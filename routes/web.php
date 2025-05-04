@@ -10,6 +10,11 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
+// Landing page
+Route::get('/', function () {
+    return view('landing'); // menampilkan resources/views/landing.blade.php
+});
+
 // Route untuk menampilkan form login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 
