@@ -6,20 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('role')->default('user')->after('email');
         });
     }
     
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('email_verified_at');
+            $table->dropColumn('role');
         });
     }
     
