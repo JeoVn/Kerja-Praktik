@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+<link rel="stylesheet" href="{{ asset('css/admin/create.css') }}">
+
 @section('content')
 <div class="container">
     <h2>Tambah Obat</h2>
@@ -20,10 +22,12 @@
 
     <form action="{{ route('medicines.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-
         <div class="mb-3">
             <label>Gambar Obat</label>
-            <input type="file" name="gambar" class="form-control" accept="image/*">
+            <input type="file" name="gambar" class="form-control" accept="image/*" id="imageInput" onchange="previewImage()">
+            <div id="imagePreview" style="margin-top: 10px;">
+                <img id="previewImage" src="" alt="Gambar Obat" style="max-width: 100%; max-height: 200px; display: none;">
+            </div>
         </div>
 
         <div class="mb-3">
@@ -90,4 +94,28 @@
         <a href="{{ url()->previous() }}" class="btn btn-secondary">Batal</a>
     </form>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+function previewImage() {
+    const input = document.getElementById('imageInput');
+    const preview = document.getElementById('previewImage');
+    
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        }
+
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = '';
+        preview.style.display = 'none';
+    }
+}
+</script>
 @endsection

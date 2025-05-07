@@ -1,0 +1,160 @@
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fc;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar styles */
+nav {
+    background-color: #2c3e50;
+    padding: 10px 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav .logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+nav ul li {
+    display: inline-block;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+nav ul li a:hover {
+    background-color: #1abc9c;
+}
+
+/* Content Section */
+.container {
+    width: 60%;
+    margin: 40px auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.container h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
+form {
+    display: grid;
+    gap: 15px;
+}
+
+form input, form select, form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+form button {
+    background-color: #2c3e50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+form button:hover {
+    background-color: #34495e;
+}
+
+/* Image Styles */
+img {
+    max-width: 100px;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Input Field Styles */
+input[type="text"], input[type="number"], input[type="date"], select {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+}
+
+input[type="file"] {
+    background-color: #f9f9f9;
+    padding: 5px;
+}
+
+/* Button Styles */
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #3498db;
+}
+
+.btn-secondary {
+    background-color: #7f8c8d;
+}
+
+/* Button Hover Effects */
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-secondary:hover {
+    background-color: #95a5a6;
+}
+
+/* Section for Back Button */
+a.btn-secondary {
+    margin-top: 10px;
+    display: inline-block;
+    text-align: center;
+}
+
+/* Layout adjustment */
+.form-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-container .input-wrapper {
+    width: 48%;
+}
+
+.form-container .input-wrapper label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}

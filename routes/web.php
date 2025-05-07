@@ -26,10 +26,14 @@ Route::post('/register/first-owner', [RegisterController::class, 'registerFirstO
 Route::post('/login', [AuthController::class, 'postLogin']);
 
 // Route untuk pendaftaran akun admin (setelah owner terdaftar)
-Route::middleware(['auth', 'role:owner'])->group(function () {
-    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [RegisterController::class, 'register']);
-});
+// Route::middleware(['auth', 'role:owner'])->group(function () {
+//     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+//     Route::post('/register', [RegisterController::class, 'register']);
+// });
+
+// Route untuk pendaftaran akun admin (setelah owner terdaftar)
+Route::middleware(['auth', 'role:owner'])->get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::middleware(['auth', 'role:owner'])->post('/register', [RegisterController::class, 'register']);
 
 // Route untuk email verifikasi (dapat diakses setelah pendaftaran)
 Route::get('/email/verify/{email}', [RegisterController::class, 'verifyEmail'])->name('verify.email');

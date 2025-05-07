@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Middleware/RoleMiddleware.php
-
 namespace App\Http\Middleware;
 
 use Closure;
@@ -12,10 +10,13 @@ class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, $role)
     {
+        // Mengecek apakah pengguna sudah login dan memiliki role yang sesuai
         if (Auth::check() && Auth::user()->role === $role) {
             return $next($request);
         }
 
-        return redirect('/');  // Redirect jika role tidak sesuai
+        // Jika tidak memiliki role yang sesuai, redirect dengan pesan error
+        return redirect()->route('dashboard')->with('error', 'Akses ditolak! Anda bukan Owner.');
     }
 }
+
