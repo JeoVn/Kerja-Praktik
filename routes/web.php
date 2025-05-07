@@ -42,3 +42,6 @@ Route::middleware(['auth', 'role:owner'])->get('/owner/dashboard', [OwnerControl
 
 // Route untuk dashboard admin, hanya bisa diakses oleh admin
 Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+
+use App\Http\Controllers\MedicineController;
+Route::resource('medicines', MedicineController::class);
