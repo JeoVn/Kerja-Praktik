@@ -61,19 +61,18 @@
         </div>
 
         <div class="mb-3">
-            <label>Jenis Penyakit</label>
-            <div class="form-control" style="height:auto;">
+                <label>Jenis Penyakit</label>
+                <select name="penyakit[]" class="form-control" multiple required>
+                <option value="">-- Pilih Jenis Penyakit --</option>
                 @foreach($penyakit as $item)
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="penyakit[]" value="{{ $item->id_jenispensyakit }}"
-                            {{ in_array($item->id_jenispensyakit, old('penyakit', $selectedPenyakit ?? [])) ? 'checked' : '' }}>
-                        <label class="form-check-label">{{ $item->nama_jenispensyakit }}</label>
-                    </div>
-                @endforeach
-            </div>
+                    <option value="{{ $item->id }}"
+                {{ in_array($item->id, old('penyakit', $selectedPenyakit ?? [])) ? 'selected' : '' }}>
+                {{ $item->nama_penyakit }}
+            </option>
+    @endforeach
+</select>
+
         </div>
-
-
 
         <div class="mb-3">
             <label>Jenis Obat</label>

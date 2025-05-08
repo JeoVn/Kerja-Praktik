@@ -16,12 +16,13 @@ class CreateMedicinesTable extends Migration
             $table->integer('harga');
             $table->date('tanggal_exp');
             $table->string('bentuk_obat');
-            $table->string('jenis_penyakit');
             $table->string('jenis_obat');
             $table->text('deskripsi')->nullable();
             $table->integer('jumlah');
             $table->timestamps();
         });
+
+        // Tidak perlu kolom jenis_penyakit di tabel medicines, karena relasi many-to-many
     }
 
     public function down()
@@ -29,3 +30,4 @@ class CreateMedicinesTable extends Migration
         Schema::dropIfExists('medicines');
     }
 }
+

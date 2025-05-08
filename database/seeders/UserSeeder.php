@@ -15,7 +15,8 @@ class UserSeeder extends Seeder
             'password' => bcrypt('ayambebek'),
             'role' => 'owner',
         ]);
-        $this->call(UserSeeder::class);
     }
-    
 }
+
+    
+
