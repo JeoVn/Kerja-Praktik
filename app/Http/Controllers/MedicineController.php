@@ -245,39 +245,53 @@ class MedicineController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi input dari user
         $request->validate([
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'kode_obat' => 'required|unique:medicines',
             'nama_obat' => 'required',
             'harga' => 'required|numeric',
+            'jumlah' => 'required|integer', // Validasi jumlah
             'tanggal_exp' => 'required|date',
             'bentuk_obat' => 'required',
             'penyakit' => 'required|array',
             'penyakit.*' => 'exists:jenis_penyakits,id',
             'jenis_obat' => 'required',
-            'jumlah' => 'required|integer',
         ]);
-
+    
         $data = $request->except('_token', 'penyakit');
-
+    
+        // Menambahkan default value untuk harga dan jumlah jika tidak ada
+        $data['harga'] = $data['harga'] ?? 0;
+        $data['jumlah'] = $data['jumlah'] ?? 0; // Pastikan jumlah tidak null
+    
+        // Proses gambar jika ada
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
             $filename = time() . '_' . $file->getClientOriginalName();
             $destination = public_path('uploads/obat');
+    
             if (!file_exists($destination)) {
                 mkdir($destination, 0755, true);
             }
+    
             $file->move($destination, $filename);
             $data['gambar'] = 'uploads/obat/' . $filename;
         } else {
             $data['gambar'] = null;
         }
-
+    
+        // Simpan ke database
         $medicine = Medicine::create($data);
+    
+        // Menambahkan relasi many-to-many
         $medicine->jenisPenyakit()->sync($request->penyakit);
-
+    
+        // Redirect dengan pesan sukses
         return redirect()->route('medicines.create')->with('success', 'Obat berhasil ditambahkan');
     }
+    
+
 
     public function dashboard()
     {
