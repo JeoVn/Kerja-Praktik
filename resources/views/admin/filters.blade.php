@@ -67,29 +67,26 @@
     <div class="mb-3">
         <h6 class="text-primary font-weight-bold">Jenis Obat</h6>
         @foreach($jenisObat as $jenis)
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="jenis_obat[]" value="{{ $jenis }}"
-                       {{ in_array($jenis, request()->get('jenis_obat', [])) ? 'checked' : '' }}>
-                <label class="form-check-label">
-                    {{ $jenis }}
-                </label>
+    <input type="checkbox" name="jenis_obat[]" value="{{ $jenis }}"
+        {{ in_array($jenis, request()->get('jenis_obat', [])) ? 'checked' : '' }}>
+    <label>{{ $jenis }}</label>
             </div>
         @endforeach
     </div>
 
+    
     <!-- Penyakit -->
     <div class="mb-3">
-        <h6 class="text-primary font-weight-bold">Sakit</h6>
+        <label>Jenis Penyakit</label><br>
         @foreach($penyakit as $item)
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="jenis_penyakit[]" value="{{ $item }}"
-                       {{ in_array($item, request()->get('jenis_penyakit', [])) ? 'checked' : '' }}>
-                <label class="form-check-label">
-                    {{ $item }}
-                </label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="penyakit[]" value="{{ $item->id_jenispensyakit }}"
+                    {{ in_array($item->id_jenispensyakit, old('penyakit', $selectedPenyakit ?? [])) ? 'checked' : '' }}>
+                <label class="form-check-label">{{ $item->nama_jenispensyakit }}</label>
             </div>
         @endforeach
     </div>
+
 
     <!-- Bentuk Obat -->
     <div class="mb-3">

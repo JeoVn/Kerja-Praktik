@@ -10,9 +10,11 @@ use App\Models\JenisPenyakit;
 class MedicineController extends Controller
 {
     public function create()
-    {
-        return view('admin.medicines.create');
-    }
+{
+    $penyakit = JenisPenyakit::all();
+    return view('admin.medicines.create', compact('penyakit'));
+}
+
 
     public function store(Request $request)
     {
@@ -23,48 +25,36 @@ class MedicineController extends Controller
             'harga' => 'required|numeric',
             'tanggal_exp' => 'required|date',
             'bentuk_obat' => 'required',
-            'jenis_penyakit' => 'required',
+            'jenis_penyakit' => 'required|array',
             'jenis_obat' => 'required',
             'jumlah' => 'required|integer',
         ]);
-
-        $data = $request->except('_token');
-
-        // if ($request->hasFile('gambar')) {
-        //     $file = $request->file('gambar');
-        //     $filename = time() . '_' . $file->getClientOriginalName();
-
-        //     $destination = public_path('uploads/obat');
-        //     if (!file_exists($destination)) {
-        //         mkdir($destination, 0755, true);
-        //     }
-
-        //     $file->move($destination, $filename);
-        //     $data['gambar'] = 'uploads/obat/' . $filename;
-        // } else {
-        //     $data['gambar'] = null;
-        // }
+    
+        $data = $request->except('_token', 'jenis_penyakit'); // kita akan proses relasi terpisah
+    
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
             $filename = time() . '_' . $file->getClientOriginalName();
-            \Log::info('File being uploaded: ' . $filename);
             $destination = public_path('uploads/obat');
+    
             if (!file_exists($destination)) {
                 mkdir($destination, 0755, true);
-                \Log::info('Directory created: ' . $destination);
             }
+    
             $file->move($destination, $filename);
             $data['gambar'] = 'uploads/obat/' . $filename;
-            \Log::info('File uploaded to: ' . $data['gambar']);
         } else {
             $data['gambar'] = null;
         }
-       
-
-        Medicine::create($data);
-
+    
+        $medicine = Medicine::create($data);
+    
+        // Tambahkan relasi many-to-many ke pivot table
+        $medicine->jenisPenyakit()->sync($request->jenis_penyakit);
+    
         return redirect()->route('medicines.create')->with('success', 'Obat berhasil ditambahkan');
     }
+    
 
     public function edit($id)
     {
@@ -100,7 +90,7 @@ class MedicineController extends Controller
 
         return redirect()->route('medicines.edit', $medicine->id)->with('success', 'Data obat berhasil diperbarui');
     }
-
+    
     
     public function dashboard()
     {

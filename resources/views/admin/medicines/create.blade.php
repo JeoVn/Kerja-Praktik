@@ -62,13 +62,18 @@
 
         <div class="mb-3">
             <label>Jenis Penyakit</label>
-            <select name="jenis_penyakit" class="form-control" required>
-                <option value="">-- Pilih Jenis Penyakit --</option>
-                @foreach(['Batuk', 'Pilek & Flu', 'Demam & Nyeri', 'Masalah Pencernaan', 'Alergi', 'Masalah THT', 'Masalah Mata', 'Kondisi Kulit', 'Infeksi', 'Tulang & Sendi', 'Kesuburan', 'Lainnya'] as $jenis)
-                    <option value="{{ $jenis }}" {{ old('jenis_penyakit') == $jenis ? 'selected' : '' }}>{{ $jenis }}</option>
+            <div class="form-control" style="height:auto;">
+                @foreach($penyakit as $item)
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="penyakit[]" value="{{ $item->id_jenispensyakit }}"
+                            {{ in_array($item->id_jenispensyakit, old('penyakit', $selectedPenyakit ?? [])) ? 'checked' : '' }}>
+                        <label class="form-check-label">{{ $item->nama_jenispensyakit }}</label>
+                    </div>
                 @endforeach
-            </select>
+            </div>
         </div>
+
+
 
         <div class="mb-3">
             <label>Jenis Obat</label>
