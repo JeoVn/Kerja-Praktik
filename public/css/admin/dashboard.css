@@ -1,0 +1,85 @@
+/* Container Width */
+.container {
+    max-width: 1400px;
+}
+
+/* Medicine Card Style */
+.medicine-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease-in-out;
+    background-color: #f9fcff;
+    border: 1px solid #e3e3e3;
+}
+
+.medicine-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Gambar Obat */
+.card-img-top {
+    height: 130px;
+    object-fit: contain;
+    padding: 10px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Teks di dalam card */
+.card-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.card-text {
+    font-size: 13px;
+    margin-bottom: 10px;
+    color: #28a745;
+}
+
+/* Tombol */
+.btn-info {
+    background-color: #007bff;
+    border: none;
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+.btn-info:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .col-md-4, .col-lg-3, .col-xl-2 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 576px) {
+    .col-md-4, .col-lg-3, .col-xl-2 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+.filter-sidebar {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: #f9f9f9;
+}
+
+.filter-sidebar h6 {
+    margin-top: 10px;
+    font-size: 16px;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 4px;
+}
+
+.form-check {
+    margin-bottom: 5px;
+}

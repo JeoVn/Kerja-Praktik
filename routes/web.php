@@ -49,3 +49,5 @@ Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AdminControl
 
 use App\Http\Controllers\MedicineController;
 Route::resource('medicines', MedicineController::class);
+
+Route::get('/admin/dashboard', [MedicineController::class, 'dashboard'])->name('admin.dashboard');

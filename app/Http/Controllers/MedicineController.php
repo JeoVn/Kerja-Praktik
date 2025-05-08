@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Medicine;
 use Illuminate\Http\Request;
+use App\Models\Obat;
+use App\Models\JenisPenyakit;
 
 class MedicineController extends Controller
 {
@@ -98,6 +100,50 @@ class MedicineController extends Controller
 
         return redirect()->route('medicines.edit', $medicine->id)->with('success', 'Data obat berhasil diperbarui');
     }
+
+    
+    public function dashboard()
+    {
+        $medicines = Medicine::all();
+    
+        // Ambil nilai unik dari kolom enum/string di tabel obat
+        $jenisObat = Medicine::select('jenis_obat')->distinct()->pluck('jenis_obat');
+        $bentukObat = Medicine::select('bentuk_obat')->distinct()->pluck('bentuk_obat');
+        $penyakit = Medicine::select('jenis_penyakit')->distinct()->pluck('jenis_penyakit');
+    
+        return view('admin.dashboard', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
+    }
+    
+    
+    
+
+    public function index(Request $request)
+{
+    $medicines = Medicine::query();
+
+    if ($request->has('jenis_obat')) {
+        $medicines->whereIn('jenis_obat_id', $request->jenis_obat);
+    }
+
+    if ($request->has('penyakit')) {
+        $medicines->whereHas('penyakit', function ($q) use ($request) {
+            $q->whereIn('penyakit_id', $request->penyakit);
+        });
+    }
+
+    if ($request->has('bentuk_obat')) {
+        $medicines->whereIn('bentuk_obat_id', $request->bentuk_obat);
+    }
+
+    return view('admin.dashboard', [
+        'medicines'   => $medicines->get(),
+        'jenisObat'   => JenisObat::all(),
+        'penyakit'    => Penyakit::all(),
+        'bentukObat'  => BentukObat::all(),
+    ]);
+}
+
+
 }
 
 
