@@ -296,8 +296,10 @@ class MedicineController extends Controller
     public function dashboard()
     {
         $medicines = Medicine::all();
-        $jenisObat = Medicine::select('jenis_obat')->distinct()->pluck('jenis_obat');
-        $bentukObat = Medicine::select('bentuk_obat')->distinct()->pluck('bentuk_obat');
+        $jenisObat = Medicine::select('id', 'jenis_obat')->distinct()->get();
+
+
+        $bentukObat = Medicine::select('bentuk_obat')->distinct()->get();
         $penyakit = JenisPenyakit::all();
 
         return view('admin.dashboard', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
