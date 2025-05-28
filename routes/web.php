@@ -51,3 +51,8 @@ use App\Http\Controllers\MedicineController;
 Route::resource('medicines', MedicineController::class);
 
 Route::get('/admin/dashboard', [MedicineController::class, 'dashboard'])->name('admin.dashboard');
+
+Route::get('/admin/create', [MedicineController::class, 'create'])->name('admin.medicines.create');
+
+Route::get('/medicines/{medicine}/edit', [MedicineController::class, 'edit'])->name('medicines.edit');
+Route::put('/medicines/{medicine}', [MedicineController::class, 'update'])->name('medicines.update');

@@ -20,6 +20,7 @@ class CreateMedicinesTable extends Migration
             $table->text('deskripsi')->nullable();
             $table->integer('jumlah');
             $table->timestamps();
+            $table->engine = 'InnoDB';
         });
 
         // Tidak perlu kolom jenis_penyakit di tabel medicines, karena relasi many-to-many

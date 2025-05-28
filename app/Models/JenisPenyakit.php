@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\Model;
 class JenisPenyakit extends Model
 {
     
-    protected $table = 'jenis_penyakits'; // pastikan nama tabel benar
+    protected $table = 'jenis_penyakit'; // pastikan nama tabel benar
     protected $primaryKey = 'id';        // sesuaikan jika beda
     protected $fillable = ['nama_penyakit'];
 }

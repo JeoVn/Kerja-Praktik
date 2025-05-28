@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('medicine_jenis_penyakit', function (Blueprint $table) {
             $table->id();
             $table->foreignId('medicine_id')->constrained('medicines')->onDelete('cascade');
-            $table->foreignId('jenis_penyakit_id')->constrained('jenis_penyakits')->onDelete('cascade');
+            $table->foreignId('jenis_penyakit_id')->constrained('jenis_penyakit')->onDelete('cascade');
             $table->timestamps();
+            $table->engine = 'InnoDB';
         });
     }
 

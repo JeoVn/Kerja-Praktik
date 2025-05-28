@@ -46,9 +46,8 @@ class Medicine extends Model
     protected $primaryKey = 'id'; // Gunakan 'id' jika primary key-nya default Laravel
 
     protected $fillable = [
-        'gambar', 'kode_obat', 'nama_obat', 'harga', 'tanggal_exp',
-        'bentuk_obat', 'jenis_obat', 'deskripsi', 'stok_obat', 'diskon_obat'
-    ];
+    'gambar', 'kode_obat', 'nama_obat', 'harga', 'jumlah', 'tanggal_exp', 'bentuk_obat', 'jenis_obat', 'deskripsi'
+];
 
     public $timestamps = true; // Set ke true jika menggunakan created_at dan updated_at
 

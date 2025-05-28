@@ -24,7 +24,7 @@ class JenisPenyakitSeeder extends Seeder
             ['nama_penyakit' => 'Masalah Mata'],
         ];
 
-        DB::table('jenis_penyakits')->insert($data);
+         DB::table('jenis_penyakit')->insert($data);
     }
 }
 
