@@ -14,6 +14,7 @@
             <p class="card-text">Deskripsi: {{ $medicine->deskripsi }}</p>
             <p class="card-text">Jumlah: {{ $medicine->jumlah }}</p>
             <p class="card-text">Tanggal Exp: {{ $medicine->tanggal_exp }}</p>
+            <a href="{{ route('medicines.edit', $medicine->id) }}" class="btn btn-warning mt-3">Edit Obat</a>
         </div>
     </div>
 </div>

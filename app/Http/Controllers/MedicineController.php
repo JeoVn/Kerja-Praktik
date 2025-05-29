@@ -75,31 +75,26 @@ class MedicineController extends Controller
             'jumlah' => 'required|integer',
             'tanggal_exp' => 'required|date',
             'bentuk_obat' => 'required',
-            'penyakit' => 'required|array',
-            'penyakit.*' => 'exists:jenis_penyakit,id',
             'jenis_obat' => 'required',
+            'deskripsi' => 'nullable',
         ]);
 
         $medicine = Medicine::findOrFail($id);
-        $data = $request->except('_token', '_method', 'penyakit');
+        $data = $request->except('_token', '_method');
 
+        // Proses upload gambar jika ada
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
             $filename = time() . '_' . $file->getClientOriginalName();
             $destination = public_path('uploads/obat');
-
             if (!file_exists($destination)) {
                 mkdir($destination, 0755, true);
             }
-
             $file->move($destination, $filename);
             $data['gambar'] = 'uploads/obat/' . $filename;
         }
 
         $medicine->update($data);
-
-        // Update relasi many-to-many
-        $medicine->jenisPenyakit()->sync($request->penyakit);
 
         return redirect()->route('medicines.edit', $medicine->id)->with('success', 'Data obat berhasil diperbarui');
     }
