@@ -48,7 +48,9 @@
     <div class="nav-tabs-container">
         <div class="nav-tabs-custom">
             <button class="nav-tab-item active">Home</button>
-            <button class="nav-tab-item">Tambah Stok</button>
+            <a href="{{ route('medicines.create') }}" class="nav-tab-item" style="text-decoration:none;">
+                Tambah Stok
+            </a>
             <button class="nav-tab-item">Kelola Stok</button>
             <button class="nav-tab-item">Dashboard</button>
         </div>
@@ -66,22 +68,18 @@
                     <div class="filter-item">
                         <input type="checkbox" id="obat-bebas" name="jenis[]" value="bebas">
                         <label for="obat-bebas">Obat Bebas</label>
-                        <span class="filter-count">12</span>
                     </div>
                     <div class="filter-item">
                         <input type="checkbox" id="obat-bebas-terbatas" name="jenis[]" value="bebas-terbatas">
                         <label for="obat-bebas-terbatas">Obat Bebas Terbatas</label>
-                        <span class="filter-count">8</span>
                     </div>
                     <div class="filter-item red-text">
                         <input type="checkbox" id="obat-keras" name="jenis[]" value="keras">
                         <label for="obat-keras">Obat Keras dan Psikotropika</label>
-                        <span class="filter-count">15</span>
                     </div>
                     <div class="filter-item blue-text">
                         <input type="checkbox" id="obat-golongan" name="jenis[]" value="golongan">
                         <label for="obat-golongan">Obat Golongan Narkotika</label>
-                        <span class="filter-count">5</span>
                     </div>
                 </div>
 
@@ -90,32 +88,26 @@
                     <div class="filter-item">
                         <input type="checkbox" id="batuk-pilek" name="sakit[]" value="batuk-pilek">
                         <label for="batuk-pilek">Batuk, Pilek & Flu</label>
-                        <span class="filter-count">20</span>
                     </div>
                     <div class="filter-item">
                         <input type="checkbox" id="demam-nyeri" name="sakit[]" value="demam-nyeri">
                         <label for="demam-nyeri">Demam & Nyeri</label>
-                        <span class="filter-count">18</span>
                     </div>
                     <div class="filter-item">
                         <input type="checkbox" id="masalah-pencernaan" name="sakit[]" value="pencernaan">
                         <label for="masalah-pencernaan">Masalah Pencernaan</label>
-                        <span class="filter-count">14</span>
                     </div>
                     <div class="filter-item">
                         <input type="checkbox" id="alergi" name="sakit[]" value="alergi">
                         <label for="alergi">Alergi</label>
-                        <span class="filter-count">10</span>
                     </div>
                     <div class="filter-item">
-                        <input type="checkbox" id="masalah-hht" name="sakit[]" value="hht">
-                        <label for="masalah-hht">Masalah HHT</label>
-                        <span class="filter-count">6</span>
+                        <input type="checkbox" id="masalah-tht" name="sakit[]" value="hht">
+                        <label for="masalah-tht">Masalah THT</label>
                     </div>
                     <div class="filter-item">
                         <input type="checkbox" id="masalah-mata" name="sakit[]" value="mata">
                         <label for="masalah-mata">Masalah Mata</label>
-                        <span class="filter-count">8</span>
                     </div>
                 </div>
 
@@ -124,27 +116,22 @@
                     <div class="filter-item">
                         <input type="checkbox" id="tablet" name="bentuk[]" value="tablet">
                         <label for="tablet">Tablet</label>
-                        <span class="filter-count">25</span>
                     </div>
                     <div class="filter-item">
                         <input type="checkbox" id="kapsul" name="bentuk[]" value="kapsul">
                         <label for="kapsul">Kapsul</label>
-                        <span class="filter-count">12</span>
                     </div>
                     <div class="filter-item">
                         <input type="checkbox" id="sirup" name="bentuk[]" value="sirup">
                         <label for="sirup">Sirup</label>
-                        <span class="filter-count">15</span>
                     </div>
                     <div class="filter-item">
                         <input type="checkbox" id="salep" name="bentuk[]" value="salep">
                         <label for="salep">Salep</label>
-                        <span class="filter-count">8</span>
                     </div>
                     <div class="filter-item">
                         <input type="checkbox" id="lainnya" name="bentuk[]" value="lainnya">
                         <label for="lainnya">Lainnya</label>
-                        <span class="filter-count">10</span>
                     </div>
                 </div>
 
@@ -152,61 +139,6 @@
             </form>
         </div>
 
-        <!-- Mobile Filter Sidebar -->
-        <div id="filterSidebar" class="filter-sidebar-overlay d-md-none">
-            <div class="filter-sidebar">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5>Filters</h5>
-                    <button id="closeFilter" class="btn btn-sm">Tutup</button>
-                </div>
-                <form method="GET" action="{{ route('medicines.index') }}">
-                    <div class="filter-group">
-                        <h6>Jenis Obat</h6>
-                        <div class="filter-item">
-                            <input type="checkbox" id="mobile-obat-bebas" name="jenis[]" value="bebas">
-                            <label for="mobile-obat-bebas">Obat Bebas</label>
-                            <span class="filter-count">12</span>
-                        </div>
-                        <div class="filter-item">
-                            <input type="checkbox" id="mobile-obat-bebas-terbatas" name="jenis[]" value="bebas-terbatas">
-                            <label for="mobile-obat-bebas-terbatas">Obat Bebas Terbatas</label>
-                            <span class="filter-count">8</span>
-                        </div>
-                        <div class="filter-item red-text">
-                            <input type="checkbox" id="mobile-obat-keras" name="jenis[]" value="keras">
-                            <label for="mobile-obat-keras">Obat Keras dan Psikotropika</label>
-                            <span class="filter-count">15</span>
-                        </div>
-                        <div class="filter-item blue-text">
-                            <input type="checkbox" id="mobile-obat-golongan" name="jenis[]" value="golongan">
-                            <label for="mobile-obat-golongan">Obat Golongan Narkotika</label>
-                            <span class="filter-count">5</span>
-                        </div>
-                    </div>
-
-                    <div class="filter-group">
-                        <h6>Bentuk Obat</h6>
-                        <div class="filter-item">
-                            <input type="checkbox" id="mobile-tablet" name="bentuk[]" value="tablet">
-                            <label for="mobile-tablet">Tablet</label>
-                            <span class="filter-count">25</span>
-                        </div>
-                        <div class="filter-item">
-                            <input type="checkbox" id="mobile-kapsul" name="bentuk[]" value="kapsul">
-                            <label for="mobile-kapsul">Kapsul</label>
-                            <span class="filter-count">12</span>
-                        </div>
-                        <div class="filter-item">
-                            <input type="checkbox" id="mobile-sirup" name="bentuk[]" value="sirup">
-                            <label for="mobile-sirup">Sirup</label>
-                            <span class="filter-count">15</span>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary w-100 mt-3">Terapkan Filter</button>
-                </form>
-            </div>
-        </div>
 
         <!-- Product Grid -->
         <div class="product-grid">
@@ -217,7 +149,7 @@
             <div class="products-container">
                 @forelse($medicines as $index => $medicine)
                     <div class="medicine-card">
-                        <div class="card-number">{{ $index }}</div>
+                        <div class="card-number"></div>
                         <div class="card-img-container">
                             <img src="{{ asset($medicine->gambar) }}" class="card-img-top" alt="{{ $medicine->nama_obat }}">
                         </div>
@@ -261,6 +193,8 @@
                     filterSidebar.classList.remove('active');
                 }
             });
+
+            
         }
 
         // Navigation tabs functionality
