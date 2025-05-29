@@ -58,13 +58,12 @@ class MedicineController extends Controller
     }
 
     public function edit($id)
-    {
-        $medicine = Medicine::findOrFail($id);
-        $penyakit = JenisPenyakit::all();
-        $selectedPenyakit = $medicine->jenisPenyakit->pluck('id')->toArray();
-
-        return view('admin.medicines.edit', compact('medicine', 'penyakit', 'selectedPenyakit'));
-    }
+{
+    $medicine = Medicine::findOrFail($id);
+    $penyakit = JenisPenyakit::all();
+    $selectedPenyakit = $medicine->jenisPenyakit->pluck('id')->toArray();
+    return view('admin.medicines.edit', compact('medicine', 'penyakit', 'selectedPenyakit'));
+}
 
     public function update(Request $request, $id)
     {
@@ -81,6 +80,8 @@ class MedicineController extends Controller
         ]);
 
         $medicine = Medicine::findOrFail($id);
+    $medicine->update($request->except('jenis_penyakit'));
+    $medicine->jenisPenyakit()->sync($request->jenis_penyakit);
         $data = $request->except('_token', '_method');
 
         // Proses upload gambar jika ada

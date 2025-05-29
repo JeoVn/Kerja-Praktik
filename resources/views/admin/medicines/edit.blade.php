@@ -60,13 +60,16 @@
         </div>
 
         <div class="mb-3">
-            <label>Jenis Penyakit</label>
-            <select name="jenis_penyakit" class="form-control" required>
-                @foreach(['Batuk', 'Pilek & Flu', 'Demam & Nyeri', 'Masalah Pencernaan', 'Alergi', 'Masalah THT', 'Masalah Mata', 'Kondisi Kulit', 'Infeksi', 'Tulang & Sendi', 'Kesuburan', 'Lainnya'] as $jenis)
-                    <option value="{{ $jenis }}" {{ old('jenis_penyakit', $medicine->jenis_penyakit) == $jenis ? 'selected' : '' }}>{{ $jenis }}</option>
-                @endforeach
-            </select>
-        </div>
+    <label>Jenis Penyakit</label>
+    <select name="jenis_penyakit[]" class="form-control" multiple required>
+        @foreach($penyakit as $p)
+            <option value="{{ $p->id }}" {{ in_array($p->id, $selectedPenyakit ?? []) ? 'selected' : '' }}>
+                {{ $p->nama_penyakit }}
+            </option>
+        @endforeach
+    </select>
+    <small class="text-muted">Tekan Ctrl (atau Cmd di Mac) untuk memilih lebih dari satu.</small>
+</div>
 
         <div class="mb-3">
             <label>Jenis Obat</label>
