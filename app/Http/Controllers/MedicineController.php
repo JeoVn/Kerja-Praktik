@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Medicine;
 use App\Models\JenisPenyakit;
 use Illuminate\Http\Request;
+use Carbon\Carbon; 
 
 class MedicineController extends Controller
 {
@@ -147,5 +148,17 @@ class MedicineController extends Controller
     {
         $medicine = Medicine::findOrFail($id);
         return view('detailuser', compact('medicine'));
+    }
+    public function expiringSoon()
+    {
+        $today = Carbon::today();
+        $sixMonthsLater = $today->copy()->addMonths(6);
+
+        $medicines = Medicine::whereDate('tanggal_exp', '>=', $today)
+                            ->whereDate('tanggal_exp', '<=', $sixMonthsLater)
+                            ->orderBy('tanggal_exp')
+                            ->get();
+
+        return view('admin.expiring', compact('medicines'));
     }
 }

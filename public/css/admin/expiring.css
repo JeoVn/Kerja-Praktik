@@ -1,0 +1,71 @@
+/* General background */
+body {
+    background-color: #f4faff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Container styling */
+.container {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.05);
+}
+
+/* Title */
+h2 {
+    font-weight: bold;
+    color: #d32f2f;
+    margin-bottom: 25px;
+}
+
+/* Table styling */
+.table {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th {
+    background-color: #0d47a1;
+    color: #ffffff;
+    font-size: 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table td {
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #f1f8ff;
+}
+
+.table-danger {
+    background-color: #ffe6e6 !important;
+}
+
+/* Sisa hari badge */
+.badge-hari {
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.badge-merah {
+    background-color: #ffcdd2;
+    color: #b71c1c;
+}
+
+.badge-kuning {
+    background-color: #fff9c4;
+    color: #f57f17;
+}
+
+.badge-hijau {
+    background-color: #c8e6c9;
+    color: #1b5e20;
+}

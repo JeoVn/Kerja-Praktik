@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/admin/detail.css') }}">
+@endpush
+
 @section('content')
 <div class="container">
     <h2>Detail Obat</h2>

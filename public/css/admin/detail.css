@@ -1,0 +1,111 @@
+/* Warna latar belakang halaman */
+body {
+    background-color: #e3f2fd;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Container utama */
+.container {
+    background-color: #e0f2ff;
+    padding: 2rem;
+    border-radius: 15px;
+    max-width: 960px;
+    margin: 2rem auto;
+}
+
+/* Judul */
+.container h2 {
+    font-weight: bold;
+    color: #0d47a1;
+    margin-bottom: 1.5rem;
+}
+
+/* Card tampilan obat */
+.card {
+    display: flex;
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Gambar obat */
+.card-img-top {
+    width: 280px;
+    object-fit: cover;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    background-color: #f0f8ff;
+}
+
+/* Isi card */
+.card-body {
+    padding: 20px;
+    flex: 1;
+    position: relative;
+}
+
+/* Judul nama obat */
+.card-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Harga */
+.card-text:nth-of-type(2) {
+    color: #d32f2f;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Label jenis obat */
+.card-text:nth-of-type(4) {
+    margin-top: 10px;
+}
+.card-text:nth-of-type(4)::after {
+    content: ' Obat Bebas';
+    display: inline-block;
+    background-color: #c8e6c9;
+    color: #2e7d32;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-left: 10px;
+}
+
+/* Label stok tersedia */
+.card-body::before {
+    content: 'STOK Tersedia, Segera ke Apotik';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #ffebee;
+    color: #b71c1c;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+/* Deskripsi */
+.card-text {
+    font-size: 15px;
+    color: #444;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* Tombol edit */
+.btn-warning {
+    margin-top: 1rem;
+    font-weight: bold;
+    background-color: #ffb300;
+    border-color: #ffa000;
+    border-radius: 6px;
+}
+.btn-warning:hover {
+    background-color: #ff8f00;
+    border-color: #fb8c00;
+}

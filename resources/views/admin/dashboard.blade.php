@@ -53,6 +53,10 @@
             </a>
             <button class="nav-tab-item">Kelola Stok</button>
             <button class="nav-tab-item">Dashboard</button>
+            <a href="{{ route('medicines.expiring') }}" class="btn btn-danger mb-3">
+                🔔 Lihat Obat Hampir Expired
+            </a>
+
         </div>
     </div>
 

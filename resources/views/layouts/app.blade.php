@@ -6,6 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Default Title')</title>
+       
+    @stack('styles')
+
     <!-- Anda dapat menambahkan link CSS atau meta tag lainnya di sini -->
 </head>
 <body>
