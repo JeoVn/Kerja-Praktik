@@ -47,7 +47,7 @@
                             <div class="card-body text-center">
                                 <h6 class="card-title">{{ $medicine->nama_obat }}</h6>
                                 <p class="card-text text-primary">Rp. {{ number_format($medicine->harga, 0, ',', '.') }}</p>
-                                <a href="{{route('medicines.show', $medicine->id)}}" class="btn btn-info btn-sm">Informasi Obat</a>
+                                <a href="{{ route('admin.detail', $medicine->id) }}" class="btn btn-info btn-sm">Informasi Obat</a>
                             </div>
                         </div>
                     </div>

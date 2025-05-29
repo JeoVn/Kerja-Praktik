@@ -142,4 +142,10 @@ class MedicineController extends Controller
         $medicine = Medicine::findOrFail($id);
         return view('admin.detail', compact('medicine'));
     }
+
+    public function showuser($id)
+    {
+        $medicine = Medicine::findOrFail($id);
+        return view('detailuser', compact('medicine'));
+    }
 }
