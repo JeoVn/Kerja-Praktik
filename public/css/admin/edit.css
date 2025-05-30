@@ -1,0 +1,38 @@
+/* Gaya untuk header dan form */
+h2 {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Menata form input */
+.form-control {
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Tombol simpan dan batal */
+.btn {
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+/* Tombol simpan */
+.btn-success {
+    background-color: #4CAF50;
+    border: none;
+}
+
+/* Tombol batal */
+.btn-danger {
+    background-color: #F44336;
+    border: none;
+}
+
+img.img-fluid {
+    border-radius: 8px;
+}

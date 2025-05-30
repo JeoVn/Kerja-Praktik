@@ -1,111 +1,102 @@
-/* Warna latar belakang halaman */
-body {
-    background-color: #e3f2fd;
-    font-family: 'Segoe UI', sans-serif;
+/* Layout keseluruhan halaman detail obat */
+.medicine-detail {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
 }
 
-/* Container utama */
-.container {
-    background-color: #e0f2ff;
-    padding: 2rem;
-    border-radius: 15px;
-    max-width: 960px;
-    margin: 2rem auto;
-}
-
-/* Judul */
-.container h2 {
-    font-weight: bold;
-    color: #0d47a1;
-    margin-bottom: 1.5rem;
-}
-
-/* Card tampilan obat */
-.card {
+/* Menata header (gambar obat dan info obat) */
+.medicine-header {
     display: flex;
-    background-color: #ffffff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 /* Gambar obat */
-.card-img-top {
-    width: 280px;
+.medicine-img {
+    width: 150px;
+    height: 150px;
     object-fit: cover;
-    border-right: 1px solid #ccc;
-    padding: 20px;
-    background-color: #f0f8ff;
+    border-radius: 10px;
+    margin-right: 20px;
 }
 
-/* Isi card */
-.card-body {
-    padding: 20px;
+/* Menata info obat */
+.medicine-info {
     flex: 1;
-    position: relative;
 }
 
-/* Judul nama obat */
-.card-title {
-    font-size: 22px;
-    font-weight: 700;
+.medicine-info h2 {
+    font-size: 24px;
+    font-weight: 600;
     color: #333;
     margin-bottom: 10px;
 }
 
-/* Harga */
-.card-text:nth-of-type(2) {
-    color: #d32f2f;
-    font-size: 18px;
-    font-weight: bold;
+.medicine-price {
+    font-size: 20px;
+    color: #e74c3c;
+    font-weight: 500;
 }
 
-/* Label jenis obat */
-.card-text:nth-of-type(4) {
+.medicine-type {
+    font-size: 14px;
     margin-top: 10px;
 }
-.card-text:nth-of-type(4)::after {
-    content: ' Obat Bebas';
-    display: inline-block;
-    background-color: #c8e6c9;
-    color: #2e7d32;
-    font-weight: bold;
-    padding: 4px 10px;
-    border-radius: 6px;
-    margin-left: 10px;
+
+.medicine-stock {
+    font-size: 16px;
+    color: #27ae60;
+    font-weight: 500;
+    margin-top: 10px;
 }
 
-/* Label stok tersedia */
-.card-body::before {
-    content: 'STOK Tersedia, Segera ke Apotik';
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background-color: #ffebee;
-    color: #b71c1c;
-    font-weight: bold;
-    padding: 6px 12px;
-    border-radius: 5px;
-    font-size: 13px;
+/* Menata deskripsi obat */
+.medicine-description {
+    background-color: #eaf7ff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
 }
 
-/* Deskripsi */
-.card-text {
-    font-size: 15px;
-    color: #444;
+/* Detil tambahan obat */
+.medicine-details {
+    margin-top: 10px;
+}
+
+.medicine-details p {
+    font-size: 14px;
     margin-bottom: 8px;
-    line-height: 1.4;
 }
 
-/* Tombol edit */
-.btn-warning {
-    margin-top: 1rem;
-    font-weight: bold;
-    background-color: #ffb300;
-    border-color: #ffa000;
-    border-radius: 6px;
+.medicine-details .badge {
+    font-size: 12px;
+    padding: 5px 10px;
 }
+
+/* Tombol aksi */
+.medicine-actions {
+    text-align: right;
+}
+
+.btn-warning {
+    background-color: #f39c12;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    color: white;
+}
+
 .btn-warning:hover {
-    background-color: #ff8f00;
-    border-color: #fb8c00;
+    background-color: #e67e22;
+}
+.bg-blue-custom {
+        background-color: #BAE4FA !important; /* Bootstrap primary */
+    }
+.bg-blue-custom .card-img-top {
+    background: #fff;
 }

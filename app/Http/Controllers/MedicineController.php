@@ -66,40 +66,47 @@ class MedicineController extends Controller
 }
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'kode_obat' => 'required|unique:medicines,kode_obat,' . $id,
-            'nama_obat' => 'required',
-            'harga' => 'required|numeric',
-            'jumlah' => 'required|integer',
-            'tanggal_exp' => 'required|date',
-            'bentuk_obat' => 'required',
-            'jenis_obat' => 'required',
-            'deskripsi' => 'nullable',
-        ]);
+{
+    $request->validate([
+        'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        'kode_obat' => 'required|unique:medicines,kode_obat,' . $id,
+        'nama_obat' => 'required',
+        'harga' => 'required|numeric',
+        'jumlah' => 'required|integer',
+        'tanggal_exp' => 'required|date',
+        'bentuk_obat' => 'required',
+        'jenis_obat' => 'required',
+        'deskripsi' => 'nullable',
+        'jenis_penyakit' => 'required|array',
+        'jenis_penyakit.*' => 'exists:jenis_penyakit,id',
+    ]);
 
-        $medicine = Medicine::findOrFail($id);
-    $medicine->update($request->except('jenis_penyakit'));
-    $medicine->jenisPenyakit()->sync($request->jenis_penyakit);
-        $data = $request->except('_token', '_method');
+    $medicine = Medicine::findOrFail($id);
+    $data = $request->except('_token', '_method', 'jenis_penyakit');
 
-        // Proses upload gambar jika ada
-        if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $destination = public_path('uploads/obat');
-            if (!file_exists($destination)) {
-                mkdir($destination, 0755, true);
-            }
-            $file->move($destination, $filename);
-            $data['gambar'] = 'uploads/obat/' . $filename;
+    // Proses upload gambar jika ada
+    if ($request->hasFile('gambar')) {
+        // Hapus gambar lama jika ada
+        if ($medicine->gambar && file_exists(public_path($medicine->gambar))) {
+            @unlink(public_path($medicine->gambar));
         }
-
-        $medicine->update($data);
-
-        return redirect()->route('medicines.edit', $medicine->id)->with('success', 'Data obat berhasil diperbarui');
+        $file = $request->file('gambar');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $destination = public_path('uploads/obat');
+        if (!file_exists($destination)) {
+            mkdir($destination, 0755, true);
+        }
+        $file->move($destination, $filename);
+        $data['gambar'] = 'uploads/obat/' . $filename;
     }
+
+    $medicine->update($data);
+
+    // Update relasi many-to-many jenis penyakit
+    $medicine->jenisPenyakit()->sync($request->jenis_penyakit);
+
+return redirect()->route('admin.detail', $medicine->id)->with('success', 'Data obat berhasil diperbarui');
+}
 
     public function dashboard()
     {
