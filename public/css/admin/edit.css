@@ -36,3 +36,21 @@ h2 {
 img.img-fluid {
     border-radius: 8px;
 }
+    .bg-blue-custom {
+        background-color: #BAE4FA !important;
+    }
+    .form-control:focus, .form-control, select.form-control, textarea.form-control {
+        border-color: #3F5FAF !important;
+        box-shadow: none;
+    }
+    .form-control, .form-select, textarea.form-control {
+        background-color: #fff !important;
+    }
+    .form-label{
+        font-weight: bold;
+        color: #3F5FAF !important;
+    }
+    .form-control::placeholder {
+        color: #e0e0e0 !important;
+        opacity: 1;
+    }
