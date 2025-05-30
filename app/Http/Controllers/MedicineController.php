@@ -146,6 +146,19 @@ return redirect()->route('admin.detail', $medicine->id)->with('success', 'Data o
         ]);
     }
 
+    // public function storePenyakit(Request $request)
+    // {
+    //     $request->validate([
+    //         'nama_penyakit' => 'required|unique:jenis_penyakit,nama_penyakit'
+    //     ]);
+
+    //     JenisPenyakit::create([
+    //         'nama_penyakit' => $request->nama_penyakit
+    //     ]);
+
+    //     return redirect()->back()->with('success', 'Jenis penyakit berhasil ditambahkan.');
+    // }
+
     public function show($id)
     {
         $medicine = Medicine::findOrFail($id);
