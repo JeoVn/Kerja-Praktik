@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="p-4 rounded shadow bg-blue-custom">
-                <h2 class="text-center mb-4 text-white">Edit Obat</h2>
+                <h2 class="text-center mb-4" style="font-weight: bold; color:#3F5FAF ;">Edit Obat</h2>
 
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
