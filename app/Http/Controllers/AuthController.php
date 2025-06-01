@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 
 class AuthController extends Controller
 {
@@ -78,6 +80,59 @@ class AuthController extends Controller
         return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
     }
     
+    public function profile()
+    {
+        $user = Auth::user();
+        $admins = collect();
 
+        if ($user->role === 'owner') {
+            $admins = User::where('role', 'admin')->get();
+        }
+
+        return view('profile', compact('user', 'admins'));
+    }
+
+    public function showChangePasswordForm()
+    {
+        return view('change_password');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password saat ini salah']);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->route('profile')->with('success', 'Password berhasil diubah');
+    }
+
+    public function deleteAdmin($id)
+    {
+        $user = Auth::user();
+
+        if ($user->role !== 'owner') {
+            return redirect()->route('profile')->with('error', 'Akses ditolak');
+        }
+
+        $admin = User::where('id', $id)->where('role', 'admin')->first();
+
+        if (!$admin) {
+            return redirect()->route('profile')->with('error', 'Admin tidak ditemukan.');
+        }
+
+        $admin->delete();
+
+        return redirect()->route('profile')->with('success', 'Admin berhasil dihapus.');
+    }
 
 }

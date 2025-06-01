@@ -51,11 +51,12 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
 });
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [OwnerController::class, 'profile'])->name('profile');
-    Route::get('/password/change', [OwnerController::class, 'showChangePasswordForm'])->name('password.change');
-    Route::post('/password/change', [OwnerController::class, 'changePassword'])->name('password.update');
-    Route::delete('/admin/{id}/delete', [OwnerController::class, 'deleteAdmin'])->name('admin.delete')->middleware('role:owner');
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+    Route::get('/password/change', [AuthController::class, 'showChangePasswordForm'])->name('password.change');
+    Route::post('/password/change', [AuthController::class, 'changePassword'])->name('password.update');
+    Route::delete('/admin/{id}', [AuthController::class, 'deleteAdmin'])->name('admin.delete')->middleware('role:owner');
 });
+
 
 
 Route::get('/homeuser', [MedicineController::class, 'publicIndex'])->name('user.home');
