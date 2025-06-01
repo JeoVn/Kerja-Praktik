@@ -47,6 +47,7 @@ Route::get('/medicines/expiring', [MedicineController::class, 'expiringSoon'])->
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [MedicineController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/medicines/expiring', [MedicineController::class, 'expiringSoon'])->name('medicines.expiring');
+    Route::get('/medicines/sedikit-stok', [MedicineController::class, 'sedikitStok'])->name('medicines.sedikitstok');  
     Route::get('/create', [MedicineController::class, 'create'])->name('admin.medicines.create');
 
 });

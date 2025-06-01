@@ -183,6 +183,13 @@ return redirect()->route('admin.detail', $medicine->id)->with('success', 'Data o
         return view('admin.expiring', compact('medicines'));
     }
 
+        public function sedikitStok()
+    {
+        $lowStockMedicines = Medicine::where('jumlah', '<', 20)->orderBy('jumlah')->get();
+
+        return view('admin.sedikit_stok', compact('lowStockMedicines'));
+    }
+
    // Tampilkan list obat untuk user biasa (public)
    public function publicIndex(Request $request)
 {

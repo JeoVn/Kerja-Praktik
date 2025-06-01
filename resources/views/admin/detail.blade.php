@@ -25,6 +25,7 @@
         <!-- Kontainer Detail Obat -->
         <div class="col-md-8">
             <div class="medicine-detail bg-blue-custom rounded shadow-sm p-4 {{ $medicine->jenis_obat_class }}">
+
                 <h2>{{ $medicine->nama_obat }}</h2>
                 <p class="medicine-price">Rp. {{ number_format($medicine->harga, 0, ',', '.') }}</p>
                 <p class="medicine-type">
@@ -40,8 +41,15 @@
                         <span class="badge bg-secondary">{{ $medicine->jenis_obat }}</span>
                     @endif
                 </p>
-                <p class="medicine-stock">STOK Tersedia, Segera ke Apotek</p>
-
+                <p class="medicine-stock">
+                     @if($medicine->jumlah < 20)
+                        <span class="text-danger fw-bold">
+                            ⚠️ Stok terbatas! Segera lakukan pengisian ulang stok.
+                        </span>
+                    @else
+                        STOK Tersedia, Segera ke Apotek
+                    @endif
+                </p>
                 <div class="medicine-description mt-3">
                     <p><strong>Deskripsi:</strong> {{ $medicine->deskripsi }}</p>
                 </div>

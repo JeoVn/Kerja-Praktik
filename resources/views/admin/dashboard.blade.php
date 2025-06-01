@@ -56,7 +56,9 @@
             <a href="{{ route('medicines.expiring') }}" class="btn btn-danger mb-3">
                 🔔 Lihat Obat Hampir Expired
             </a>
-
+            <a href="{{ route('medicines.sedikitstok') }}" class="btn btn-danger mb-3">
+                ⚠️ Lihat Obat Hampir Habis Stok
+            </a>
         </div>
     </div>
 
