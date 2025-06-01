@@ -40,16 +40,24 @@
                         <span class="badge bg-secondary">{{ $medicine->jenis_obat }}</span>
                     @endif
                 </p>
-                <p class="medicine-stock">STOK Tersedia, Segera ke Apotek</p>
+                <p class="medicine-stock">
+                     @if($medicine->jumlah < 20)
+                        <span class="text-danger fw-bold">
+                            ⚠️ Stok Sedikit, Segera Datang Ke Apotek.
+                        </span>
+                    @else
+                        STOK Tersedia, Segera ke Apotek
+                    @endif
+                </p>
 
                 <div class="medicine-description mt-3">
-                    <p><strong>Deskripsi:</strong> {{ $medicine->deskripsi }}</p>
+                    <p><strong>Deskripsi :</strong> <br> {{ $medicine->deskripsi }}</p>
                 </div>
 
                 <div class="medicine-details">
-                    <p><strong>Kode Obat:</strong> {{ $medicine->kode_obat }}</p>
-                    <p><strong>Bentuk Obat:</strong> {{ $medicine->bentuk_obat }}</p>
-                    <p><strong>Jenis Penyakit:</strong>
+                    <p><strong>Kode Obat :</strong> {{ $medicine->kode_obat }}</p>
+                    <p><strong>Bentuk Obat :</strong> {{ $medicine->bentuk_obat }}</p>
+                    <p><strong>Jenis Penyakit :</strong>
                         @if($medicine->jenisPenyakit && $medicine->jenisPenyakit->count())
                             {{ $medicine->jenisPenyakit->pluck('nama_penyakit')->implode(', ') }}
                         @else
