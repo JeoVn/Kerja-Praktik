@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Registrasi</title>
@@ -44,4 +44,66 @@
         <button type="submit">Daftar</button>
     </form>
 </body>
-</html>
+</html> -->
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <h2>Form Registrasi</h2>
+
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
+    <form method="POST" action="{{ route('register') }}">
+        @csrf
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Nama:</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required autofocus>
+            @error('name')
+                <div class="text-danger small">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
+            @error('email')
+                <div class="text-danger small">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+            @error('password')
+                <div class="text-danger small">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Konfirmasi Password:</label>
+            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="role" class="form-label">Role:</label>
+            <select class="form-select" id="role" name="role" required>
+                <option value="" disabled {{ old('role') ? '' : 'selected' }}>-- Pilih Role --</option>
+                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                <option value="owner" {{ old('role') == 'owner' ? 'selected' : '' }}>Owner</option>
+            </select>
+            @error('role')
+                <div class="text-danger small">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <button type="submit" class="btn btn-primary">Daftar</button>
+    </form>
+</div>
+@endsection

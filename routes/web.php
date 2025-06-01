@@ -24,8 +24,8 @@ Route::get('/email/verify/{email}', [RegisterController::class, 'verifyEmail'])-
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 // Dashboard Owner & Admin
-Route::middleware(['auth', 'role:owner'])->get('/owner/dashboard', [OwnerController::class, 'index'])->name('owner.dashboard');
-Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::middleware(['auth', 'role:owner'])->get('/owner/home', [OwnerController::class, 'index'])->name('owner.home');
+Route::middleware(['auth', 'role:admin'])->get('/admin/home', [AdminController::class, 'index'])->name('admin.home');
 
 // Medicines Resource (CRUD)
 Route::resource('medicines', MedicineController::class);
@@ -43,15 +43,22 @@ Route::get('/dashboarduser', [MedicineController::class, 'index'])->name('dashbo
 Route::get('/detailuser/{medicine}', [MedicineController::class, 'detailuser'])->name('detailuser.show');
 Route::middleware(['auth', 'role:admin'])->get('/admin/detail/{medicine}', [MedicineController::class, 'show'])->name('admin.detail');
 
-Route::get('/medicines/expiring', [MedicineController::class, 'expiringSoon'])->name('medicines.expiring');
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/dashboard', [MedicineController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/home', [MedicineController::class, 'homeAdmin'])->name('admin.home');
     Route::get('/medicines/expiring', [MedicineController::class, 'expiringSoon'])->name('medicines.expiring');
     Route::get('/medicines/sedikit-stok', [MedicineController::class, 'sedikitStok'])->name('medicines.sedikitstok');  
     Route::get('/create', [MedicineController::class, 'create'])->name('admin.medicines.create');
 
 });
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [OwnerController::class, 'profile'])->name('profile');
+    Route::get('/password/change', [OwnerController::class, 'showChangePasswordForm'])->name('password.change');
+    Route::post('/password/change', [OwnerController::class, 'changePassword'])->name('password.update');
+    Route::delete('/admin/{id}/delete', [OwnerController::class, 'deleteAdmin'])->name('admin.delete')->middleware('role:owner');
+});
+
 
 Route::get('/homeuser', [MedicineController::class, 'publicIndex'])->name('user.home');
 Route::get('/homeuser/{id}', [MedicineController::class, 'publicShow'])->name('user.detail');
+
 

@@ -108,14 +108,14 @@ class MedicineController extends Controller
 return redirect()->route('admin.detail', $medicine->id)->with('success', 'Data obat berhasil diperbarui');
 }
 
-    public function dashboard()
+    public function homeAdmin()
     {
         $medicines = Medicine::all();
         $jenisObat = Medicine::select('jenis_obat')->distinct()->pluck('jenis_obat');
         $bentukObat = Medicine::select('bentuk_obat')->distinct()->pluck('bentuk_obat');
         $penyakit = JenisPenyakit::all();
 
-        return view('admin.dashboard', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
+        return view('admin.home', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
     }
 
     public function index(Request $request)
@@ -138,7 +138,7 @@ return redirect()->route('admin.detail', $medicine->id)->with('success', 'Data o
 
         $medicines = $query->get();
 
-        return view('admin.dashboard', [
+        return view('admin.home', [
             'medicines' => $medicines,
             'jenisObat' => Medicine::select('jenis_obat')->distinct()->pluck('jenis_obat'),
             'bentukObat' => Medicine::select('bentuk_obat')->distinct()->pluck('bentuk_obat'),

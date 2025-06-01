@@ -35,9 +35,9 @@ class AuthController extends Controller
 
             // Redirect berdasarkan role
             if ($user->role === 'owner') {
-                return redirect()->route('owner.dashboard'); // Redirect ke dashboard owner
+                return redirect()->route('owner.home'); // Redirect ke dashboard owner
             } elseif ($user->role === 'admin') {
-                return redirect()->route('admin.dashboard'); // Redirect ke dashboard admin
+                return redirect()->route('admin.home'); // Redirect ke dashboard admin
             }
 
             // Default redirection jika role tidak ditemukan
@@ -55,4 +55,29 @@ class AuthController extends Controller
         session()->flash('success', 'You have successfully logged out.'); // Pesan sukses logout
         return redirect()->route('login'); // Redirect ke form login
     }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|confirmed|min:6',
+            'role' => 'required|in:admin,owner',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => $request->role,
+        ]);
+
+        // Anda bisa langsung login user jika mau
+        // Auth::login($user);
+
+        return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
+    }
+    
+
+
 }

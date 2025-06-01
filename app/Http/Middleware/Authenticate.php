@@ -21,9 +21,9 @@ class Authenticate extends Middleware
         // Jika pengguna sudah login, arahkan berdasarkan role mereka
         $user = Auth::user();
         if ($user->role === 'owner') {
-            return route('owner.dashboard');
+            return route('owner.home');
         } elseif ($user->role === 'admin') {
-            return route('admin.dashboard');
+            return route('admin.home');
         }
 
         // Default pengalihan jika role tidak ditemukan

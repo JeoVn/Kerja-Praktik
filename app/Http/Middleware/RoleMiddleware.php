@@ -16,7 +16,9 @@ class RoleMiddleware
         }
 
         // Jika tidak memiliki role yang sesuai, redirect dengan pesan error
-        return redirect()->route('dashboard')->with('error', 'Akses ditolak! Anda bukan Owner.');
+    //     return redirect()->route('dashboard')->with('error', 'Akses ditolak! Anda bukan Owner.');
+    // }
+    return redirect()->route('login')->with('error', 'Akses ditolak! Anda bukan Owner.');
     }
 }
 

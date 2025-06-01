@@ -10,6 +10,6 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard');  // Halaman dashboard admin
+        return view('admin.home');  // Halaman dashboard admin
     }
 }
