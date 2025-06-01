@@ -13,6 +13,12 @@
     display: block;
 }
 
+.btn-primary {
+  background-color: #ff0000 !important;
+  border-color: #ff0000 !important;
+}
+
+
 .filter-sidebar {
     width: 80%;
     max-width: 300px;

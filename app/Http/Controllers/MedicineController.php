@@ -182,4 +182,33 @@ return redirect()->route('admin.detail', $medicine->id)->with('success', 'Data o
 
         return view('admin.expiring', compact('medicines'));
     }
+
+   // Tampilkan list obat untuk user biasa (public)
+   public function publicIndex(Request $request)
+{
+    $query = Medicine::query();
+
+    if ($request->filled('jenis_obat')) {
+        $query->whereIn('jenis_obat', $request->jenis_obat);
+    }
+    if ($request->filled('sakit')) {
+        // Sesuaikan filter sakit jika ada relasi, atau hapus jika belum ada
+    }
+    if ($request->filled('bentuk_obat')) {
+        $query->whereIn('bentuk_obat', $request->bentuk_obat);
+    }
+
+    $medicines = $query->get();
+
+    return view('user.homeuser', compact('medicines'));
+}
+
+public function publicShow($id)
+{
+    $medicine = Medicine::findOrFail($id);
+    return view('user.detail', compact('medicine'));
+}
+
+
+
 }

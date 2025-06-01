@@ -50,3 +50,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/create', [MedicineController::class, 'create'])->name('admin.medicines.create');
 
 });
+
+Route::get('/homeuser', [MedicineController::class, 'publicIndex'])->name('user.home');
+Route::get('/homeuser/{id}', [MedicineController::class, 'publicShow'])->name('user.detail');
+
