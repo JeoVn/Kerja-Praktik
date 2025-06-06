@@ -8,17 +8,17 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-    public function handle(Request $request, Closure $next, $role)
+    public function handle(Request $request, Closure $next, $roles)
     {
-        // Mengecek apakah pengguna sudah login dan memiliki role yang sesuai
-        if (Auth::check() && Auth::user()->role === $role) {
-            return $next($request);
+        // Mendukung multi role, misal: role:admin,owner
+        $rolesArray = explode(',', $roles);
+
+        if (Auth::check() && in_array(Auth::user()->role, $rolesArray)) {
+             return $next($request);
+            // dd(Auth::user()->role); // Debugging line to check the role 
         }
 
-        // Jika tidak memiliki role yang sesuai, redirect dengan pesan error
-    //     return redirect()->route('dashboard')->with('error', 'Akses ditolak! Anda bukan Owner.');
-    // }
-    return redirect()->route('login')->with('error', 'Akses ditolak! Anda bukan Owner.');
+        return redirect()->route('login')->with('error', 'Akses ditolak! Anda tidak memiliki akses.');
     }
 }
 

@@ -12,7 +12,7 @@ class OwnerController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:owner');  // Pastikan hanya owner yang bisa akses
+      //  $this->middleware('role:owner');  // Pastikan hanya owner yang bisa akses
     }
 
     public function index() 

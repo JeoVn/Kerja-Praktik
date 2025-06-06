@@ -20,11 +20,10 @@ Route::middleware(['auth', 'role:owner'])->get('/register', [RegisterController:
 Route::middleware(['auth', 'role:owner'])->post('/register', [RegisterController::class, 'register']);
 Route::get('/register/first-owner', [RegisterController::class, 'showFirstOwnerRegistrationForm'])->name('register.first-owner');
 Route::post('/register/first-owner', [RegisterController::class, 'registerFirstOwner'])->name('register.first-owner.submit');
-Route::get('/email/verify/{email}', [RegisterController::class, 'verifyEmail'])->name('verify.email');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 // Dashboard Owner & Admin
-Route::middleware(['auth', 'role:owner'])->get('/owner/home', [OwnerController::class, 'index'])->name('owner.home');
+// Route::middleware(['auth', 'role:owner'])->get('/owner/home', [OwnerController::class, 'index'])->name('owner.home');
 Route::middleware(['auth', 'role:admin'])->get('/admin/home', [AdminController::class, 'index'])->name('admin.home');
 
 // Medicines Resource (CRUD)
@@ -34,7 +33,7 @@ Route::resource('medicines', MedicineController::class);
 Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [MedicineController::class, 'dashboard'])->name('admin.dashboard');
 
 // Form create obat khusus admin (opsional, jika ingin path berbeda)
-Route::middleware(['auth', 'role:admin'])->get('/admin/create', [MedicineController::class, 'create'])->name('admin.medicines.create');
+// Route::middleware(['auth', 'role:admin'])->get('/admin/create', [MedicineController::class, 'create'])->name('admin.medicines.create');
 
 // Dashboard untuk user biasa
 Route::get('/dashboarduser', [MedicineController::class, 'index'])->name('dashboarduser');
@@ -48,13 +47,24 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/medicines/expiring', [MedicineController::class, 'expiringSoon'])->name('medicines.expiring');
     Route::get('/medicines/sedikit-stok', [MedicineController::class, 'sedikitStok'])->name('medicines.sedikitstok');  
     Route::get('/create', [MedicineController::class, 'create'])->name('admin.medicines.create');
-
+    // Tambahkan route lain yang ingin diakses oleh admin dan owner di sini
 });
+
+Route::prefix('owner')->middleware(['auth', 'role:owner'])->group(function () {
+    Route::get('/home', [OwnerController::class, 'index'])->name('owner.home');
+    // Route::get('/home', [MedicineController::class, 'homeAdmin'])->name('admin.home');
+    Route::get('/medicines/expiring', [MedicineController::class, 'expiringSoon'])->name('owner.medicines.expiring');
+    Route::get('/medicines/sedikit-stok', [MedicineController::class, 'sedikitStok'])->name('owner.medicines.sedikitstok');  
+    Route::get('/create', [MedicineController::class, 'create'])->name('owner.medicines.create');
+    // Tambahkan route lain yang ingin diakses oleh admin dan owner di sini
+});
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
     Route::get('/password/change', [AuthController::class, 'showChangePasswordForm'])->name('password.change');
     Route::post('/password/change', [AuthController::class, 'changePassword'])->name('password.update');
-    Route::delete('/admin/{id}', [AuthController::class, 'deleteAdmin'])->name('admin.delete')->middleware('role:owner');
+    Route::delete('/admin/{id}/delete', [OwnerController::class, 'deleteAdmin'])->name('admin.delete')->middleware('role:owner');
+
 });
 
 
