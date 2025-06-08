@@ -66,6 +66,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
   // Route untuk mencari obat berdasarkan kode atau nama
     Route::get('/medicines/search-medicine/{search_term}', [MedicineController::class, 'searchMedicine'])->name('medicines.search');
 
+
 });
 
 Route::prefix('owner')->middleware(['auth', 'role:owner'])->group(function () {

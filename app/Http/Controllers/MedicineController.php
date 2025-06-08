@@ -253,29 +253,27 @@ public function purchaseCreate()
     // Update stock for a medicine
 
     public function searchMedicine($search_term)
-    {
-        Log::info('Searching for medicine with search term: ' . $search_term);
+{
+    // Cari obat berdasarkan kode_obat atau nama_obat
+    $medicine = Medicine::where('kode_obat', 'like', '%' . $search_term . '%')
+                        ->orWhere('nama_obat', 'like', '%' . $search_term . '%')
+                        ->first(); // Menggunakan first() untuk mendapatkan data pertama yang ditemukan
 
-        // Search for medicine by kode_obat or nama_obat
-        $medicine = Medicine::where('kode_obat', 'like', '%' . $search_term . '%')
-                            ->orWhere('nama_obat', 'like', '%' . $search_term . '%')
-                            ->first();  // Use first() to get the first match
-
-        if ($medicine) {
-            Log::info('Medicine found: ' . $medicine->nama_obat);  // Log the found medicine details
-            return response()->json([
-                'success' => true,
-                'medicine' => [
-                    'kode_obat' => $medicine->kode_obat,
-                    'nama_obat' => $medicine->nama_obat,
-                    'harga' => $medicine->harga
-                ]
-            ]);
-        } else {
-            Log::info('No medicine found for search term: ' . $search_term);  // Log if no medicine is found
-            return response()->json(['success' => false]);
-        }
+    if ($medicine) {
+        return response()->json([
+            'success' => true,
+            'medicine' => [
+                'kode_obat' => $medicine->kode_obat,
+                'nama_obat' => $medicine->nama_obat,
+                'harga' => $medicine->harga
+            ]
+        ]);
+    } else {
+        return response()->json(['success' => false]);
     }
+}
+
+
 
 
 
