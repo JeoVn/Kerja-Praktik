@@ -206,11 +206,7 @@ public function publicShow($id)
     return view('user.detail', compact('medicine'));
 }
 // Display the form for adding stock to a medicine
-public function addStockForm($id)
-{
-    $medicine = Medicine::findOrFail($id);
-    return view('admin.medicines.add_stock', compact('medicine'));
-}
+
 
 
 public function purchaseCreate()
@@ -272,6 +268,73 @@ public function purchaseCreate()
         return response()->json(['success' => false]);
     }
 }
+public function addStockForm($id)
+{
+    // Fetch the medicine by ID
+    $medicine = Medicine::findOrFail($id);
+
+    // Pass the medicine data to the view
+    return view('admin.medicines.add_stock', compact('medicine'));
+}
+
+public function addStock(Request $request, $id)
+{
+    // Validate the incoming data
+    $request->validate([
+        'jumlah' => 'required|integer|min:1', // Quantity to add must be a positive integer
+    ]);
+
+    // Find the medicine by its ID
+    $medicine = Medicine::findOrFail($id);
+
+    // Get the quantity to add to the stock
+    $quantityToAdd = $request->input('jumlah');
+
+    // **Assign a new batch number** by getting the highest current batch number and incrementing it
+    $batchNumber = Medicine::where('kode_obat', $medicine->kode_obat)->max('batch') + 1;
+
+    // **Update the stock** of the medicine
+    $medicine->jumlah += $quantityToAdd;
+
+    // **Assign the batch number** to the medicine
+    $medicine->batch = $batchNumber;
+
+    // **Save the updated medicine** record with the new batch number and updated stock
+    $medicine->save();
+
+    // Optionally, you can add a record in a `stock_history` table to track this stock addition.
+    // Or simply, you can log a message or notify the user.
+
+    return redirect()->route('medicines.show', $medicine->id)
+                     ->with('success', 'Stock berhasil ditambahkan dengan Batch ' . $batchNumber);
+}
+
+public function getMedicineBatches($kodeObat)
+{
+    // Ambil semua batch untuk obat dengan kode yang dimasukkan
+    $medicines = Medicine::where('kode_obat', $kodeObat)->get();
+
+    // Jika obat tidak ditemukan
+    if ($medicines->isEmpty()) {
+        return response()->json(['success' => false, 'message' => 'Obat tidak ditemukan.']);
+    }
+
+    // Kembalikan data batch obat
+    $data = $medicines->map(function ($medicine) {
+        return [
+            'batch' => $medicine->batch,
+            'exp_date' => $medicine->tanggal_exp,
+            'quantity' => $medicine->jumlah,
+            'nama_obat' => $medicine->nama_obat,
+            'harga' => $medicine->harga
+        ];
+    });
+
+    return response()->json(['success' => true, 'medicines' => $data]);
+}
+
+
+
 
 
 

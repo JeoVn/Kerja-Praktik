@@ -42,6 +42,15 @@
                         <input type="number" id="harga" name="harga" class="form-control" required readonly>
                     </div>
 
+                    <!-- Batch Selection (auto-filled based on medicine code) -->
+                    <div class="mb-3">
+                        <label for="batch" class="form-label">Batch</label>
+                        <select id="batch" name="batch" class="form-control" required>
+                            <option value="">Pilih Batch</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+
                     <!-- Quantity -->
                     <div class="mb-3">
                         <label for="jumlah" class="form-label">Jumlah</label>
@@ -67,19 +76,31 @@
         if (kodeObat) {
             console.log('Mencari obat dengan kode: ' + kodeObat);  // Debugging log
 
-            // Make a fetch request to search for the medicine
-            fetch('/admin/medicines/search-medicine/' + kodeObat)
+            // Make a fetch request to search for the medicine and get available batches
+            fetch('/admin/medicines/get-medicine-batches/' + kodeObat)
                 .then(response => response.json())
                 .then(data => {
                     console.log('Data yang diterima:', data);  // Log the response from server
                     if (data.success) {
                         // Populate the medicine name and price fields
-                        document.getElementById('nama_obat').value = data.medicine.nama_obat;
-                        document.getElementById('harga').value = data.medicine.harga;
+                        document.getElementById('nama_obat').value = data.medicines[0].nama_obat;
+                        document.getElementById('harga').value = data.medicines[0].harga;
+
+                        // Populate the batch dropdown
+                        const batchSelect = document.getElementById('batch');
+                        batchSelect.innerHTML = '<option value="">Pilih Batch</option>'; // Clear previous options
+
+                        data.medicines.forEach(medicine => {
+                            const option = document.createElement('option');
+                            option.value = medicine.batch;
+                            option.textContent = `Batch ${medicine.batch} - Exp: ${medicine.exp_date} - Stok: ${medicine.quantity}`;
+                            batchSelect.appendChild(option);
+                        });
                     } else {
                         // Clear the fields if medicine not found
                         document.getElementById('nama_obat').value = '';
                         document.getElementById('harga').value = '';
+                        document.getElementById('batch').innerHTML = '<option value="">Pilih Batch</option>';
                         alert('Obat tidak ditemukan!');
                     }
                 })
@@ -91,6 +112,7 @@
             // Clear the fields if no code is entered
             document.getElementById('nama_obat').value = '';
             document.getElementById('harga').value = '';
+            document.getElementById('batch').innerHTML = '<option value="">Pilih Batch</option>';
         }
     });
 </script>

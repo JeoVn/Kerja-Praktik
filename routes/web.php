@@ -65,7 +65,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
   // Route untuk mencari obat berdasarkan kode atau nama
     Route::get('/medicines/search-medicine/{search_term}', [MedicineController::class, 'searchMedicine'])->name('medicines.search');
+    Route::get('/medicines/{id}/add-stock', [MedicineController::class, 'addStockForm'])->name('medicines.addStockForm');
+    Route::get('/medicines/get-medicine-batches/{kodeObat}', [MedicineController::class, 'getMedicineBatches']);
 
+    // Route to handle the stock addition and batch assignment
+    Route::post('/medicines/{id}/add-stock', [MedicineController::class, 'addStock'])->name('medicines.addStock');
 
 });
 
