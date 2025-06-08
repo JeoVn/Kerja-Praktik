@@ -32,4 +32,18 @@ class Medicine extends Model
     {
         return $this->belongsToMany(JenisPenyakit::class, 'medicine_jenis_penyakit', 'medicine_id', 'jenis_penyakit_id');
     }
+
+    // Inside your Medicine model
+    public function decreaseStock($quantity)
+    {
+        // Check if there's enough stock before decreasing
+        if ($this->jumlah >= $quantity) {
+            $this->jumlah -= $quantity;
+            $this->save(); // Save the updated stock to the database
+            return true;
+        }
+        return false; // Return false if there's not enough stock
+    }
+
+    
 }

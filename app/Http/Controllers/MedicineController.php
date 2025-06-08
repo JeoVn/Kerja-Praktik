@@ -1,11 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Models\Medicine;
 use App\Models\JenisPenyakit;
-use Illuminate\Http\Request;
+
 use Carbon\Carbon; 
+
+// Add this if the Purchase model exists, otherwise create it in app/Models/Purchase.php
+use App\Models\Purchase;
 
 class MedicineController extends Controller
 {
@@ -145,20 +149,6 @@ return redirect()->route('admin.detail', $medicine->id)->with('success', 'Data o
             'penyakit' => JenisPenyakit::all(),
         ]);
     }
-
-    // public function storePenyakit(Request $request)
-    // {
-    //     $request->validate([
-    //         'nama_penyakit' => 'required|unique:jenis_penyakit,nama_penyakit'
-    //     ]);
-
-    //     JenisPenyakit::create([
-    //         'nama_penyakit' => $request->nama_penyakit
-    //     ]);
-
-    //     return redirect()->back()->with('success', 'Jenis penyakit berhasil ditambahkan.');
-    // }
-
     public function show($id)
     {
         $medicine = Medicine::findOrFail($id);
@@ -215,6 +205,80 @@ public function publicShow($id)
     $medicine = Medicine::findOrFail($id);
     return view('user.detail', compact('medicine'));
 }
+// Display the form for adding stock to a medicine
+public function addStockForm($id)
+{
+    $medicine = Medicine::findOrFail($id);
+    return view('admin.medicines.add_stock', compact('medicine'));
+}
+
+
+public function purchaseCreate()
+    {
+        // Fetch all medicines for the purchase form
+        $medicines = Medicine::all();
+        return view('admin.purchase', compact('medicines'));
+    }
+
+    // Store the purchase and update the stock
+    // Menyimpan pembelian dan memperbarui stok
+    public function purchaseStore(Request $request)
+    {
+        // Validasi data input
+        $request->validate([
+            'kode_obat' => 'required',  // Kode obat wajib
+            'nama_obat' => 'required',  // Nama obat wajib
+            'jumlah' => 'required|integer', // Jumlah wajib dan harus berupa angka
+        ]);
+
+        // Mencari obat berdasarkan kode obat
+        $medicine = Medicine::where('kode_obat', $request->kode_obat)->first();
+
+        if ($medicine) {
+            // Mengecek dan mengurangi stok jika tersedia
+            $stockUpdated = $medicine->decreaseStock($request->jumlah);
+
+            if ($stockUpdated) {
+                // Menghitung harga total
+                $total = $request->jumlah * $medicine->harga; 
+
+                return redirect()->route('medicines.purchase')->with('success', 'Pembelian berhasil, stok diperbarui');
+            } else {
+                return redirect()->route('medicines.purchase')->with('error', 'Stok tidak cukup');
+            }
+        } else {
+            return redirect()->route('medicines.purchase')->with('error', 'Obat tidak ditemukan');
+        }
+    }
+    // Update stock for a medicine
+
+    public function searchMedicine($search_term)
+    {
+        Log::info('Searching for medicine with search term: ' . $search_term);
+
+        // Search for medicine by kode_obat or nama_obat
+        $medicine = Medicine::where('kode_obat', 'like', '%' . $search_term . '%')
+                            ->orWhere('nama_obat', 'like', '%' . $search_term . '%')
+                            ->first();  // Use first() to get the first match
+
+        if ($medicine) {
+            Log::info('Medicine found: ' . $medicine->nama_obat);  // Log the found medicine details
+            return response()->json([
+                'success' => true,
+                'medicine' => [
+                    'kode_obat' => $medicine->kode_obat,
+                    'nama_obat' => $medicine->nama_obat,
+                    'harga' => $medicine->harga
+                ]
+            ]);
+        } else {
+            Log::info('No medicine found for search term: ' . $search_term);  // Log if no medicine is found
+            return response()->json(['success' => false]);
+        }
+    }
+
+
+
 
 
 

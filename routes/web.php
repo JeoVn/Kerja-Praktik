@@ -47,7 +47,25 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/medicines/expiring', [MedicineController::class, 'expiringSoon'])->name('medicines.expiring');
     Route::get('/medicines/sedikit-stok', [MedicineController::class, 'sedikitStok'])->name('medicines.sedikitstok');  
     Route::get('/create', [MedicineController::class, 'create'])->name('admin.medicines.create');
-    // Tambahkan route lain yang ingin diakses oleh admin dan owner di sini
+    // Route::post('medicines/record-purchase', [MedicineController::class, 'recordPurchase'])->name('medicines.recordPurchase');
+    // Route::put('medicines/{id}/update-stock-beli', [MedicineController::class, 'updateStockBeli'])->name('medicines.updateStockBeli');
+
+   Route::get('medicines/{id}/add-stock', [MedicineController::class, 'addStockForm'])->name('medicines.addStockForm');
+    // Route for updating stock
+    Route::put('medicines/{id}/update-stock', [MedicineController::class, 'updateStock'])->name('medicines.updateStock');
+
+    // Show the form for recording a purchase
+    // Menampilkan formulir pembelian
+    Route::get('/medicines/purchase', [MedicineController::class, 'purchaseCreate'])->name('medicines.purchase');
+
+    // Menyimpan pembelian dan memperbarui stok
+    Route::post('/medicines/purchase', [MedicineController::class, 'purchaseStore'])->name('medicines.purchase.store');
+    // Route to search for a medicine by its code or name
+    // Route::get('/medicines/search-medicine/{search_term}', [MedicineController::class, 'searchMedicine'])->name('medicines.search');
+
+  // Route untuk mencari obat berdasarkan kode atau nama
+    Route::get('/medicines/search-medicine/{search_term}', [MedicineController::class, 'searchMedicine'])->name('medicines.search');
+
 });
 
 Route::prefix('owner')->middleware(['auth', 'role:owner'])->group(function () {
@@ -58,6 +76,7 @@ Route::prefix('owner')->middleware(['auth', 'role:owner'])->group(function () {
     Route::get('/create', [MedicineController::class, 'create'])->name('owner.medicines.create');
     // Tambahkan route lain yang ingin diakses oleh admin dan owner di sini
 });
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');

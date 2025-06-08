@@ -47,7 +47,7 @@
     </div>
 
     <!-- Navigation Tabs -->
-    <div class="nav-tabs-container">
+    <!-- <div class="nav-tabs-container">
         <div class="nav-tabs-custom">
             <button class="nav-tab-item active">Home</button>
             <a href="{{ route('medicines.create') }}" class="nav-tab-item" style="text-decoration:none;">
@@ -62,7 +62,29 @@
                 ⚠️ Lihat Obat Hampir Habis Stok
             </a>
         </div>
+    </div> -->
+    <!-- Navigation Tabs -->
+<div class="nav-tabs-container">
+    <div class="nav-tabs-custom">
+        <button class="nav-tab-item active">Home</button>
+        <a href="{{ route('medicines.create') }}" class="nav-tab-item" style="text-decoration:none;">
+            Tambah Stok
+        </a>
+        <button class="nav-tab-item">Kelola Stok</button>
+        <button class="nav-tab-item">Dashboard</button>
+        <a href="{{ route('medicines.expiring') }}" class="btn btn-danger mb-3">
+            🔔 Lihat Obat Hampir Expired
+        </a>
+        <a href="{{ route('medicines.sedikitstok') }}" class="btn btn-danger mb-3">
+            ⚠️ Lihat Obat Hampir Habis Stok
+        </a>
+        <a href="{{ route('medicines.purchase') }}" class="btn btn-warning mb-3">
+            📦 Catat Pembelian Obat
+        </a>
+
     </div>
+</div>
+
 
     <!-- Main Content -->
     <div class="main-content">
