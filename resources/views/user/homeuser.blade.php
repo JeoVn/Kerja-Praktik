@@ -26,10 +26,10 @@
         </div>
         
         <div class="header-right">
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="Cari Obat...">
-                <div class="search-icon">🔍</div>
-            </div>
+            <form method="GET" action="{{ route('medicines.index') }}" class="search-container">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Obat..." class="search-input">
+                <button type="submit" class="search-icon" style="background:none; border:none;">🔍</button>
+            </form>
             <button class="filters-btn d-md-none" id="filterToggle">
                 ☰ Filters
             </button>
