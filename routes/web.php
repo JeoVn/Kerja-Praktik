@@ -50,7 +50,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     // Route::post('medicines/record-purchase', [MedicineController::class, 'recordPurchase'])->name('medicines.recordPurchase');
     // Route::put('medicines/{id}/update-stock-beli', [MedicineController::class, 'updateStockBeli'])->name('medicines.updateStockBeli');
 
-   Route::get('medicines/{id}/add-stock', [MedicineController::class, 'addStockForm'])->name('medicines.addStockForm');
+ 
     // Route for updating stock
     Route::put('medicines/{id}/update-stock', [MedicineController::class, 'updateStock'])->name('medicines.updateStock');
 
@@ -65,13 +65,16 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
   // Route untuk mencari obat berdasarkan kode atau nama
     Route::get('/medicines/search-medicine/{search_term}', [MedicineController::class, 'searchMedicine'])->name('medicines.search');
-    Route::get('/medicines/{id}/add-stock', [MedicineController::class, 'addStockForm'])->name('medicines.addStockForm');
     Route::get('/medicines/get-medicine-batches/{kodeObat}', [MedicineController::class, 'getMedicineBatches']);
 
-    // Route to handle the stock addition and batch assignment
-    Route::post('/medicines/{id}/add-stock', [MedicineController::class, 'addStock'])->name('medicines.addStock');
+    Route::get('/medicines/add-stock', [MedicineController::class, 'addObatCreate'])->name('medicines.addStock');
 
+    // Rute untuk menyimpan stok yang ditambahkan
+    Route::get('/medicines/get-medicine-batches-stock/{kodeObat}', [MedicineController::class, 'getMedicineBatchesStock']);
+
+    Route::post('/medicines/add-stock', [MedicineController::class, 'addObatStore'])->name('medicines.addStock.store');
 });
+
 
 Route::prefix('owner')->middleware(['auth', 'role:owner'])->group(function () {
     Route::get('/home', [OwnerController::class, 'index'])->name('owner.home');

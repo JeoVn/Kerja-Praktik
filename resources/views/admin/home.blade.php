@@ -81,6 +81,11 @@
         <a href="{{ route('medicines.purchase') }}" class="btn btn-warning mb-3">
             📦 Catat Pembelian Obat
         </a>
+        <a href="{{ route('medicines.addStock') }}" class="btn btn-warning mb-3">
+    📦 Tambah Stok Obat
+</a>
+
+
 
     </div>
 </div>

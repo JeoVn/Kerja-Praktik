@@ -246,68 +246,97 @@ public function purchaseCreate()
             return redirect()->route('medicines.purchase')->with('error', 'Obat tidak ditemukan');
         }
     }
-    // Update stock for a medicine
 
-    public function searchMedicine($search_term)
-{
-    // Cari obat berdasarkan kode_obat atau nama_obat
-    $medicine = Medicine::where('kode_obat', 'like', '%' . $search_term . '%')
-                        ->orWhere('nama_obat', 'like', '%' . $search_term . '%')
-                        ->first(); // Menggunakan first() untuk mendapatkan data pertama yang ditemukan
-
-    if ($medicine) {
-        return response()->json([
-            'success' => true,
-            'medicine' => [
-                'kode_obat' => $medicine->kode_obat,
-                'nama_obat' => $medicine->nama_obat,
-                'harga' => $medicine->harga
-            ]
-        ]);
-    } else {
-        return response()->json(['success' => false]);
+    public function addObatCreate()
+    {
+        // Fetch all medicines for the purchase form
+        $medicines = Medicine::all();
+        return view('admin.addStock', compact('medicines'));
     }
-}
-public function addStockForm($id)
-{
-    // Fetch the medicine by ID
-    $medicine = Medicine::findOrFail($id);
+    public function addObatStore(Request $request)
+    {
+        // Validasi data input
+        $request->validate([
+            'kode_obat' => 'required',
+            'nama_obat' => 'required',  // Kode obat wajib
+            'jumlah' => 'required|integer|min:1', // Jumlah wajib dan harus berupa angka lebih dari 0
+            'tanggal_exp' => 'required|date', // Tanggal kadaluarsa wajib
+        ]);
 
-    // Pass the medicine data to the view
-    return view('admin.medicines.add_stock', compact('medicine'));
-}
+        // Mencari obat berdasarkan kode obat
+        $medicine = Medicine::where('kode_obat', $request->kode_obat)->first();
 
-public function addStock(Request $request, $id)
-{
-    // Validate the incoming data
-    $request->validate([
-        'jumlah' => 'required|integer|min:1', // Quantity to add must be a positive integer
-    ]);
+        // Jika obat ditemukan
+        if ($medicine) {
+            // Menambahkan stok berdasarkan jumlah yang dimasukkan
+            $medicine->jumlah += $request->jumlah;  // Menambah stok yang baru
 
-    // Find the medicine by its ID
-    $medicine = Medicine::findOrFail($id);
+            // Membuat batch baru berdasarkan batch terakhir yang ada (batch + 1)
+            $batchNumber = Medicine::where('kode_obat', $request->kode_obat)->max('batch') + 1;
 
-    // Get the quantity to add to the stock
-    $quantityToAdd = $request->input('jumlah');
+            // Menyimpan data baru (batch baru dan tanggal kadaluarsa baru)
+            $newStock = new Medicine();
+            $newStock->kode_obat = $medicine->kode_obat;
+            $newStock->nama_obat = $medicine->nama_obat;
+            $newStock->harga = $medicine->harga;
+            $newStock->batch = $batchNumber;
+            $newStock->jumlah = $request->jumlah;
+            $newStock->tanggal_exp = $request->tanggal_exp;
+            $newStock->bentuk_obat = $medicine->bentuk_obat;
+            $newStock->jenis_obat = $medicine->jenis_obat; // ✅ Diambil dari obat lama
 
-    // **Assign a new batch number** by getting the highest current batch number and incrementing it
-    $batchNumber = Medicine::where('kode_obat', $medicine->kode_obat)->max('batch') + 1;
 
-    // **Update the stock** of the medicine
-    $medicine->jumlah += $quantityToAdd;
+            $newStock->save();
 
-    // **Assign the batch number** to the medicine
-    $medicine->batch = $batchNumber;
+            $newStock->jenisPenyakit()->sync($medicine->jenisPenyakit->pluck('id'));
 
-    // **Save the updated medicine** record with the new batch number and updated stock
-    $medicine->save();
 
-    // Optionally, you can add a record in a `stock_history` table to track this stock addition.
-    // Or simply, you can log a message or notify the user.
+    
+            // Save the new batch
+            $newStock->save();
 
-    return redirect()->route('medicines.show', $medicine->id)
-                     ->with('success', 'Stock berhasil ditambahkan dengan Batch ' . $batchNumber);
-}
+            $newStock->jenisPenyakit()->sync($medicine->jenisPenyakit->pluck('id'));
+
+
+            // Return success message
+            return redirect()->route('medicines.addStockForm')->with('success', 'Stok berhasil ditambahkan dengan Batch ' . $batchNumber);
+        } else {
+            // If medicine not found, return error
+            return redirect()->route('medicines.addStockForm')->with('error', 'Obat tidak ditemukan');
+        }
+    }
+
+
+// public function searchMedicine($search_term)
+// {
+//     // Cari obat berdasarkan kode_obat atau nama_obat
+//     $medicine = Medicine::where('kode_obat', 'like', '%' . $search_term . '%')
+//                         ->orWhere('nama_obat', 'like', '%' . $search_term . '%')
+//                         ->first(); // Menggunakan first() untuk mendapatkan data pertama yang ditemukan
+
+//     if ($medicine) {
+//         // Mendapatkan batch dan ekspansi stok jika ada
+//         $batches = Medicine::where('kode_obat', $medicine->kode_obat)->get(['batch', 'tanggal_exp', 'jumlah']);
+
+//         return response()->json([
+//             'success' => true,
+//             'medicine' => [
+//                 'kode_obat' => $medicine->kode_obat,
+//                 'nama_obat' => $medicine->nama_obat,
+//                 'harga' => $medicine->harga,
+//                 'batches' => $batches // Menambahkan data batch yang ada
+//             ]
+//         ]);
+//     } else {
+//         return response()->json([
+//             'success' => false,
+//             'message' => 'Obat tidak ditemukan'
+//         ]);
+//     }
+// }
+
+// MedicineController.php
+
 
 public function getMedicineBatches($kodeObat)
 {
@@ -331,6 +360,47 @@ public function getMedicineBatches($kodeObat)
     });
 
     return response()->json(['success' => true, 'medicines' => $data]);
+}
+
+public function getMedicineBatchesStock($kodeObat)
+{
+    $medicines = Medicine::with('jenisPenyakit')
+                    ->where('kode_obat', $kodeObat)
+                    ->get();
+
+    if ($medicines->isEmpty()) {
+        return response()->json(['success' => false, 'message' => 'Obat tidak ditemukan.']);
+    }
+
+    $representative = $medicines->first();
+
+    $data = $medicines->map(function ($medicine) {
+        return [
+            'batch' => $medicine->batch,
+            'exp_date' => $medicine->tanggal_exp,
+            'quantity' => $medicine->jumlah,
+            'nama_obat' => $medicine->nama_obat,
+            'harga' => $medicine->harga,
+        ];
+    });
+
+    return response()->json([
+            'success' => true,
+            'medicines' => $data,
+            'representative' => [
+        'nama_obat' => $representative->nama_obat,
+        'harga' => $representative->harga,
+        'bentuk_obat' => $representative->bentuk_obat,
+        'jenis_obat' => $representative->jenis_obat, // ✅ TAMBAHKAN INI
+        'jenis_penyakit' => $representative->jenisPenyakit->map(function ($p) {
+            return [
+                'id' => $p->id,
+                'nama_penyakit' => $p->nama_penyakit
+            ];
+        })
+    ]
+    ]);
+
 }
 
 

@@ -30,5 +30,8 @@
         <p>Footer Content</p>
     </footer>
 
+    {{-- ... mungkin sebelum script JS --}}
+    @yield('scripts')
 </body>
 </html>
+
