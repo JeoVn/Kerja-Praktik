@@ -11,6 +11,7 @@
 
     <!-- Anda dapat menambahkan link CSS atau meta tag lainnya di sini -->
 </head>
+
 <body>
 
     <!-- Header -->
@@ -19,6 +20,8 @@
             <!-- Menu navigasi bisa ditambahkan di sini -->
         </nav>
     </header>
+@stack('scripts')
+@yield('scripts')
 
     <!-- Konten Utama -->
     <main>
@@ -29,9 +32,10 @@
     <footer>
         <p>Footer Content</p>
     </footer>
-
+    
     {{-- ... mungkin sebelum script JS --}}
     @yield('scripts')
+
 </body>
 </html>
 

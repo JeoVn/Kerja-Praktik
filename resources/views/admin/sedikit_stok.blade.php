@@ -57,6 +57,6 @@
         </div>
     @endif
 
-    <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary mt-4">Kembali ke Dashboard</a>
+    <a href="{{ route('admin.home') }}" class="btn btn-secondary mt-4">Kembali ke Home</a>
 </div>
 @endsection

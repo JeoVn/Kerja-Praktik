@@ -30,63 +30,54 @@
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Obat..." class="search-input">
                 <button type="submit" class="search-icon" style="background:none; border:none;">🔍</button>
             </form>
-            <button class="filters-btn d-md-none" id="filterToggle">
-                ☰ Filters
-            </button>
-            <button class="filters-btn d-none d-md-inline-flex">
-                ☰ Filters
-            </button>
-            <div class="user-profile">
-                <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                </svg>
-            </div>
+          <button class="filters-btn" id="filterToggle">☰ Filters</button>
+
+            
         </div>
     </div>
 
    
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Desktop Filter Sidebar -->
-        <div class="filter-sidebar-desktop d-none d-md-block">
+    <!-- Sidebar Filter -->
+    <div class="filter-sidebar-mobile" id="filterSidebar">
+        <div class="filter-sidebar-content">
+            <button class="btn-close mb-3 float-end" id="closeFilter"></button>
             <h6 class="filter-title">Filters</h6>
-            
             <form method="GET" action="{{ route('medicines.index') }}">
                 <div class="filter-group">
                     <h6>Jenis Obat</h6>
-                @foreach($jenisObat as $jenis)
-                <div class="filter-item">
-                   <input type="checkbox" name="jenis_obat[]" id="jenis-{{ strtolower($jenis) }}" value="{{ $jenis }}">
-                    <label for="jenis-{{ strtolower($jenis) }}">{{ $jenis }}</label>
-
-                </div>
-                 @endforeach
+                    @foreach($jenisObat as $jenis)
+                    <div class="filter-item">
+                        <input type="checkbox" name="jenis_obat[]" id="jenis-m-{{ strtolower($jenis) }}" value="{{ $jenis }}">
+                        <label for="jenis-m-{{ strtolower($jenis) }}">{{ $jenis }}</label>
+                    </div>
+                    @endforeach
                 </div>
 
                 <div class="filter-group">
                     <h6>Jenis Penyakit</h6>
-                @foreach($penyakit as $p)
-                <div class="filter-item">
-                    <input type="checkbox" id="penyakit-{{ $p->id }}" name="penyakit[]" value="{{ $p->id }}">
-                    <label for="penyakit-{{ $p->id }}">{{ $p->nama_penyakit }}</label>
-                </div>
-                 @endforeach
+                    @foreach($penyakit as $p)
+                    <div class="filter-item">
+                        <input type="checkbox" id="penyakit-m-{{ $p->id }}" name="penyakit[]" value="{{ $p->id }}">
+                        <label for="penyakit-m-{{ $p->id }}">{{ $p->nama_penyakit }}</label>
+                    </div>
+                    @endforeach
                 </div>
 
                 <div class="filter-group">
                     <h6>Bentuk Obat</h6>
                     @foreach($bentukObat as $bentuk)
                     <div class="filter-item">
-                        <input type="checkbox" name="bentuk_obat[]" id="{{ strtolower($bentuk) }}" value="{{ $bentuk }}">
-                        <label for="{{ strtolower($bentuk) }}">{{ $bentuk }}</label>
+                        <input type="checkbox" name="bentuk_obat[]" id="bentuk-m-{{ strtolower($bentuk) }}" value="{{ $bentuk }}">
+                        <label for="bentuk-m-{{ strtolower($bentuk) }}">{{ $bentuk }}</label>
                     </div>
-                @endforeach
-
+                    @endforeach
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 mt-3">Terapkan Filter</button>
             </form>
         </div>
+    </div>
+ 
 
 
         <!-- Product Grid -->
@@ -123,6 +114,26 @@
 @endsection
 
 @push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const filterToggle = document.getElementById('filterToggle');
+        const filterSidebar = document.getElementById('filterSidebar');
+        const closeFilter = document.getElementById('closeFilter');
+
+        if (filterToggle && filterSidebar && closeFilter) {
+            filterToggle.addEventListener('click', function () {
+                filterSidebar.classList.add('active');
+            });
+
+            closeFilter.addEventListener('click', function () {
+                filterSidebar.classList.remove('active');
+            });
+        }
+    });
+</script>
+@endpush
+
+<!-- @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -179,4 +190,4 @@
         }
     });
 </script>
-@endpush
+@endpush -->
