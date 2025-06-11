@@ -11,7 +11,7 @@ class CreateMedicinesTable extends Migration
         Schema::create('medicines', function (Blueprint $table) {
             $table->id();
             $table->string('gambar')->nullable();
-            $table->string('kode_obat')->unique();
+            $table->string('kode_obat');
             $table->string('nama_obat');
             $table->integer('harga');
             $table->date('tanggal_exp');

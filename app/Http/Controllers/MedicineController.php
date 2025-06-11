@@ -283,6 +283,8 @@ public function purchaseCreate()
             $newStock->jumlah = $request->jumlah;
             $newStock->tanggal_exp = $request->tanggal_exp;
             $newStock->bentuk_obat = $medicine->bentuk_obat;
+            $newStock->gambar = $medicine->gambar; // ✅ Diambil dari obat lama
+            $newStock->deskripsi = $medicine->deskripsi; // ✅ Diambil dari obat lama
             $newStock->jenis_obat = $medicine->jenis_obat; // ✅ Diambil dari obat lama
 
 
@@ -299,10 +301,10 @@ public function purchaseCreate()
 
 
             // Return success message
-            return redirect()->route('medicines.addStockForm')->with('success', 'Stok berhasil ditambahkan dengan Batch ' . $batchNumber);
+            return redirect()->route('medicines.addStock')->with('success', 'Stok berhasil ditambahkan dengan Batch ' . $batchNumber);
         } else {
             // If medicine not found, return error
-            return redirect()->route('medicines.addStockForm')->with('error', 'Obat tidak ditemukan');
+            return redirect()->route('medicines.addStock')->with('error', 'Obat tidak ditemukan');
         }
     }
 
@@ -391,7 +393,9 @@ public function getMedicineBatchesStock($kodeObat)
         'nama_obat' => $representative->nama_obat,
         'harga' => $representative->harga,
         'bentuk_obat' => $representative->bentuk_obat,
-        'jenis_obat' => $representative->jenis_obat, // ✅ TAMBAHKAN INI
+        'jenis_obat' => $representative->jenis_obat, 
+        'gambar' => $representative->gambar,
+        'deskripsi' => $representative->deskripsi,
         'jenis_penyakit' => $representative->jenisPenyakit->map(function ($p) {
             return [
                 'id' => $p->id,

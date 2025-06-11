@@ -25,6 +25,18 @@
                         <input type="text" id="kode_obat" name="kode_obat" class="form-control" required>
                     </div>
 
+                    <div class="col-md-3 mb-3 d-flex justify-content-center align-items-center">
+                        <div class="border rounded shadow-sm p-2 bg-blue-custom" style="max-width: 180px;">
+                            <img id="preview-gambar"
+                                 src="{{ asset('img/default.png') }}"
+                                 class="img-fluid"
+                                 alt="Gambar Obat"
+                                 style="max-height: 160px; object-fit: contain;">
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="gambar" name="gambar">
+
                     <div class="mb-3">
                         <label for="nama_obat" class="form-label">Nama Obat</label>
                         <input type="text" id="nama_obat" name="nama_obat" class="form-control" readonly required>
@@ -36,6 +48,7 @@
                             <option value=""> Bentuk Obat</option>
                         </select>
                     </div>
+
                     <div class="mb-3">
                         <label for="jenis_obat" class="form-label">Jenis Obat</label>
                         <select id="jenis_obat" name="jenis_obat" class="form-control" required>
@@ -55,6 +68,11 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="deskripsi" class="form-label">Deskripsi</label>
+                        <input type="text" id="deskripsi" name="deskripsi" class="form-control" readonly required>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="batch" class="form-label">Batch (Otomatis)</label>
                         <input type="number" id="batch" name="batch" class="form-control" readonly required>
                     </div>
@@ -65,7 +83,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="tanggal_exp" class="form-label">Tanggal Expiry</label>
+                        <label for="tanggal_exp" class="form-label">Tanggal Expired</label>
                         <input type="date" id="tanggal_exp" name="tanggal_exp" class="form-control" required>
                     </div>
 
@@ -82,79 +100,74 @@
 
 @section('scripts')
 <script>
-  // 1. Ambil elemen form
-  const kodeInput = document.getElementById('kode_obat');
+const kodeInput = document.getElementById('kode_obat');
 
-  kodeInput.addEventListener('input', function () {
+kodeInput.addEventListener('input', function () {
     const kodeObat = this.value.trim();
-    console.log('🔎 Ketik kode_obat:', kodeObat);
 
     if (!kodeObat) {
-      clearFields();
-      return;
+        clearFields();
+        return;
     }
 
-    // show spinner kalau pakai spinner
     fetch('/admin/medicines/get-medicine-batches-stock/' + kodeObat)
-      .then(r => {
-        console.log('🔄 fetch status:', r.status);
-        return r.json();
-      })
-      .then(data => {
-        console.log('📦 Data JSON:', data);
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) {
+                clearFields();
+                alert('Obat tidak ditemukan!');
+                return;
+            }
 
-        if (!data.success) {
-          clearFields();
-          alert('Obat tidak ditemukan!');
-          return;
-        }
+            const rep = data.representative;
 
-        const rep = data.representative;
+            document.getElementById('nama_obat').value   = rep.nama_obat;
+            document.getElementById('harga').value       = rep.harga;
+            document.getElementById('deskripsi').value   = rep.deskripsi;
+            document.getElementById('gambar').value      = rep.gambar;
 
-        // Isi field teks
-        document.getElementById('nama_obat').value = rep.nama_obat;
-        document.getElementById('harga').value     = rep.harga;
+            // Tampilkan gambar
+            document.getElementById('preview-gambar').src = rep.gambar 
+                ? '/' + rep.gambar 
+                : '/img/default.png';
 
-        // Isi dropdown bentuk_obat
-        const bentuk = document.getElementById('bentuk_obat');
-        bentuk.innerHTML = `<option value="${rep.bentuk_obat}" selected>${rep.bentuk_obat}</option>`;
+            const bentuk = document.getElementById('bentuk_obat');
+            bentuk.innerHTML = `<option value="${rep.bentuk_obat}" selected>${rep.bentuk_obat}</option>`;
 
-        // Isi dropdown jenis_obat
-       // Isi dropdown jenis_obat
-        const jenis = document.getElementById('jenis_obat');
-        jenis.innerHTML = `<option value="${rep.jenis_obat}" selected>${rep.jenis_obat}</option>`;
+            const jenis = document.getElementById('jenis_obat');
+            jenis.innerHTML = `<option value="${rep.jenis_obat}" selected>${rep.jenis_obat}</option>`;
 
-        // Isi dropdown jenis_penyakit
-        const ps = document.getElementById('penyakit');
-        ps.innerHTML = '';
-        rep.jenis_penyakit.forEach(p => {
-          const opt = document.createElement('option');
-          opt.value = p.id;
-          opt.textContent = p.nama_penyakit;
-          opt.selected = true;
-          ps.appendChild(opt);
+            const ps = document.getElementById('penyakit');
+            ps.innerHTML = '';
+            rep.jenis_penyakit.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                opt.textContent = p.nama_penyakit;
+                opt.selected = true;
+                ps.appendChild(opt);
+            });
+
+            let last = 0;
+            data.medicines.forEach(m => last = Math.max(last, parseInt(m.batch)));
+            document.getElementById('batch').value = last + 1;
+        })
+        .catch(err => {
+            console.error('❌ Fetch error:', err);
+            alert('Gagal mengambil data.');
         });
+});
 
-        // Hitung batch selanjutnya
-        let last = 0;
-        data.medicines.forEach(m => last = Math.max(last, parseInt(m.batch)));
-        document.getElementById('batch').value = last + 1;
-      })
-      .catch(err => {
-        console.error('❌ Fetch error:', err);
-        alert('Gagal mengambil data.');
-      });
-  });
-
-  // Fungsi bersihkan form
-  function clearFields() {
+function clearFields() {
+    document.getElementById('gambar').value = '';
+    document.getElementById('preview-gambar').src = '/img/default.png';
     document.getElementById('nama_obat').value = '';
     document.getElementById('harga').value     = '';
     document.getElementById('batch').value     = '';
     document.getElementById('bentuk_obat').innerHTML = '<option value=""> Bentuk Obat</option>';
     document.getElementById('penyakit').innerHTML     = '';
     document.getElementById('jenis_obat').innerHTML = '<option value=""> Jenis Obat</option>';
-  }
+    document.getElementById('deskripsi').value = '';
+}
 </script>
 @endsection
-
+@section('styles')
