@@ -64,8 +64,8 @@
                             <span class="text-muted">-</span>
                         @endif
                     </p>
-                    <p><strong>Jumlah:</strong> {{ $medicine->jumlah }}</p>
-                    <p><strong>Tanggal Exp:</strong> {{ $medicine->tanggal_exp }}</p>
+                 <p class="card-stock">Stok: {{ $totalJumlah }}</p>
+
                 </div>
 
             

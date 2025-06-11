@@ -145,7 +145,9 @@
                         <div class="card-body">
                             <h6 class="card-title">{{ $medicine->nama_obat }}</h6>
                             <p class="card-price">Rp. {{ number_format($medicine->harga, 0, ',', '.') }}</p>
-                            <a href="{{ route('user.detail', $medicine->id) }}" class="btn">Informasi Obat</a>
+                            <!-- <a href="{{ route('user.detail', $medicine->id) }}" class="btn">Informasi Obat</a> -->
+                             <a href="{{ route('user.detail', $medicine->id) }}" class="btn">Informasi Obat</a>
+
 
                         </div>
                     </div>

@@ -73,6 +73,10 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/medicines/get-medicine-batches-stock/{kodeObat}', [MedicineController::class, 'getMedicineBatchesStock']);
 
     Route::post('/medicines/add-stock', [MedicineController::class, 'addObatStore'])->name('medicines.addStock.store');
+
+    Route::get('/medicines/edit-by-batch', [MedicineController::class, 'editByBatch'])->name('medicines.editByBatch');
+
+
 });
 
 

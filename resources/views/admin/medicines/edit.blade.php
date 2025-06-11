@@ -1,12 +1,16 @@
 @extends('layouts.app')
+
+@push('styles')
 <link rel="stylesheet" href="{{ asset('css/admin/edit.css') }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+@endpush
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="p-4 rounded shadow bg-blue-custom">
-                <h2 class="text-center mb-4" style="font-weight: bold; color:#3F5FAF ;">Edit Obat</h2>
+                <h2 class="text-center mb-4" style="font-weight: bold; color:#3F5FAF;">Edit Obat</h2>
 
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
@@ -14,7 +18,7 @@
 
                 @if($errors->any())
                     <div class="alert alert-danger">
-                        <ul>
+                        <ul class="mb-0">
                             @foreach($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
@@ -22,22 +26,37 @@
                     </div>
                 @endif
 
+                {{-- Pilihan Batch --}}
+                <div class="mb-4">
+                    <form method="GET" action="{{ route('medicines.editByBatch') }}">
+                        <label for="batchSelect" class="form-label">Pilih Batch</label>
+                        <div class="input-group">
+                            <select name="batch_id" id="batchSelect" class="form-select" onchange="this.form.submit()">
+                                @foreach($batchList as $batch)
+                                    <option value="{{ $batch->id }}" {{ $batch->id == $medicine->id ? 'selected' : '' }}>
+                                        Batch {{ $batch->batch }} (Exp: {{ $batch->tanggal_exp }}) - Jumlah: {{ $batch->jumlah }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="row">
                     <div class="col-md-4">
-                        <!-- Gambar Obat -->
                         @if($medicine->gambar)
                             <img src="{{ asset($medicine->gambar) }}" width="100%" class="img-fluid mb-3 rounded border border-primary">
                         @endif
                     </div>
                     <div class="col-md-8">
                         <form action="{{ route('medicines.update', $medicine->id) }}" method="POST" enctype="multipart/form-data">
-                            @method('PUT')
                             @csrf
+                            @method('PUT')
 
                             <div class="mb-3">
                                 <label for="gambar" class="form-label">Ganti Gambar Obat</label>
                                 <input type="file" id="gambar" name="gambar" class="form-control" accept="image/*">
-                                <small style="color: #3F5FAF;">Kosongkan jika tidak ingin mengganti gambar.</small>
+                                <small class="text-muted">Kosongkan jika tidak ingin mengganti gambar.</small>
                             </div>
 
                             <div class="mb-3">
@@ -48,6 +67,11 @@
                             <div class="mb-3">
                                 <label for="nama_obat" class="form-label">Nama Obat</label>
                                 <input type="text" id="nama_obat" name="nama_obat" value="{{ old('nama_obat', $medicine->nama_obat) }}" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="batch" class="form-label">Nomor Batch</label>
+                                <input type="number" id="batch" name="batch" value="{{ old('batch', $medicine->batch) }}" class="form-control" required>
                             </div>
 
                             <div class="mb-3">
@@ -76,7 +100,6 @@
                                         <option value="{{ $p->id }}" {{ in_array($p->id, $selectedPenyakit ?? []) ? 'selected' : '' }}>{{ $p->nama_penyakit }}</option>
                                     @endforeach
                                 </select>
-                                <small style="color: #3F5FAF;">Tekan Ctrl (atau Cmd di Mac) untuk memilih lebih dari satu.</small>
                             </div>
 
                             <div class="mb-3">

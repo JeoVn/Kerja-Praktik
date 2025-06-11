@@ -65,9 +65,41 @@
                             <span class="text-muted">-</span>
                         @endif
                     </p>
-                    <p><strong>Jumlah:</strong> {{ $medicine->jumlah }}</p>
-                    <p><strong>Tanggal Exp:</strong> {{ $medicine->tanggal_exp }}</p>
-                </div>
+                <p><strong>Total Jumlah Semua Batch:</strong> {{ $totalJumlah }}</p>
+
+                    <div class="mb-3">
+                        <label for="batchSelect" class="form-label"><strong>Pilih Batch:</strong></label>
+                        <select id="batchSelect" class="form-select" onchange="showBatchInfo(this.value)">
+                            @foreach($batches as $batch)
+                                <option value="{{ $batch->id }}">
+                                    Batch ID {{ $batch->id }} - Exp: {{ $batch->tanggal_exp }} - Jumlah: {{ $batch->jumlah }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mt-3">
+                        <h6>Detail Semua Batch:</h6>
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Batch ID</th>
+                                    <th>Jumlah</th>
+                                    <th>Tanggal Exp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($batches as $batch)
+                                <tr>
+                                    <td>{{ $batch->id }}</td>
+                                    <td>{{ $batch->jumlah }}</td>
+                                    <td>{{ $batch->tanggal_exp }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
 
                 <div class="medicine-actions mt-4">
                     <a href="{{ route('medicines.edit', $medicine->id) }}" class="btn btn-warning">Edit Obat</a>

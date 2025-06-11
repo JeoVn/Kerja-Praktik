@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Medicine;
 use App\Models\JenisPenyakit;
+use Illuminate\Support\Facades\DB;
 
 use Carbon\Carbon; 
 
@@ -62,18 +63,33 @@ class MedicineController extends Controller
     }
 
     public function edit($id)
-{
-    $medicine = Medicine::findOrFail($id);
-    $penyakit = JenisPenyakit::all();
-    $selectedPenyakit = $medicine->jenisPenyakit->pluck('id')->toArray();
-    return view('admin.medicines.edit', compact('medicine', 'penyakit', 'selectedPenyakit'));
-}
+    {
+        $medicine = Medicine::findOrFail($id);
+        $penyakit = JenisPenyakit::all();
+        $selectedPenyakit = $medicine->jenisPenyakit->pluck('id')->toArray();
+
+        $batchList = Medicine::where('kode_obat', $medicine->kode_obat)->orderBy('batch')->get();
+
+        return view('admin.medicines.edit', compact('medicine', 'penyakit', 'selectedPenyakit', 'batchList'));
+    //     return view('admin.medicines.edit', compact('medicine', 'penyakit', 'selectedPenyakit'));
+    // }
+    }
+
+      public function editByBatch(Request $request)
+    {
+        $medicine = Medicine::findOrFail($request->batch_id);
+        $penyakit = JenisPenyakit::all();
+        $selectedPenyakit = $medicine->jenisPenyakit->pluck('id')->toArray();
+        $batchList = Medicine::where('kode_obat', $medicine->kode_obat)->get();
+
+        return view('admin.medicines.edit', compact('medicine', 'penyakit', 'selectedPenyakit', 'batchList'));
+    }
 
     public function update(Request $request, $id)
 {
     $request->validate([
         'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        'kode_obat' => 'required|unique:medicines,kode_obat,' . $id,
+        'kode_obat' => 'required|string|max:255',
         'nama_obat' => 'required',
         'harga' => 'required|numeric',
         'jumlah' => 'required|integer',
@@ -112,15 +128,27 @@ class MedicineController extends Controller
 return redirect()->route('admin.detail', $medicine->id)->with('success', 'Data obat berhasil diperbarui');
 }
 
+
     public function homeAdmin()
     {
-        $medicines = Medicine::all();
+        $subquery = DB::table('medicines')
+            ->select(DB::raw('MAX(id) as id'))
+            ->groupBy('kode_obat');
+
+        $medicines = DB::table('medicines')
+            ->joinSub($subquery, 'latest', function ($join) {
+                $join->on('medicines.id', '=', 'latest.id');
+            })
+            ->orderBy('nama_obat')
+            ->get();
+
         $jenisObat = Medicine::select('jenis_obat')->distinct()->pluck('jenis_obat');
         $bentukObat = Medicine::select('bentuk_obat')->distinct()->pluck('bentuk_obat');
         $penyakit = JenisPenyakit::all();
 
         return view('admin.home', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
     }
+
 
     public function index(Request $request)
     {
@@ -152,8 +180,15 @@ return redirect()->route('admin.detail', $medicine->id)->with('success', 'Data o
     public function show($id)
     {
         $medicine = Medicine::findOrFail($id);
-        return view('admin.detail', compact('medicine'));
+
+           // Ambil semua batch dengan kode obat yang sama
+        $batches = Medicine::where('kode_obat', $medicine->kode_obat)->orderBy('tanggal_exp')->get();
+        $totalJumlah = $batches->sum('jumlah');
+
+    return view('admin.detail', compact('medicine', 'batches', 'totalJumlah'));
+        // return view('admin.detail', compact('medicine'));
     }
+
 
     public function showuser($id)
     {
@@ -181,33 +216,69 @@ return redirect()->route('admin.detail', $medicine->id)->with('success', 'Data o
     }
 
    // Tampilkan list obat untuk user biasa (public)
-   public function publicIndex(Request $request)
+//    public function publicIndex(Request $request)
+//     {
+//         $query = Medicine::query();
+
+//         if ($request->filled('jenis_obat')) {
+//             $query->whereIn('jenis_obat', $request->jenis_obat);
+//         }
+//         if ($request->filled('sakit')) {
+//             // Sesuaikan filter sakit jika ada relasi, atau hapus jika belum ada
+//         }
+//         if ($request->filled('bentuk_obat')) {
+//             $query->whereIn('bentuk_obat', $request->bentuk_obat);
+//         }
+
+//         $medicines = $query->get();
+
+//         return view('user.homeuser', compact('medicines'));
+//     }
+public function publicIndex(Request $request)
 {
     $query = Medicine::query();
 
+    // Filter berdasarkan jenis obat
     if ($request->filled('jenis_obat')) {
         $query->whereIn('jenis_obat', $request->jenis_obat);
     }
-    if ($request->filled('sakit')) {
-        // Sesuaikan filter sakit jika ada relasi, atau hapus jika belum ada
-    }
+
+    // Filter berdasarkan bentuk obat
     if ($request->filled('bentuk_obat')) {
         $query->whereIn('bentuk_obat', $request->bentuk_obat);
     }
 
-    $medicines = $query->get();
+    // Catatan: Filter sakit belum digunakan, bisa ditambahkan jika relasi tersedia
+
+    // Ambil data grup per kode_obat dan hitung total jumlah
+$medicines = $query->selectRaw('MAX(id) as id, kode_obat, nama_obat, harga, gambar, jenis_obat, bentuk_obat, SUM(jumlah) as total_jumlah')
+    ->groupBy('kode_obat', 'nama_obat', 'harga', 'gambar', 'jenis_obat', 'bentuk_obat')
+    ->orderBy('nama_obat')
+    ->get();
+
 
     return view('user.homeuser', compact('medicines'));
 }
 
+// public function publicShow($id)
+//     {
+//         $medicine = Medicine::findOrFail($id);
+//         return view('user.detail', compact('medicine'));
+//     }
+
 public function publicShow($id)
 {
+    // Ambil 1 data utama dari ID yang diklik
     $medicine = Medicine::findOrFail($id);
-    return view('user.detail', compact('medicine'));
+
+    // Ambil semua batch dengan kode_obat yang sama
+    $batches = Medicine::where('kode_obat', $medicine->kode_obat)->get();
+
+    // Hitung total jumlah dari semua batch
+    $totalJumlah = $batches->sum('jumlah');
+
+    return view('user.detail', compact('medicine', 'batches', 'totalJumlah'));
 }
-// Display the form for adding stock to a medicine
-
-
 
 public function purchaseCreate()
     {
