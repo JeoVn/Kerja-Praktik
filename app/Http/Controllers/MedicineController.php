@@ -149,34 +149,100 @@ return redirect()->route('admin.detail', $medicine->id)->with('success', 'Data o
         return view('admin.home', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
     }
 
+// public function index(Request $request)
+// {
+//     $query = Medicine::query();
 
-    public function index(Request $request)
-    {
-        $query = Medicine::query();
+//     // Filter berdasarkan Jenis Obat (array)
+//     if ($request->filled('jenis_obat')) {
+//         $query->whereIn('jenis_obat', $request->jenis_obat);
+//     }
 
-        if ($request->filled('jenis_obat')) {
-            $query->where('jenis_obat', $request->jenis_obat);
-        }
 
-        if ($request->filled('penyakit')) {
-            $query->whereHas('jenisPenyakit', function ($q) use ($request) {
-                $q->whereIn('id', $request->penyakit);
-            });
-        }
+//     // Filter berdasarkan Bentuk Obat (single select)
+//     if ($request->filled('bentuk_obat')) {
+//         $query->where('bentuk_obat', $request->bentuk_obat);
+//     }
 
-        if ($request->filled('bentuk_obat')) {
-            $query->where('bentuk_obat', $request->bentuk_obat);
-        }
+//     // Filter berdasarkan Penyakit (many-to-many)
+//     if ($request->filled('penyakit')) {
+//         $query->whereHas('jenisPenyakit', function ($q) use ($request) {
+//         $q->whereIn('jenis_penyakit.id', $request->penyakit);
+//     });
+// }
 
-        $medicines = $query->get();
 
-        return view('admin.home', [
-            'medicines' => $medicines,
-            'jenisObat' => Medicine::select('jenis_obat')->distinct()->pluck('jenis_obat'),
-            'bentukObat' => Medicine::select('bentuk_obat')->distinct()->pluck('bentuk_obat'),
-            'penyakit' => JenisPenyakit::all(),
-        ]);
+//     // Group berdasarkan kode_obat agar hanya tampil satu entry per kode
+//     $medicines = $query->selectRaw('MAX(id) as id, kode_obat, nama_obat, harga, gambar, jenis_obat, bentuk_obat, SUM(jumlah) as jumlah')
+//         ->groupBy('kode_obat', 'nama_obat', 'harga', 'gambar', 'jenis_obat', 'bentuk_obat')
+//         ->orderBy('nama_obat')
+//         ->get();
+
+//     // Ambil data filter (untuk dropdown/checkbox di view)
+//     $jenisObat = Medicine::distinct()->pluck('jenis_obat');
+//     $bentukObat = Medicine::distinct()->pluck('bentuk_obat');
+//     $penyakit = JenisPenyakit::all();
+
+//     return view('admin.home', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
+// }
+public function index(Request $request)
+{
+    $query = Medicine::query();
+
+    // Filter jenis obat
+    if ($request->filled('jenis_obat')) {
+        $query->whereIn('jenis_obat', $request->jenis_obat);
     }
+
+    // Filter jenis penyakit
+    if ($request->filled('penyakit')) {
+        $query->whereHas('jenisPenyakit', function ($q) use ($request) {
+            $q->whereIn('jenis_penyakit.id', $request->penyakit);
+        });
+    }
+
+    // Filter bentuk obat
+    if ($request->filled('bentuk_obat')) {
+        $query->whereIn('bentuk_obat', $request->bentuk_obat);
+    }
+
+    $medicines = $query->get();
+
+    // Kirim semua filter ke view
+    $jenisObat = Medicine::distinct()->pluck('jenis_obat')->filter()->values();
+    $bentukObat = Medicine::distinct()->pluck('bentuk_obat')->filter()->values();
+    $penyakit = JenisPenyakit::all(); // pastikan model ini ada
+
+    return view('admin.home', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
+}
+
+    // public function index(Request $request)
+    // {
+    //     $query = Medicine::query();
+
+    //     if ($request->filled('jenis_obat')) {
+    //         $query->where('jenis_obat', $request->jenis_obat);
+    //     }
+
+    //     if ($request->filled('penyakit')) {
+    //         $query->whereHas('jenisPenyakit', function ($q) use ($request) {
+    //             $q->whereIn('id', $request->penyakit);
+    //         });
+    //     }
+
+    //     if ($request->filled('bentuk_obat')) {
+    //         $query->where('bentuk_obat', $request->bentuk_obat);
+    //     }
+
+    //     $medicines = $query->get();
+
+    //     return view('admin.home', [
+    //         'medicines' => $medicines,
+    //         'jenisObat' => Medicine::select('jenis_obat')->distinct()->pluck('jenis_obat'),
+    //         'bentukObat' => Medicine::select('bentuk_obat')->distinct()->pluck('bentuk_obat'),
+    //         'penyakit' => JenisPenyakit::all(),
+    //     ]);
+    // }
     public function show($id)
     {
         $medicine = Medicine::findOrFail($id);

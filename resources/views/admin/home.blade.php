@@ -100,74 +100,34 @@
             <form method="GET" action="{{ route('medicines.index') }}">
                 <div class="filter-group">
                     <h6>Jenis Obat</h6>
-                    <div class="filter-item">
-                        <input type="checkbox" id="obat-bebas" name="jenis[]" value="bebas">
-                        <label for="obat-bebas">Obat Bebas</label>
-                    </div>
-                    <div class="filter-item">
-                        <input type="checkbox" id="obat-bebas-terbatas" name="jenis[]" value="bebas-terbatas">
-                        <label for="obat-bebas-terbatas">Obat Bebas Terbatas</label>
-                    </div>
-                    <div class="filter-item red-text">
-                        <input type="checkbox" id="obat-keras" name="jenis[]" value="keras">
-                        <label for="obat-keras">Obat Keras dan Psikotropika</label>
-                    </div>
-                    <div class="filter-item blue-text">
-                        <input type="checkbox" id="obat-golongan" name="jenis[]" value="golongan">
-                        <label for="obat-golongan">Obat Golongan Narkotika</label>
-                    </div>
+                @foreach($jenisObat as $jenis)
+                <div class="filter-item">
+                   <input type="checkbox" name="jenis_obat[]" id="jenis-{{ strtolower($jenis) }}" value="{{ $jenis }}">
+                    <label for="jenis-{{ strtolower($jenis) }}">{{ $jenis }}</label>
+
+                </div>
+                 @endforeach
                 </div>
 
                 <div class="filter-group">
-                    <h6>Sakit</h6>
-                    <div class="filter-item">
-                        <input type="checkbox" id="batuk-pilek" name="sakit[]" value="batuk-pilek">
-                        <label for="batuk-pilek">Batuk, Pilek & Flu</label>
-                    </div>
-                    <div class="filter-item">
-                        <input type="checkbox" id="demam-nyeri" name="sakit[]" value="demam-nyeri">
-                        <label for="demam-nyeri">Demam & Nyeri</label>
-                    </div>
-                    <div class="filter-item">
-                        <input type="checkbox" id="masalah-pencernaan" name="sakit[]" value="pencernaan">
-                        <label for="masalah-pencernaan">Masalah Pencernaan</label>
-                    </div>
-                    <div class="filter-item">
-                        <input type="checkbox" id="alergi" name="sakit[]" value="alergi">
-                        <label for="alergi">Alergi</label>
-                    </div>
-                    <div class="filter-item">
-                        <input type="checkbox" id="masalah-tht" name="sakit[]" value="hht">
-                        <label for="masalah-tht">Masalah THT</label>
-                    </div>
-                    <div class="filter-item">
-                        <input type="checkbox" id="masalah-mata" name="sakit[]" value="mata">
-                        <label for="masalah-mata">Masalah Mata</label>
-                    </div>
+                    <h6>Jenis Penyakit</h6>
+                @foreach($penyakit as $p)
+                <div class="filter-item">
+                    <input type="checkbox" id="penyakit-{{ $p->id }}" name="penyakit[]" value="{{ $p->id }}">
+                    <label for="penyakit-{{ $p->id }}">{{ $p->nama_penyakit }}</label>
+                </div>
+                 @endforeach
                 </div>
 
                 <div class="filter-group">
                     <h6>Bentuk Obat</h6>
+                    @foreach($bentukObat as $bentuk)
                     <div class="filter-item">
-                        <input type="checkbox" id="tablet" name="bentuk[]" value="tablet">
-                        <label for="tablet">Tablet</label>
+                        <input type="checkbox" name="bentuk_obat[]" id="{{ strtolower($bentuk) }}" value="{{ $bentuk }}">
+                        <label for="{{ strtolower($bentuk) }}">{{ $bentuk }}</label>
                     </div>
-                    <div class="filter-item">
-                        <input type="checkbox" id="kapsul" name="bentuk[]" value="kapsul">
-                        <label for="kapsul">Kapsul</label>
-                    </div>
-                    <div class="filter-item">
-                        <input type="checkbox" id="sirup" name="bentuk[]" value="sirup">
-                        <label for="sirup">Sirup</label>
-                    </div>
-                    <div class="filter-item">
-                        <input type="checkbox" id="salep" name="bentuk[]" value="salep">
-                        <label for="salep">Salep</label>
-                    </div>
-                    <div class="filter-item">
-                        <input type="checkbox" id="lainnya" name="bentuk[]" value="lainnya">
-                        <label for="lainnya">Lainnya</label>
-                    </div>
+                @endforeach
+
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 mt-3">Terapkan Filter</button>
