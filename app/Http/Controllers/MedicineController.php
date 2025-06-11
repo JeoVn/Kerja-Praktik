@@ -6,11 +6,13 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Medicine;
 use App\Models\JenisPenyakit;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Purchase;
 use Carbon\Carbon; 
+use Illuminate\Support\Facades\Auth;
+
 
 // Add this if the Purchase model exists, otherwise create it in app/Models/Purchase.php
-use App\Models\Purchase;
+
 
 class MedicineController extends Controller
 {
@@ -148,43 +150,6 @@ return redirect()->route('admin.detail', $medicine->id)->with('success', 'Data o
 
         return view('admin.home', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
     }
-
-// public function index(Request $request)
-// {
-//     $query = Medicine::query();
-
-//     // Filter berdasarkan Jenis Obat (array)
-//     if ($request->filled('jenis_obat')) {
-//         $query->whereIn('jenis_obat', $request->jenis_obat);
-//     }
-
-
-//     // Filter berdasarkan Bentuk Obat (single select)
-//     if ($request->filled('bentuk_obat')) {
-//         $query->where('bentuk_obat', $request->bentuk_obat);
-//     }
-
-//     // Filter berdasarkan Penyakit (many-to-many)
-//     if ($request->filled('penyakit')) {
-//         $query->whereHas('jenisPenyakit', function ($q) use ($request) {
-//         $q->whereIn('jenis_penyakit.id', $request->penyakit);
-//     });
-// }
-
-
-//     // Group berdasarkan kode_obat agar hanya tampil satu entry per kode
-//     $medicines = $query->selectRaw('MAX(id) as id, kode_obat, nama_obat, harga, gambar, jenis_obat, bentuk_obat, SUM(jumlah) as jumlah')
-//         ->groupBy('kode_obat', 'nama_obat', 'harga', 'gambar', 'jenis_obat', 'bentuk_obat')
-//         ->orderBy('nama_obat')
-//         ->get();
-
-//     // Ambil data filter (untuk dropdown/checkbox di view)
-//     $jenisObat = Medicine::distinct()->pluck('jenis_obat');
-//     $bentukObat = Medicine::distinct()->pluck('bentuk_obat');
-//     $penyakit = JenisPenyakit::all();
-
-//     return view('admin.home', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
-// }
 
 public function index(Request $request)
 {
@@ -399,36 +364,133 @@ public function purchaseCreate()
         return view('admin.purchase', compact('medicines'));
     }
 
-    // Store the purchase and update the stock
-    // Menyimpan pembelian dan memperbarui stok
-    public function purchaseStore(Request $request)
-    {
-        // Validasi data input
-        $request->validate([
-            'kode_obat' => 'required',  // Kode obat wajib
-            'nama_obat' => 'required',  // Nama obat wajib
-            'jumlah' => 'required|integer', // Jumlah wajib dan harus berupa angka
+//     // Store the purchase and update the stock
+//     // Menyimpan pembelian dan memperbarui stok
+//     public function purchaseStore(Request $request)
+//     {
+//         // Validasi data input
+//         $request->validate([
+//             'kode_obat' => 'required',  // Kode obat wajib
+//             'nama_obat' => 'required',  // Nama obat wajib
+//             'jumlah' => 'required|integer', // Jumlah wajib dan harus berupa angka
+//         ]);
+
+//         // Mencari obat berdasarkan kode obat
+//         $medicine = Medicine::where('kode_obat', $request->kode_obat)->first();
+
+//         if ($medicine) {
+//             // Mengecek dan mengurangi stok jika tersedia
+//             $stockUpdated = $medicine->decreaseStock($request->jumlah);
+
+//             if ($stockUpdated) {
+//                 // Menghitung harga total
+//                 $total = $request->jumlah * $medicine->harga; 
+
+//                 return redirect()->route('medicines.purchase')->with('success', 'Pembelian berhasil, stok diperbarui');
+//             } else {
+//                 return redirect()->route('medicines.purchase')->with('error', 'Stok tidak cukup');
+//             }
+//         } else {
+//             return redirect()->route('medicines.purchase')->with('error', 'Obat tidak ditemukan');
+//         }
+//     }
+
+public function purchaseStore(Request $request)
+{
+    $request->validate([
+        'items' => 'required|array|min:1',
+        'items.*.kode_obat' => 'required',
+        'items.*.nama_obat' => 'required',
+        'items.*.harga' => 'required|numeric',
+        'items.*.batch' => 'required',
+        'items.*.jumlah' => 'required|integer|min:1',
+        'diskon' => 'nullable|numeric|min:0|max:100',
+    ]);
+
+    $totalHarga = 0;
+
+    foreach ($request->items as $index => $item) {
+        $medicine = Medicine::where('kode_obat', $item['kode_obat'])
+                            ->where('batch', $item['batch'])
+                            ->first();
+
+        if (!$medicine) {
+            return back()->with('error', "Obat dengan kode {$item['kode_obat']} batch {$item['batch']} tidak ditemukan.");
+        }
+
+        if ($medicine->jumlah < $item['jumlah']) {
+            return back()->with('error', "Stok tidak cukup untuk obat {$item['nama_obat']}.");
+        }
+
+        // Kurangi stok
+        $medicine->jumlah -= $item['jumlah'];
+        $medicine->save();
+
+        // Simpan ke purchases
+        Purchase::create([
+            'kode_obat' => $item['kode_obat'],
+            'nama_obat' => $item['nama_obat'],
+            'harga'     => $item['harga'],
+            'batch'     => $item['batch'],
+            'jumlah'    => $item['jumlah'],
+            'diskon' => $request->diskon ?? 0,
+
+            'admin_id'  => Auth::id(),
         ]);
 
-        // Mencari obat berdasarkan kode obat
-        $medicine = Medicine::where('kode_obat', $request->kode_obat)->first();
-
-        if ($medicine) {
-            // Mengecek dan mengurangi stok jika tersedia
-            $stockUpdated = $medicine->decreaseStock($request->jumlah);
-
-            if ($stockUpdated) {
-                // Menghitung harga total
-                $total = $request->jumlah * $medicine->harga; 
-
-                return redirect()->route('medicines.purchase')->with('success', 'Pembelian berhasil, stok diperbarui');
-            } else {
-                return redirect()->route('medicines.purchase')->with('error', 'Stok tidak cukup');
-            }
-        } else {
-            return redirect()->route('medicines.purchase')->with('error', 'Obat tidak ditemukan');
-        }
+        $totalHarga += $item['harga'] * $item['jumlah'];
     }
+
+    // Hitung total setelah diskon (jika ada)
+    $diskon = $request->diskon ?? 0;
+    $totalSetelahDiskon = $totalHarga - ($totalHarga * ($diskon / 100));
+
+    return redirect()->route('medicines.purchase')->with('success', 
+        'Transaksi berhasil disimpan. Total setelah diskon: Rp' . number_format($totalSetelahDiskon, 0, ',', '.') .
+        ($diskon > 0 ? " (Diskon {$diskon}%)" : '')
+    );
+}
+
+
+ 
+// public function purchaseStore(Request $request)
+// {
+//     $request->validate([
+//         'kode_obat' => 'required',
+//         'nama_obat' => 'required',
+//         'harga' => 'required|numeric',
+//         'batch' => 'required',
+//         'jumlah' => 'required|integer|min:1',
+//     ]);
+
+//     $medicine = Medicine::where('kode_obat', $request->kode_obat)
+//         ->where('batch', $request->batch)
+//         ->first();
+
+//     if (!$medicine) {
+//         return redirect()->route('medicines.purchase')->with('error', 'Obat tidak ditemukan.');
+//     }
+
+//     if ($medicine->jumlah < $request->jumlah) {
+//         return redirect()->route('medicines.purchase')->with('error', 'Stok tidak cukup.');
+//     }
+
+//     // Kurangi stok
+//     $medicine->jumlah -= $request->jumlah;
+//     $medicine->save();
+
+//     // Simpan ke tabel purchases
+//     Purchase::create([
+//         'kode_obat' => $medicine->kode_obat,
+//         'nama_obat' => $medicine->nama_obat,
+//         'harga' => $medicine->harga,
+//         'batch' => $medicine->batch,
+//         'jumlah' => $request->jumlah,
+//         'admin_id' => Auth::id(),
+//     ]);
+
+//     return redirect()->route('medicines.purchase')->with('success', 'Transaksi berhasil dicatat dan stok diperbarui.');
+// }
 
     public function addObatCreate()
     {
@@ -444,6 +506,7 @@ public function purchaseCreate()
             'nama_obat' => 'required',  // Kode obat wajib
             'jumlah' => 'required|integer|min:1', // Jumlah wajib dan harus berupa angka lebih dari 0
             'tanggal_exp' => 'required|date', // Tanggal kadaluarsa wajib
+            
         ]);
 
         // Mencari obat berdasarkan kode obat
@@ -470,7 +533,7 @@ public function purchaseCreate()
             $newStock->deskripsi = $medicine->deskripsi; // ✅ Diambil dari obat lama
             $newStock->jenis_obat = $medicine->jenis_obat; // ✅ Diambil dari obat lama
 
-
+            $newStock->admin_id = Auth::id(); // ID admin yang menambahkan stok
             $newStock->save();
 
             $newStock->jenisPenyakit()->sync($medicine->jenisPenyakit->pluck('id'));
