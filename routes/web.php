@@ -22,28 +22,28 @@ Route::get('/register/first-owner', [RegisterController::class, 'showFirstOwnerR
 Route::post('/register/first-owner', [RegisterController::class, 'registerFirstOwner'])->name('register.first-owner.submit');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-// Dashboard Owner & Admin
-// Route::middleware(['auth', 'role:owner'])->get('/owner/home', [OwnerController::class, 'index'])->name('owner.home');
+
 Route::middleware(['auth', 'role:admin'])->get('/admin/home', [AdminController::class, 'index'])->name('admin.home');
 
 // Medicines Resource (CRUD)
 Route::resource('medicines', MedicineController::class);
 
 // Admin dashboard khusus (jika ingin dashboard khusus dari MedicineController)
-Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [MedicineController::class, 'dashboard'])->name('admin.dashboard');
+// Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [MedicineController::class, 'dashboard'])->name('admin.dashboard');
 
 // Form create obat khusus admin (opsional, jika ingin path berbeda)
 // Route::middleware(['auth', 'role:admin'])->get('/admin/create', [MedicineController::class, 'create'])->name('admin.medicines.create');
 
 // Dashboard untuk user biasa
-Route::get('/dashboarduser', [MedicineController::class, 'index'])->name('dashboarduser');
+// Route::get('/dashboarduser', [MedicineController::class, 'index'])->name('dashboarduser');
 
 // Detail obat untuk user
-Route::get('/detailuser/{medicine}', [MedicineController::class, 'detailuser'])->name('detailuser.show');
-Route::middleware(['auth', 'role:admin'])->get('/admin/detail/{medicine}', [MedicineController::class, 'show'])->name('admin.detail');
+// Route::get('/detailuser/{medicine}', [MedicineController::class, 'detailuser'])->name('detailuser.show');
+// Route::middleware(['auth', 'role:admin'])->get('/admin/detail/{medicine}', [MedicineController::class, 'show'])->name('admin.detail');
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/home', [MedicineController::class, 'homeAdmin'])->name('admin.home');
+    Route::get('/detail{medicine}',  [MedicineController::class, 'show'])->name('admin.detail');
     Route::get('/medicines/expiring', [MedicineController::class, 'expiringSoon'])->name('medicines.expiring');
     Route::get('/medicines/sedikit-stok', [MedicineController::class, 'sedikitStok'])->name('medicines.sedikitstok');  
     Route::get('/create', [MedicineController::class, 'create'])->name('admin.medicines.create');
@@ -82,11 +82,14 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
 Route::prefix('owner')->middleware(['auth', 'role:owner'])->group(function () {
     Route::get('/home', [OwnerController::class, 'index'])->name('owner.home');
-    // Route::get('/home', [MedicineController::class, 'homeAdmin'])->name('admin.home');
+    
+    Route::get('/detail{medicine}',  [MedicineController::class, 'show'])->name('owner.admin.detail');
+
     Route::get('/medicines/expiring', [MedicineController::class, 'expiringSoon'])->name('owner.medicines.expiring');
     Route::get('/medicines/sedikit-stok', [MedicineController::class, 'sedikitStok'])->name('owner.medicines.sedikitstok');  
     Route::get('/create', [MedicineController::class, 'create'])->name('owner.medicines.create');
-    // Tambahkan route lain yang ingin diakses oleh admin dan owner di sini
+    
+    
 });
 
 

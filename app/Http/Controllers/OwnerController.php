@@ -17,7 +17,11 @@ class OwnerController extends Controller
 
     public function index() 
     {
-        $medicines = Medicine::all();  // Ambil semua data obat
+        $medicines = Medicine::selectRaw('MAX(id) as id, kode_obat, nama_obat, harga, gambar, SUM(jumlah) as jumlah')
+      ->groupBy('kode_obat', 'nama_obat', 'harga', 'gambar')
+      ->orderBy('nama_obat')
+      ->get();
+
         return view('owner.home', compact('medicines'));
     }
 }

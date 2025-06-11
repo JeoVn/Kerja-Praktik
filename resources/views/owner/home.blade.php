@@ -100,7 +100,7 @@
                         <div class="medicine-price">Rp {{ number_format($medicine->harga, 0, ',', '.') }}</div>
                         <div class="medicine-stock">Stok: {{ $medicine->jumlah }}</div>
                     </div>
-                    <a href="{{ route('admin.detail', $medicine->id) }}" class="btn btn-info btn-detail">Detail Obat</a>
+                    <a href="{{ route('owner.admin.detail', $medicine->id) }}" class="btn btn-info btn-detail">Detail Obat</a>
                 </div>
             @endforeach
         </div>
