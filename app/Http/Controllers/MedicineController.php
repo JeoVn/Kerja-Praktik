@@ -299,32 +299,63 @@ public function index(Request $request)
 //         $medicines = $query->get();
 
 //         return view('user.homeuser', compact('medicines'));
-//     }
+// //     }
 public function publicIndex(Request $request)
 {
     $query = Medicine::query();
 
-    // Filter berdasarkan jenis obat
     if ($request->filled('jenis_obat')) {
         $query->whereIn('jenis_obat', $request->jenis_obat);
     }
 
-    // Filter berdasarkan bentuk obat
     if ($request->filled('bentuk_obat')) {
         $query->whereIn('bentuk_obat', $request->bentuk_obat);
     }
 
-    // Catatan: Filter sakit belum digunakan, bisa ditambahkan jika relasi tersedia
+    if ($request->filled('penyakit')) {
+        $query->whereHas('jenisPenyakit', function ($q) use ($request) {
+            $q->whereIn('id', $request->penyakit);
+        });
+    }
 
-    // Ambil data grup per kode_obat dan hitung total jumlah
-$medicines = $query->selectRaw('MAX(id) as id, kode_obat, nama_obat, harga, gambar, jenis_obat, bentuk_obat, SUM(jumlah) as total_jumlah')
-    ->groupBy('kode_obat', 'nama_obat', 'harga', 'gambar', 'jenis_obat', 'bentuk_obat')
-    ->orderBy('nama_obat')
-    ->get();
+    $medicines = $query->selectRaw('MAX(id) as id, kode_obat, nama_obat, harga, gambar, jenis_obat, bentuk_obat, SUM(jumlah) as jumlah')
+        ->groupBy('kode_obat', 'nama_obat', 'harga', 'gambar', 'jenis_obat', 'bentuk_obat')
+        ->orderBy('nama_obat')
+        ->get();
 
+    // Tambahkan ini:
+    $jenisObat = Medicine::distinct()->pluck('jenis_obat')->filter()->values();
+    $bentukObat = Medicine::distinct()->pluck('bentuk_obat')->filter()->values();
+    $penyakit = \App\Models\JenisPenyakit::all();
 
-    return view('user.homeuser', compact('medicines'));
+    return view('user.homeuser', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
 }
+
+// public function publicIndex(Request $request)
+// {
+//     $query = Medicine::query();
+
+//     // Filter berdasarkan jenis obat
+//     if ($request->filled('jenis_obat')) {
+//         $query->whereIn('jenis_obat', $request->jenis_obat);
+//     }
+
+//     // Filter berdasarkan bentuk obat
+//     if ($request->filled('bentuk_obat')) {
+//         $query->whereIn('bentuk_obat', $request->bentuk_obat);
+//     }
+
+//     // Catatan: Filter sakit belum digunakan, bisa ditambahkan jika relasi tersedia
+
+//     // Ambil data grup per kode_obat dan hitung total jumlah
+// $medicines = $query->selectRaw('MAX(id) as id, kode_obat, nama_obat, harga, gambar, jenis_obat, bentuk_obat, SUM(jumlah) as total_jumlah')
+//     ->groupBy('kode_obat', 'nama_obat', 'harga', 'gambar', 'jenis_obat', 'bentuk_obat')
+//     ->orderBy('nama_obat')
+//     ->get();
+
+
+//     return view('user.homeuser', compact('medicines'));
+// }
 
 // public function publicShow($id)
 //     {
