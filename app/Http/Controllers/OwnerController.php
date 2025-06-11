@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Medicine; 
+use App\Models\Purchase;
 use Illuminate\Support\Facades\Hash;
 
 class OwnerController extends Controller
@@ -32,5 +33,10 @@ class OwnerController extends Controller
 
     return view('owner.home', compact('medicines'));
 }
+  public function transaksi()
+  {
+      $purchases = Purchase::with('admin')->orderBy('created_at', 'desc')->get();
+      return view('owner.transaksi', compact('purchases'));
+  }
 
 }

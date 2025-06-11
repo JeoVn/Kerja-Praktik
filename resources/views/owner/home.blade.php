@@ -94,13 +94,12 @@
         <a href="{{ route('register') }}" class="btn btn-primary">
             ➕ Registrasi Admin
         </a>
-        <a href="{{ route('transaksi') }}" class="btn btn-success">
-            💳 Lihat Transaksi
-        </a>
+        <a href="{{ route('owner.transaksi') }}" class="btn btn-success">Lihat Transaksi</a>
+
     </div>
 
     <!-- Search Bar -->
-    <form method="GET" action="{{ route('owner.dashboard') }}" class="search-bar">
+    <form method="GET" action="{{ route('owner.home') }}" class="search-bar">
         <input type="text" name="search" class="form-control" placeholder="Cari nama obat..." value="{{ request('search') }}">
         <button type="submit" class="btn btn-outline-primary">Cari</button>
     </form>

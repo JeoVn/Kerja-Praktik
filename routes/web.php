@@ -89,7 +89,7 @@ Route::prefix('owner')->middleware(['auth', 'role:owner'])->group(function () {
     Route::get('/medicines/sedikit-stok', [MedicineController::class, 'sedikitStok'])->name('owner.medicines.sedikitstok');  
     Route::get('/create', [MedicineController::class, 'create'])->name('owner.medicines.create');
     
-    
+    Route::get('/transaksi', [OwnerController::class, 'transaksi'])->name('owner.transaksi');
 });
 
 
