@@ -38,5 +38,6 @@ class OwnerController extends Controller
       $purchases = Purchase::with('admin')->orderBy('created_at', 'desc')->get();
       return view('owner.transaksi', compact('purchases'));
   }
+  
 
 }

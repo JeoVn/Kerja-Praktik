@@ -90,6 +90,7 @@ Route::prefix('owner')->middleware(['auth', 'role:owner'])->group(function () {
     Route::get('/create', [MedicineController::class, 'create'])->name('owner.medicines.create');
     
     Route::get('/transaksi', [OwnerController::class, 'transaksi'])->name('owner.transaksi');
+    Route::patch('/admin/{id}/toggle-status', [AuthController::class, 'toggleAdminStatus'])->name('admin.toggleStatus');
 });
 
 
@@ -105,5 +106,4 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/homeuser', [MedicineController::class, 'publicIndex'])->name('user.home');
 Route::get('/homeuser/{id}', [MedicineController::class, 'publicShow'])->name('user.detail');
-
 

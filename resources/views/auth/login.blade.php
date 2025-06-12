@@ -12,7 +12,7 @@
                 <img src="{{ asset('images/logo.png') }}" alt="Logo Apotek" class="logo">
                 <h1>AA APOTEK ANUGRAH</h1>
                 <p class="subtitle">SOLUSI SEHAT KELUARGA ANDA</p>
-                <small class="powered">Powered by PT Kimara Indonesia</small>
+                <!-- <small class="powered">Powered by PT Kimara Indonesia</small> -->
             </div>
         </div>
         <div class="right-panel">

@@ -20,7 +20,7 @@
         <div class="logo">💊</div>
         <h1>AA APOTEK ANUGRAH</h1>
         <p class="subtitle">Solusi Sehat Keluarga Anda</p>
-        <div class="powered">Powered by PT Pharos Indonesia</div>
+        
     </div>
 </body>
 </html>

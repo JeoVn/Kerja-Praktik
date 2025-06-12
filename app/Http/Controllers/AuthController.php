@@ -14,41 +14,78 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
+public function postLogin(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|string',
+    ]);
 
-    // Proses login
-    public function postLogin(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
+    // Ambil user berdasarkan email
+    $user = User::where('email', $request->email)->first();
 
-        // Ambil data email dan password dari request
-        $credentials = $request->only('email', 'password');
+    if (!$user) {
+        return redirect()->back()->withErrors(['email' => 'Email tidak terdaftar.']);
+    }
 
-        // Cek kredensial
-        if (Auth::attempt($credentials)) {
-            // Cek role pengguna setelah login
-            $user = Auth::user(); // Mengambil user yang sedang login
+    // Cek status aktif jika role-nya admin
+    if ($user->role === 'admin' && !$user->is_active) {
+        return redirect()->back()->withErrors(['email' => 'Akun admin Anda telah dinonaktifkan.']);
+    }
 
-            // Menambahkan pesan sukses untuk login
-            session()->flash('success', 'Login successful!');
+    // Cek kredensial
+    if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        session()->flash('success', 'Login berhasil!');
+        $user = Auth::user();
 
-            // Redirect berdasarkan role
-            if ($user->role === 'owner') {
-                return redirect()->route('owner.home'); // Redirect ke dashboard owner
-            } elseif ($user->role === 'admin') {
-                return redirect()->route('admin.home'); // Redirect ke dashboard admin
-            }
-
-            // Default redirection jika role tidak ditemukan
-            return redirect()->route('login')->withErrors(['role' => 'Invalid user role']);
+        if ($user->role === 'owner') {
+            return redirect()->route('owner.home');
+        } elseif ($user->role === 'admin') {
+            return redirect()->route('admin.home');
         }
 
-        // Jika login gagal
-        return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
+        Auth::logout();
+        return redirect()->route('login')->withErrors(['role' => 'Role pengguna tidak dikenali.']);
     }
+
+    return redirect()->back()->withErrors(['email' => 'Email atau password salah.']);
+}
+
+    // Proses login
+    // public function postLogin(Request $request)
+    // {
+    //     // Validasi input
+    //     $request->validate([
+    //         'email' => 'required|email',
+    //         'password' => 'required|string',
+    //     ]);
+
+    //     // Ambil data email dan password dari request
+    //     $credentials = $request->only('email', 'password');
+
+    //     // Cek kredensial
+    //     if (Auth::attempt($credentials)) {
+    //         // Cek role pengguna setelah login
+    //         $user = Auth::user(); // Mengambil user yang sedang login
+
+    //         // Menambahkan pesan sukses untuk login
+    //         session()->flash('success', 'Login successful!');
+
+    //         // Redirect berdasarkan role
+    //         if ($user->role === 'owner') {
+    //             return redirect()->route('owner.home'); // Redirect ke dashboard owner
+    //         } elseif ($user->role === 'admin') {
+    //             return redirect()->route('admin.home'); // Redirect ke dashboard admin
+    //         }
+
+    //         // Default redirection jika role tidak ditemukan
+    //         return redirect()->route('login')->withErrors(['role' => 'Invalid user role']);
+    //     }
+
+    //     // Jika login gagal
+    //     return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
+    // }
 
     // Logout
     public function logout()
@@ -116,23 +153,27 @@ class AuthController extends Controller
         return redirect()->route('profile')->with('success', 'Password berhasil diubah');
     }
 
-    public function deleteAdmin($id)
-    {
-        $user = Auth::user();
+public function toggleAdminStatus($id)
+{
+    $user = Auth::user();
 
-        if ($user->role !== 'owner') {
-            return redirect()->route('profile')->with('error', 'Akses ditolak');
-        }
-
-        $admin = User::where('id', $id)->where('role', 'admin')->first();
-
-        if (!$admin) {
-            return redirect()->route('profile')->with('error', 'Admin tidak ditemukan.');
-        }
-
-        $admin->delete();
-
-        return redirect()->route('profile')->with('success', 'Admin berhasil dihapus.');
+    if ($user->role !== 'owner') {
+        return redirect()->route('profile')->with('error', 'Akses ditolak');
     }
+
+    $admin = User::where('id', $id)->where('role', 'admin')->first();
+
+    if (!$admin) {
+        return redirect()->route('profile')->with('error', 'Admin tidak ditemukan.');
+    }
+
+    $admin->is_active = !$admin->is_active;
+    $admin->save();
+
+    return redirect()->route('profile')->with('success', 'Status admin berhasil diperbarui.');
+}
+
+
+
 
 }
