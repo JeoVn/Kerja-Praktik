@@ -1,54 +1,52 @@
 @extends('layouts.app')
 
 @push('styles')
-    <title>Dashboard Obat - AA Apotek Anugerah</title>
+    <title> Obat - AA Apotek Anugerah</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/admin/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/home.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/filters.css') }}">
 @endpush
 
 @section('content')
 <div class="container-fluid">
-
-    <!-- Header -->
-    <div class="header-section">
-        <div class="header-left">
-            <div class="logo-section">
-                <div class="logo">
-                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                    </svg>
-                </div>
-                <div class="company-name">AA APOTEK ANUGERAH</div>
+<!-- Header -->
+<div class="header-section">
+    <div class="header-left">
+        <div class="logo-section">
+            <div class="logo">
+                <img src="/uploads/obat/logo.jpg" alt="Logo" width="40" height="40">
+            </div> <!-- tutup .logo -->
+            <div class="company-name">
+                AA APOTEK ANUGERAH
             </div>
+        </div> <!-- tutup .logo-section -->
+    </div> <!-- tutup .header-left -->
+
+    <div class="header-right">
+        <form method="GET" action="{{ route('medicines.index') }}" class="search-container">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Obat..." class="search-input">
+            <button type="submit" class="search-icon" style="background:none; border:none;">🔍</button>
+        </form>
+
+        <button class="filters-btn" id="filterToggle">☰ Filters</button>
+
+        <div class="user-profile">
+            <a href="{{ route('profile') }}" title="Profil Saya" style="text-decoration:none;">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                </svg>
+            </a>
         </div>
+    </div> <!-- tutup .header-right -->
+</div> <!-- tutup .header-section -->
 
-        <div class="header-right">
-            <form method="GET" action="{{ route('medicines.index') }}" class="search-container">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Obat..." class="search-input">
-                <button type="submit" class="search-icon" style="background:none; border:none;">🔍</button>
-            </form>
-
-            <button class="filters-btn" id="filterToggle">☰ Filters</button>
-
-            <div class="user-profile">
-                <a href="{{ route('profile') }}" title="Profil Saya" style="text-decoration:none;">
-                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </div>
+    </d>
 
     <!-- Navigasi -->
     <div class="nav-tabs-container">
         <div class="nav-tabs-custom">
-            <button class="nav-tab-item active">Home</button>
-            <a href="{{ route('medicines.create') }}" class="nav-tab-item">Tambah Stok</a>
-            <button class="nav-tab-item">Kelola Stok</button>
-            <button class="nav-tab-item">Dashboard</button>
+            <a href="{{ route('admin.home') }}" class="nav-tab-item">Home</a>
+            <a href="{{ route('medicines.create') }}" class="nav-tab-item">Tambah Stok Obat Baru</a>
             <a href="{{ route('medicines.expiring') }}" class="btn btn-danger mb-3">🔔 Lihat Obat Hampir Expired</a>
             <a href="{{ route('medicines.sedikitstok') }}" class="btn btn-danger mb-3">⚠️ Lihat Obat Hampir Habis Stok</a>
             <a href="{{ route('medicines.purchase') }}" class="btn btn-warning mb-3">📦 Catat Pembelian Obat</a>

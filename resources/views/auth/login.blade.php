@@ -9,8 +9,8 @@
     <div class="container">
         <div class="left-panel">
             <div class="logo-box">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo Apotek" class="logo">
-                <h1>AA APOTEK ANUGRAH</h1>
+                <img src="/uploads/obat/logo.jpg" alt="Logo" width="200" height="200">
+                                <h1>AA APOTEK ANUGRAH</h1>
                 <p class="subtitle">SOLUSI SEHAT KELUARGA ANDA</p>
                 <!-- <small class="powered">Powered by PT Kimara Indonesia</small> -->
             </div>
@@ -27,7 +27,9 @@
                     <input type="password" name="password" id="password" placeholder="Enter your password" required>
 
                     <div class="forgot">
-                        <a href="#">Forgot Password?</a>
+                         <a href="{{ route('password.change') }}" class="btn btn-primary mt-3">
+            Ganti Kata Sandi
+        </a>
                     </div>
 
                     <button type="submit">Login</button>

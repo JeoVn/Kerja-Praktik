@@ -102,6 +102,7 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 
 Route::get('/homeuser', [MedicineController::class, 'publicIndex'])->name('user.home');

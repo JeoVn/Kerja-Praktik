@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Medicine;
 use App\Models\JenisPenyakit;
 use Illuminate\Support\Facades\DB;
 use App\Models\Purchase;
+use App\Models\Admin;
 use Carbon\Carbon; 
 use Illuminate\Support\Facades\Auth;
 
@@ -364,36 +366,6 @@ public function purchaseCreate()
         return view('admin.purchase', compact('medicines'));
     }
 
-//     // Store the purchase and update the stock
-//     // Menyimpan pembelian dan memperbarui stok
-//     public function purchaseStore(Request $request)
-//     {
-//         // Validasi data input
-//         $request->validate([
-//             'kode_obat' => 'required',  // Kode obat wajib
-//             'nama_obat' => 'required',  // Nama obat wajib
-//             'jumlah' => 'required|integer', // Jumlah wajib dan harus berupa angka
-//         ]);
-
-//         // Mencari obat berdasarkan kode obat
-//         $medicine = Medicine::where('kode_obat', $request->kode_obat)->first();
-
-//         if ($medicine) {
-//             // Mengecek dan mengurangi stok jika tersedia
-//             $stockUpdated = $medicine->decreaseStock($request->jumlah);
-
-//             if ($stockUpdated) {
-//                 // Menghitung harga total
-//                 $total = $request->jumlah * $medicine->harga; 
-
-//                 return redirect()->route('medicines.purchase')->with('success', 'Pembelian berhasil, stok diperbarui');
-//             } else {
-//                 return redirect()->route('medicines.purchase')->with('error', 'Stok tidak cukup');
-//             }
-//         } else {
-//             return redirect()->route('medicines.purchase')->with('error', 'Obat tidak ditemukan');
-//         }
-//     }
 
 public function purchaseStore(Request $request)
 {
@@ -450,6 +422,10 @@ public function purchaseStore(Request $request)
         ($diskon > 0 ? " (Diskon {$diskon}%)" : '')
     );
 }
+
+
+
+
 
 
  

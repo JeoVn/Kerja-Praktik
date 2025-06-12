@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+
 use App\Models\Medicine; 
 use App\Models\Purchase;
 use Illuminate\Support\Facades\Hash;
@@ -39,5 +40,21 @@ class OwnerController extends Controller
       return view('owner.transaksi', compact('purchases'));
   }
   
+public function purchaseFilter(Request $request)
+{
+    $query = Purchase::query();
+
+    if ($request->filled('admin')) {
+        $query->where('admin_id', $request->admin);
+    }
+
+    $purchases = $query->orderBy('created_at', 'desc')->get();
+    
+    // Ambil semua admin
+    $admins = User::where('role', 'admin')->get();
+
+    return view('owner.transaksi', compact('purchases', 'admins'));
+}
+
 
 }

@@ -4,7 +4,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 <style>
     .profile-header {
-        background: linear-gradient(135deg, #6b8dd6, #8e37d7);
+        background: linear-gradient(135deg, #6b8dd6, rgb(117, 171, 246));
         color: white;
         padding: 30px 20px;
         border-radius: 12px;
@@ -47,6 +47,16 @@
         <a href="{{ route('password.change') }}" class="btn btn-primary mt-3">
             Ganti Kata Sandi
         </a>
+
+        <a href="{{ route('logout') }}"
+           onclick="event.preventDefault(); confirmLogout();"
+           class="btn btn-outline-danger mt-2">
+            Logout
+        </a>
+
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
     </div>
 
     @if($user->role === 'owner')
@@ -86,3 +96,13 @@
     @endif
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function confirmLogout() {
+        if (confirm("Apakah Anda yakin ingin keluar dari akun ini?")) {
+            document.getElementById('logout-form').submit();
+        }
+    }
+</script>
+@endpush
