@@ -326,7 +326,6 @@ public function purchaseCreate()
         return view('admin.purchase', compact('medicines'));
     }
 
-
 public function purchaseStore(Request $request)
 {
     // Validate incoming request
@@ -343,62 +342,154 @@ public function purchaseStore(Request $request)
     $totalHarga = 0;
     $purchasedItems = [];
 
-    // Loop through items and process purchase
-    foreach ($request->items as $index => $item) {
-        // Fetch medicine
-        $medicine = Medicine::where('kode_obat', $item['kode_obat'])
-                            ->where('batch', $item['batch'])
-                            ->first();
+    // Start a database transaction to ensure data integrity
+    DB::beginTransaction();
+    
+    try {
+        // Loop through items and process purchase
+        foreach ($request->items as $index => $item) {
+            // Fetch medicine based on both kode_obat and batch
+            $medicine = Medicine::where('kode_obat', $item['kode_obat'])
+                                ->where('batch', $item['batch'])
+                                ->first();
 
-        if (!$medicine) {
-            return back()->with('error', "Obat dengan kode {$item['kode_obat']} batch {$item['batch']} tidak ditemukan.");
+            // If medicine not found
+            if (!$medicine) {
+                return back()->with('error', "Obat dengan kode {$item['kode_obat']} batch {$item['batch']} tidak ditemukan.");
+            }
+
+            // Check if stock is sufficient
+            if ($medicine->jumlah < $item['jumlah']) {
+                return back()->with('error', "Stok tidak cukup untuk obat {$item['nama_obat']}.");
+            }
+
+            // Deduct stock and save purchase
+            $medicine->jumlah -= $item['jumlah'];
+            $medicine->save();
+
+            // Create purchase record
+            Purchase::create([
+                'kode_obat' => $item['kode_obat'],
+                'nama_obat' => $item['nama_obat'],
+                'harga'     => $item['harga'],
+                'batch'     => $item['batch'],
+                'jumlah'    => $item['jumlah'],
+                'diskon'    => $request->diskon ?? 0,
+                'admin_id'  => Auth::id(),
+            ]);
+
+            // Store item for receipt
+            $purchasedItems[] = [
+                'nama_obat' => $item['nama_obat'],
+                'kode_obat' => $item['kode_obat'],
+                'harga'     => $item['harga'],
+                'jumlah'    => $item['jumlah'],
+                'total'     => $item['harga'] * $item['jumlah'],
+            ];
+
+            // Accumulate total price
+            $totalHarga += $item['harga'] * $item['jumlah'];
         }
 
-        // Check if stock is sufficient
-        if ($medicine->jumlah < $item['jumlah']) {
-            return back()->with('error', "Stok tidak cukup untuk obat {$item['nama_obat']}.");
-        }
+        // Calculate total after discount
+        $diskon = $request->diskon ?? 0;
+        $totalSetelahDiskon = $totalHarga - ($totalHarga * ($diskon / 100));
 
-        // Deduct stock and save purchase
-        $medicine->jumlah -= $item['jumlah'];
-        $medicine->save();
+        // Commit the transaction
+        DB::commit();
 
-        Purchase::create([
-            'kode_obat' => $item['kode_obat'],
-            'nama_obat' => $item['nama_obat'],
-            'harga'     => $item['harga'],
-            'batch'     => $item['batch'],
-            'jumlah'    => $item['jumlah'],
-            'diskon'    => $request->diskon ?? 0,
-            'admin_id'  => Auth::id(),
-        ]);
-
-        // Store item for receipt
-        $purchasedItems[] = [
-            'nama_obat' => $item['nama_obat'],
-            'kode_obat' => $item['kode_obat'],
-            'harga'     => $item['harga'],
-            'jumlah'    => $item['jumlah'],
-            'total'     => $item['harga'] * $item['jumlah'],
-        ];
-
-        // Accumulate total price
-        $totalHarga += $item['harga'] * $item['jumlah'];
+        // Return to view with receipt data
+        return redirect()->route('medicines.purchase')
+                         ->with('success', 'Transaksi berhasil disimpan.')
+                         ->with('receipt', [
+                             'items' => $purchasedItems,
+                             'totalHarga' => $totalSetelahDiskon,
+                             'diskon' => $diskon,
+                         ]);
+    } catch (\Exception $e) {
+        // If something goes wrong, rollback the transaction
+        DB::rollBack();
+        return back()->with('error', 'Terjadi kesalahan saat menyimpan transaksi: ' . $e->getMessage());
     }
-
-    // Calculate total after discount
-    $diskon = $request->diskon ?? 0;
-    $totalSetelahDiskon = $totalHarga - ($totalHarga * ($diskon / 100));
-
-    // Return to view with receipt data
-    return redirect()->route('medicines.purchase')
-                     ->with('success', 'Transaksi berhasil disimpan.')
-                     ->with('receipt', [
-                         'items' => $purchasedItems,
-                         'totalHarga' => $totalSetelahDiskon,
-                         'diskon' => $diskon,
-                     ]);
 }
+
+
+
+
+
+// public function purchaseStore(Request $request)
+// {
+//     // Validate incoming request
+//     $request->validate([
+//         'items' => 'required|array|min:1',
+//         'items.*.kode_obat' => 'required',
+//         'items.*.nama_obat' => 'required',
+//         'items.*.harga' => 'required|numeric',
+//         'items.*.batch' => 'required',
+//         'items.*.jumlah' => 'required|integer|min:1',
+//         'diskon' => 'nullable|numeric|min:0|max:100',
+//     ]);
+
+//     $totalHarga = 0;
+//     $purchasedItems = [];
+
+//     // Loop through items and process purchase
+//     foreach ($request->items as $index => $item) {
+//         // Fetch medicine
+//         $medicine = Medicine::where('kode_obat', $item['kode_obat'])
+//                             ->where('batch', $item['batch'])
+//                             ->first();
+
+//         if (!$medicine) {
+//             return back()->with('error', "Obat dengan kode {$item['kode_obat']} batch {$item['batch']} tidak ditemukan.");
+//         }
+
+//         // Check if stock is sufficient
+//         if ($medicine->jumlah < $item['jumlah']) {
+//             return back()->with('error', "Stok tidak cukup untuk obat {$item['nama_obat']}.");
+//         }
+
+//         // Deduct stock and save purchase
+//         $medicine->jumlah -= $item['jumlah'];
+//         $medicine->save();
+
+//         Purchase::create([
+//             'kode_obat' => $item['kode_obat'],
+//             'nama_obat' => $item['nama_obat'],
+//             'harga'     => $item['harga'],
+//             'batch'     => $item['batch'],
+//             'jumlah'    => $item['jumlah'],
+//             'diskon'    => $request->diskon ?? 0,
+//             'admin_id'  => Auth::id(),
+//         ]);
+
+//         // Store item for receipt
+//         $purchasedItems[] = [
+//             'nama_obat' => $item['nama_obat'],
+//             'kode_obat' => $item['kode_obat'],
+//             'harga'     => $item['harga'],
+//             'jumlah'    => $item['jumlah'],
+//             'total'     => $item['harga'] * $item['jumlah'],
+//         ];
+
+//         // Accumulate total price
+//         $totalHarga += $item['harga'] * $item['jumlah'];
+//     }
+
+//     // Calculate total after discount
+//     $diskon = $request->diskon ?? 0;
+//     $totalSetelahDiskon = $totalHarga - ($totalHarga * ($diskon / 100));
+
+//     // Return to view with receipt data
+//     return redirect()->route('medicines.purchase')
+//                      ->with('success', 'Transaksi berhasil disimpan.')
+//                      ->with('receipt', [
+//                          'items' => $purchasedItems,
+//                          'totalHarga' => $totalSetelahDiskon,
+//                          'diskon' => $diskon,
+//                      ]);
+                     
+// }
 
 
 

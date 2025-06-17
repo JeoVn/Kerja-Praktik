@@ -91,6 +91,9 @@ Route::prefix('owner')->middleware(['auth', 'role:owner'])->group(function () {
     
     Route::get('/transaksi', [OwnerController::class, 'transaksi'])->name('owner.transaksi');
     Route::patch('/admin/{id}/toggle-status', [AuthController::class, 'toggleAdminStatus'])->name('admin.toggleStatus');
+
+  
+
 });
 
 

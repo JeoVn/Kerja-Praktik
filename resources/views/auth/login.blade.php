@@ -17,24 +17,41 @@
         </div>
         <div class="right-panel">
             <div class="login-box">
-                <h2>Login</h2>
-                <form action="{{ route('login') }}" method="POST">
-                    @csrf
-                    <label for="email">Username</label>
-                    <input type="text" name="email" id="email" placeholder="Enter your username" required>
+    <h2>Login</h2>
 
-                    <label for="password">Password</label>
-                    <input type="password" name="password" id="password" placeholder="Enter your password" required>
+    {{-- MENAMPILKAN PESAN ERROR ATAU SUKSES --}}
+    @if ($errors->any())
+        <div class="alert alert-danger" style="color: red; margin-bottom: 20px;">
+            <ul style="list-style-type: none; padding: 0;">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-                    <div class="forgot">
-                         <a href="{{ route('password.change') }}" class="btn btn-primary mt-3">
-            Ganti Kata Sandi
-        </a>
-                    </div>
+    @if (session('success'))
+        <div class="alert alert-success" style="color: green; margin-bottom: 20px;">
+            {{ session('success') }}
+        </div>
+    @endif
 
-                    <button type="submit">Login</button>
-                </form>
-            </div>
+    <form action="{{ route('login') }}" method="POST">
+        @csrf
+        <label for="email">Username</label>
+        <input type="text" name="email" id="email" placeholder="Enter your username" required>
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="Enter your password" required>
+
+        <div class="forgot">
+            <a href="{{ route('password.change') }}" class="btn btn-primary mt-3">Ganti Kata Sandi</a>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+</div>
+
         </div>
     </div>
 </body>

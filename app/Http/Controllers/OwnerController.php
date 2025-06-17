@@ -34,12 +34,40 @@ class OwnerController extends Controller
 
     return view('owner.home', compact('medicines'));
 }
-  public function transaksi()
-  {
-      $purchases = Purchase::with('admin')->orderBy('created_at', 'desc')->get();
-      return view('owner.transaksi', compact('purchases'));
-  }
-  
+//   public function transaksi()
+//   {
+//       $purchases = Purchase::with('admin')->orderBy('created_at', 'desc')->get();
+//       return view('owner.transaksi', compact('purchases'));
+//   }
+  public function transaksi(Request $request)
+{
+    // Fetch admins
+    $admins = User::where('role', 'admin')->get(); // Ensure this is correctly fetching admins
+    
+    $query = Purchase::query();
+
+    // Apply filters if provided
+    if ($request->filled('tanggal_dari') && $request->filled('tanggal_sampai')) {
+        $query->whereBetween('created_at', [
+            Carbon::parse($request->tanggal_dari)->startOfDay(),
+            Carbon::parse($request->tanggal_sampai)->endOfDay()
+        ]);
+    }
+
+    if ($request->filled('admin_id')) {
+        $query->where('admin_id', $request->admin_id);
+    }
+
+    // Fetch purchases
+    try {
+        $purchases = $query->orderBy('created_at', 'desc')->get();
+    } catch (\Exception $e) {
+        return back()->with('error', 'Error fetching purchases: ' . $e->getMessage());
+    }
+
+    // Pass data to view
+    return view('owner.transaksi', compact('purchases', 'admins'));
+}
 public function purchaseFilter(Request $request)
 {
     $query = Purchase::query();
