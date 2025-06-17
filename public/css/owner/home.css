@@ -1,175 +1,188 @@
 body {
-        margin: 0;
-        padding: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background-color: #e6f0fa; /* Soft blue background */
-    }
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f0f6ff; /* Lebih cerah dan bersih */
+}
 
-    /* Owner Dashboard Container */
-    .owner-dashboard {
-        max-width: 1000px;
-        margin: 30px auto;
-        padding: 0 15px;
-    }
+/* Container */
+.owner-dashboard {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
 
-    /* Dashboard Header */
-    .dashboard-header {
-        text-align: center;
-        margin-bottom: 30px;
-        font-weight: 700;
-        font-size: 2rem;
-        color: #2f4fa0; /* Blue color matching the apothecary theme */
-    }
+/* Header */
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+    font-size: 2rem;
+    color: #1f3a93; /* Deep royal blue */
+}
 
-    /* Owner Menu Buttons */
-    .owner-menu {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-        margin-bottom: 30px;
-    }
+/* Menu Buttons */
+.owner-menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
 
-    .owner-menu .btn {
-        padding: 12px 18px;
-        font-weight: 600;
-        border-radius: 10px;
-        transition: background-color 0.3s ease;
-    }
+.owner-menu .btn {
+    padding: 12px 20px;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
 
-    .owner-menu .btn:hover {
-        opacity: 0.9;
-    }
+.owner-menu .btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+}
 
-    .owner-menu .btn-danger {
-        background-color: #dc3545; /* Red for warning */
-        color: white;
-    }
+.owner-menu .btn-danger {
+    background-color: #e74c3c;
+    color: white;
+}
 
-    .owner-menu .btn-warning {
-        background-color: #ffc107; /* Yellow for low stock */
-        color: white;
-    }
+.owner-menu .btn-warning {
+    background-color: #f39c12;
+    color: white;
+}
 
-    .owner-menu .btn-primary {
-        background-color: #007bff; /* Blue for registration */
-        color: white;
-    }
+.owner-menu .btn-primary {
+    background-color: #3498db;
+    color: white;
+}
 
-    .owner-menu .btn-success {
-        background-color: #28a745; /* Green for viewing transactions */
-        color: white;
-    }
+.owner-menu .btn-success {
+    background-color: #27ae60;
+    color: white;
+}
 
-    /* Profile Icon */
-    .user-profile {
-        width: 35px;
-        height: 35px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 50%;
-        display: flex;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-    }
+/* Profile Icon */
+.user-profile {
+    width: 35px;
+    height: 35px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    align-items: center;
+    justify-content: center;
+}
 
-    .user-profile svg {
-        fill: #365da6;
-        cursor: pointer;
-        transition: fill 0.3s ease;
-    }
+.user-profile svg {
+    fill: #1e56a0;
+    cursor: pointer;
+    transition: fill 0.3s ease;
+}
 
-    .user-profile svg:hover {
-        fill: #2f4fa0;
-    }
+.user-profile svg:hover {
+    fill: #163172;
+}
 
-    /* Search Bar */
-    .search-bar {
-        max-width: 500px;
-        margin: 0 auto 25px auto;
-        display: flex;
-        gap: 10px;
-    }
+/* Search Bar */
+.search-bar {
+    max-width: 500px;
+    margin: 0 auto 25px auto;
+    display: flex;
+    gap: 10px;
+}
 
-    .search-bar input {
-        padding: 10px;
-        border-radius: 12px;
-        border: 1px solid #a0c4ff;
-    }
+.search-bar input {
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid #bcd4f6;
+    background-color: #ffffff;
+    outline-color: #4682b4;
+}
 
-    .search-bar button {
-        padding: 10px;
-        border-radius: 12px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        font-weight: bold;
-    }
+.search-bar button {
+    padding: 10px;
+    border-radius: 12px;
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
 
-    /* Medicine List Items */
-    .medicine-list-item {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        padding: 15px 20px;
-        border-radius: 12px;
-        background: #f9f9f9;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    }
+.search-bar button:hover {
+    background-color: #0f6ddf;
+}
 
-    .medicine-list-item:hover {
-        background-color: #e6f0ff;
-        box-shadow: 0 4px 12px rgba(54, 93, 166, 0.2);
-    }
+/* Medicine List */
+.medicine-list-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 20px;
+    border-radius: 12px;
+    background: #ffffff;
+    margin-bottom: 20px;
+    border-left: 6px solid #3498db;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
 
-    /* Medicine Image */
-    .medicine-img {
-        width: 80px;
-        height: 80px;
-        object-fit: contain;
-        border-radius: 6px;
-        background: #fff;
-        border: 1px solid #ddd;
-        padding: 6px;
-    }
+.medicine-list-item:hover {
+    background-color: #eaf2fb;
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+    transform: translateY(-2px);
+}
 
-    /* Medicine Info */
-    .medicine-info {
-        flex-grow: 1;
-    }
+/* Medicine Image */
+.medicine-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: #ffffff;
+    border: 1px solid #cbdcf3;
+    padding: 6px;
+}
 
-    .medicine-name {
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #2f4fa0; /* Apothecary blue */
-        margin-bottom: 6px;
-    }
+/* Medicine Info */
+.medicine-info {
+    flex-grow: 1;
+}
 
-    .medicine-price {
-        font-size: 1.1rem;
-        color: #dc3545; /* Red for price */
-        font-weight: 700;
-        margin-bottom: 4px;
-    }
+.medicine-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c3e90;
+    margin-bottom: 6px;
+}
 
-    .medicine-stock {
-        font-size: 0.95rem;
-        color: #555;
-    }
+.medicine-price {
+    font-size: 1.1rem;
+    color: #e74c3c;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
 
-    /* Detail Button */
-    .btn-detail {
-        padding: 8px 18px;
-        background-color: #17a2b8; /* Blue tone */
-        color: white;
-        border-radius: 6px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: background-color 0.3s ease;
-    }
+.medicine-stock {
+    font-size: 0.95rem;
+    color: #555;
+}
 
-    .btn-detail:hover {
-        background-color: #138496;
-    }
+/* Detail Button */
+.btn-detail {
+    padding: 8px 18px;
+    background: #007bff;
+    color: white;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-detail:hover {
+    background-color: #005fbb;
+}

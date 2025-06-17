@@ -1,16 +1,9 @@
 @extends('layouts.app')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/admin/expiring.css') }}">
-<style>
-    .table-img {
-        width: 60px;
-        height: 60px;
-        object-fit: cover;
-        border-radius: 5px;
-    }
-</style>
-@endpush
+    <link rel="stylesheet" href="{{ asset('css/admin/sedikitstok.css') }}">
+
+    @endpush
 <header>
         <nav>
             <!-- Add a Bigger Back Button with Icon -->
@@ -83,14 +76,7 @@
                             @endif
                     </td>
 
-                        <!-- <td>
-                            <a href="{{ route('owner.admin.detail', $medicine->id) }}" class="btn btn-sm btn-outline-warning w-100">
-                                Detail
-                            </a>
-                            <a href="{{ route('admin.detail', $medicine->id) }}" class="btn btn-sm btn-outline-warning w-100">
-                                Detail
-                            </a>
-                        </td> -->
+                 
                     </tr>
                     @endforeach
                 </tbody>

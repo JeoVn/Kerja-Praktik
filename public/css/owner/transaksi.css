@@ -172,3 +172,44 @@ h5, h6 {
 }
 
 
+/* ==== UPGRADE METRIC CARD STYLE ==== */
+.card.metric-card {
+    border-radius: 16px;
+    color: #fff;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card.metric-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card.metric-card h6 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+.card.metric-card h4 {
+    font-size: 0.85rem; /* Lebih kecil dari sebelumnya */
+    font-weight: 500;
+    margin-top: 0.3rem;
+}
+
+
+/* Warna latar lebih soft */
+.card.metric-primary {
+    background: linear-gradient(135deg, #1565c0, #0d47a1);
+}
+
+.card.metric-success {
+    background: linear-gradient(135deg, #388e3c, #2e7d32);
+}
+
+.card.metric-info {
+    background: linear-gradient(135deg, #039be5, #0288d1);
+}

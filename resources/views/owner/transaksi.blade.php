@@ -123,7 +123,8 @@
 
     <div class="row mt-4">
         <div class="col-md-4">
-            <div class="card text-white bg-primary shadow">
+           <div class="card metric-card metric-primary shadow">
+
                 <div class="card-body text-center">
                     <h6>Total Transaksi</h6>
                     <h4 class="fw-bold">{{ $purchases->count() }}</h4>
@@ -131,7 +132,8 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card text-white bg-success shadow">
+         <div class="card metric-card metric-success shadow">
+
                 <div class="card-body text-center">
                     <h6>Total Nilai</h6>
                     <h4 class="fw-bold">
@@ -143,7 +145,8 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card text-white bg-info shadow">
+        <div class="card metric-card metric-info shadow">
+
                 <div class="card-body text-center">
                     <h6>Total Item</h6>
                     <h4 class="fw-bold">{{ $purchases->sum('jumlah') }}</h4>
