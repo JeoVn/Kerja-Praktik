@@ -23,12 +23,12 @@
 
     <!-- Footer -->
 <!-- Footer -->
-<footer style=" color: white; text-align: center; padding: 20px 10px; margin-top: 50px;">
+<footer style=" color: :rgb(38, 38, 129); text-align: center; padding: 20px 10px; margin-top: 50px;">
     <p style="font-size: 16px; margin: 0;">
         &copy; {{ date('Y') }} <strong>AA Apotek Anugrah</strong> – Solusi Sehat Keluarga Anda
     </p>
     <p style="margin-top: 10px;">
-        <a href="https://wa.me/628999008007" target="_blank" style="color: #ffffff; text-decoration: none; font-size: 16px;">
+        <a href="https://wa.me/628999008007" target="_blank" style="color:rgb(38, 38, 129); text-decoration: none; font-size: 16px;">
             <i class="fab fa-whatsapp" style="margin-right: 8px;"></i>Hubungi Kami via WhatsApp
         </a>
     </p>
