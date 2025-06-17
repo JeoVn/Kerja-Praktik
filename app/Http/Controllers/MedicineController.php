@@ -193,36 +193,47 @@ public function index(Request $request)
     return view('admin.home', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
 }
 
-// public function index(Request $request)
-// {
-//     $query = Medicine::query();
 
-//     // Filter jenis obat
-//     if ($request->filled('jenis_obat')) {
-//         $query->whereIn('jenis_obat', $request->jenis_obat);
-//     }
+public function indexHome(Request $request)
+{
+    $query = Medicine::query();
 
-//     // Filter jenis penyakit
-//     if ($request->filled('penyakit')) {
-//         $query->whereHas('jenisPenyakit', function ($q) use ($request) {
-//             $q->whereIn('jenis_penyakit.id', $request->penyakit);
-//         });
-//     }
+    // Search by nama_obat
+    if ($request->filled('search')) {
+        $query->where('nama_obat', 'like', '%' . $request->search . '%');
+    }
 
-//     // Filter bentuk obat
-//     if ($request->filled('bentuk_obat')) {
-//         $query->whereIn('bentuk_obat', $request->bentuk_obat);
-//     }
+    // Filter jenis obat (array of checkboxes)
+    if ($request->filled('jenis_obat')) {
+        $query->whereIn('jenis_obat', $request->jenis_obat);
+    }
 
-//     $medicines = $query->get();
+    // Filter jenis penyakit (relasi many-to-many)
+    if ($request->filled('penyakit')) {
+        $query->whereHas('jenisPenyakit', function ($q) use ($request) {
+            $q->whereIn('jenis_penyakit.id', $request->penyakit);
+        });
+    }
 
-//     // Kirim semua filter ke view
-//     $jenisObat = Medicine::distinct()->pluck('jenis_obat')->filter()->values();
-//     $bentukObat = Medicine::distinct()->pluck('bentuk_obat')->filter()->values();
-//     $penyakit = JenisPenyakit::all(); // pastikan model ini ada
+    // Filter bentuk obat
+    if ($request->filled('bentuk_obat')) {
+        $query->whereIn('bentuk_obat', $request->bentuk_obat);
+    }
 
-//     return view('admin.home', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
-// }
+    // Grouping untuk menampilkan data unik berdasarkan kode_obat
+    $medicines = $query->selectRaw('MAX(id) as id, kode_obat, nama_obat, harga, gambar, jenis_obat, bentuk_obat, SUM(jumlah) as jumlah')
+        ->groupBy('kode_obat', 'nama_obat', 'harga', 'gambar', 'jenis_obat', 'bentuk_obat')
+        ->orderBy('nama_obat')
+        ->get();
+
+    // Ambil data filter untuk digunakan di view
+    $jenisObat = Medicine::distinct()->pluck('jenis_obat')->filter()->values();
+    $bentukObat = Medicine::distinct()->pluck('bentuk_obat')->filter()->values();
+    $penyakit = JenisPenyakit::all();
+
+    // Return the user page instead of admin home page
+    return view('user.homeuser', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
+}
 
     
     public function show($id)
@@ -263,25 +274,6 @@ public function index(Request $request)
         return view('admin.sedikit_stok', compact('lowStockMedicines'));
     }
 
-   // Tampilkan list obat untuk user biasa (public)
-//    public function publicIndex(Request $request)
-//     {
-//         $query = Medicine::query();
-
-//         if ($request->filled('jenis_obat')) {
-//             $query->whereIn('jenis_obat', $request->jenis_obat);
-//         }
-//         if ($request->filled('sakit')) {
-//             // Sesuaikan filter sakit jika ada relasi, atau hapus jika belum ada
-//         }
-//         if ($request->filled('bentuk_obat')) {
-//             $query->whereIn('bentuk_obat', $request->bentuk_obat);
-//         }
-
-//         $medicines = $query->get();
-
-//         return view('user.homeuser', compact('medicines'));
-// //     }
 public function publicIndex(Request $request)
 {
     $query = Medicine::query();
@@ -313,38 +305,6 @@ public function publicIndex(Request $request)
     return view('user.homeuser', compact('medicines', 'jenisObat', 'bentukObat', 'penyakit'));
 }
 
-// public function publicIndex(Request $request)
-// {
-//     $query = Medicine::query();
-
-//     // Filter berdasarkan jenis obat
-//     if ($request->filled('jenis_obat')) {
-//         $query->whereIn('jenis_obat', $request->jenis_obat);
-//     }
-
-//     // Filter berdasarkan bentuk obat
-//     if ($request->filled('bentuk_obat')) {
-//         $query->whereIn('bentuk_obat', $request->bentuk_obat);
-//     }
-
-//     // Catatan: Filter sakit belum digunakan, bisa ditambahkan jika relasi tersedia
-
-//     // Ambil data grup per kode_obat dan hitung total jumlah
-// $medicines = $query->selectRaw('MAX(id) as id, kode_obat, nama_obat, harga, gambar, jenis_obat, bentuk_obat, SUM(jumlah) as total_jumlah')
-//     ->groupBy('kode_obat', 'nama_obat', 'harga', 'gambar', 'jenis_obat', 'bentuk_obat')
-//     ->orderBy('nama_obat')
-//     ->get();
-
-
-//     return view('user.homeuser', compact('medicines'));
-// }
-
-// public function publicShow($id)
-//     {
-//         $medicine = Medicine::findOrFail($id);
-//         return view('user.detail', compact('medicine'));
-//     }
-
 public function publicShow($id)
 {
     // Ambil 1 data utama dari ID yang diklik
@@ -369,6 +329,7 @@ public function purchaseCreate()
 
 public function purchaseStore(Request $request)
 {
+    // Validate incoming request
     $request->validate([
         'items' => 'required|array|min:1',
         'items.*.kode_obat' => 'required',
@@ -380,8 +341,11 @@ public function purchaseStore(Request $request)
     ]);
 
     $totalHarga = 0;
+    $purchasedItems = [];
 
+    // Loop through items and process purchase
     foreach ($request->items as $index => $item) {
+        // Fetch medicine
         $medicine = Medicine::where('kode_obat', $item['kode_obat'])
                             ->where('batch', $item['batch'])
                             ->first();
@@ -390,83 +354,53 @@ public function purchaseStore(Request $request)
             return back()->with('error', "Obat dengan kode {$item['kode_obat']} batch {$item['batch']} tidak ditemukan.");
         }
 
+        // Check if stock is sufficient
         if ($medicine->jumlah < $item['jumlah']) {
             return back()->with('error', "Stok tidak cukup untuk obat {$item['nama_obat']}.");
         }
 
-        // Kurangi stok
+        // Deduct stock and save purchase
         $medicine->jumlah -= $item['jumlah'];
         $medicine->save();
 
-        // Simpan ke purchases
         Purchase::create([
             'kode_obat' => $item['kode_obat'],
             'nama_obat' => $item['nama_obat'],
             'harga'     => $item['harga'],
             'batch'     => $item['batch'],
             'jumlah'    => $item['jumlah'],
-            'diskon' => $request->diskon ?? 0,
-
+            'diskon'    => $request->diskon ?? 0,
             'admin_id'  => Auth::id(),
         ]);
 
+        // Store item for receipt
+        $purchasedItems[] = [
+            'nama_obat' => $item['nama_obat'],
+            'kode_obat' => $item['kode_obat'],
+            'harga'     => $item['harga'],
+            'jumlah'    => $item['jumlah'],
+            'total'     => $item['harga'] * $item['jumlah'],
+        ];
+
+        // Accumulate total price
         $totalHarga += $item['harga'] * $item['jumlah'];
     }
 
-    // Hitung total setelah diskon (jika ada)
+    // Calculate total after discount
     $diskon = $request->diskon ?? 0;
     $totalSetelahDiskon = $totalHarga - ($totalHarga * ($diskon / 100));
 
-    return redirect()->route('medicines.purchase')->with('success', 
-        'Transaksi berhasil disimpan. Total setelah diskon: Rp' . number_format($totalSetelahDiskon, 0, ',', '.') .
-        ($diskon > 0 ? " (Diskon {$diskon}%)" : '')
-    );
+    // Return to view with receipt data
+    return redirect()->route('medicines.purchase')
+                     ->with('success', 'Transaksi berhasil disimpan.')
+                     ->with('receipt', [
+                         'items' => $purchasedItems,
+                         'totalHarga' => $totalSetelahDiskon,
+                         'diskon' => $diskon,
+                     ]);
 }
 
 
-
-
-
-
- 
-// public function purchaseStore(Request $request)
-// {
-//     $request->validate([
-//         'kode_obat' => 'required',
-//         'nama_obat' => 'required',
-//         'harga' => 'required|numeric',
-//         'batch' => 'required',
-//         'jumlah' => 'required|integer|min:1',
-//     ]);
-
-//     $medicine = Medicine::where('kode_obat', $request->kode_obat)
-//         ->where('batch', $request->batch)
-//         ->first();
-
-//     if (!$medicine) {
-//         return redirect()->route('medicines.purchase')->with('error', 'Obat tidak ditemukan.');
-//     }
-
-//     if ($medicine->jumlah < $request->jumlah) {
-//         return redirect()->route('medicines.purchase')->with('error', 'Stok tidak cukup.');
-//     }
-
-//     // Kurangi stok
-//     $medicine->jumlah -= $request->jumlah;
-//     $medicine->save();
-
-//     // Simpan ke tabel purchases
-//     Purchase::create([
-//         'kode_obat' => $medicine->kode_obat,
-//         'nama_obat' => $medicine->nama_obat,
-//         'harga' => $medicine->harga,
-//         'batch' => $medicine->batch,
-//         'jumlah' => $request->jumlah,
-//         'admin_id' => Auth::id(),
-//     ]);
-
-//     return redirect()->route('medicines.purchase')->with('success', 'Transaksi berhasil dicatat dan stok diperbarui.');
-// }
 
     public function addObatCreate()
     {
@@ -529,37 +463,6 @@ public function purchaseStore(Request $request)
             return redirect()->route('medicines.addStock')->with('error', 'Obat tidak ditemukan');
         }
     }
-
-
-// public function searchMedicine($search_term)
-// {
-//     // Cari obat berdasarkan kode_obat atau nama_obat
-//     $medicine = Medicine::where('kode_obat', 'like', '%' . $search_term . '%')
-//                         ->orWhere('nama_obat', 'like', '%' . $search_term . '%')
-//                         ->first(); // Menggunakan first() untuk mendapatkan data pertama yang ditemukan
-
-//     if ($medicine) {
-//         // Mendapatkan batch dan ekspansi stok jika ada
-//         $batches = Medicine::where('kode_obat', $medicine->kode_obat)->get(['batch', 'tanggal_exp', 'jumlah']);
-
-//         return response()->json([
-//             'success' => true,
-//             'medicine' => [
-//                 'kode_obat' => $medicine->kode_obat,
-//                 'nama_obat' => $medicine->nama_obat,
-//                 'harga' => $medicine->harga,
-//                 'batches' => $batches // Menambahkan data batch yang ada
-//             ]
-//         ]);
-//     } else {
-//         return response()->json([
-//             'success' => false,
-//             'message' => 'Obat tidak ditemukan'
-//         ]);
-//     }
-// }
-
-// MedicineController.php
 
 
 public function getMedicineBatches($kodeObat)

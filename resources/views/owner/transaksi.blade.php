@@ -1,6 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
+<header>
+        <nav>
+            <!-- Add a Bigger Back Button with Icon -->
+            @if(Route::currentRouteName() != 'owner.home') <!-- Avoid showing 'back' button on home page -->
+                <a href="{{ route('owner.home') }}" class="btn btn-link mb-3" style="font-size: 24px; color: #0d47a1;">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali ke Home
+                </a>
+            @endif
+            <!-- You can add other navigation menu items here -->
+        </nav>
+    </header>
+
 <div class="container-fluid">
     <!-- Header -->
     <div class="row mb-4">

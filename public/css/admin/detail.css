@@ -1,4 +1,26 @@
-/* Layout keseluruhan halaman detail obat */
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 90px;
+    height: 90px;
+    background: rgb(143, 187, 223);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.company-name {
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
 .medicine-detail {
     background-color: #f9f9f9;
     padding: 20px;
@@ -7,7 +29,7 @@
     margin-top: 30px;
 }
 
-/* Menata header (gambar obat dan info obat) */
+
 .medicine-header {
     display: flex;
     justify-content: space-between;
@@ -15,7 +37,7 @@
     margin-bottom: 20px;
 }
 
-/* Gambar obat */
+
 .medicine-img {
     width: 150px;
     height: 150px;
@@ -24,7 +46,7 @@
     margin-right: 20px;
 }
 
-/* Menata info obat */
+
 .medicine-info {
     flex: 1;
 }

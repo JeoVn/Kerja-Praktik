@@ -7,12 +7,36 @@
 
 @section('content')
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3F5FAF; height: 100px;">
-    <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="#">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" width="36" height="36" class="me-2" style="object-fit:contain;">
-        </a>
-    </div>
+<div class="header-section">
+    <div class="header-left">
+        <div class="logo-section">
+            <div class="logo">
+                <img src="/uploads/obat/logo.jpg" alt="Logo" width="90" height="90">
+            </div> <!-- tutup .logo -->
+             <div class="company-name">
+                AA APOTEK ANUGERAH
+            </div>
+        </div> <!-- tutup .logo-section -->
+    </div> <!-- tutup .header-left -->
 </nav>
+<header>
+        <nav>
+            <!-- Add a Bigger Back Button with Icon -->
+           @if(auth()->user()->role == 'admin')
+                            <!-- Admin Link -->
+                            <a href="{{ route('admin.home') }}" class="btn btn-link mb-3" style="font-size: 24px; color: #0d47a1;">
+                               <i class="fas fa-arrow-circle-left"></i> Kembali ke Home
+                            </a>
+                        @elseif(auth()->user()->role == 'owner')
+                            <!-- Owner Link -->
+                            <a href="{{ route('owner.home') }}" class="btn btn-link mb-3" style="font-size: 24px; color: #0d47a1;">
+                             <i class="fas fa-arrow-circle-left"></i> Kembali ke Home
+                            </a>
+                </a>
+            @endif
+            <!-- You can add other navigation menu items here -->
+        </nav>
+    </header>
 
 <div class="container">
     <div class="row align-items-center justify-content-center mt-4">
@@ -71,8 +95,8 @@
                         <label for="batchSelect" class="form-label"><strong>Pilih Batch:</strong></label>
                         <select id="batchSelect" class="form-select" onchange="showBatchInfo(this.value)">
                             @foreach($batches as $batch)
-                                <option value="{{ $batch->id }}">
-                                    Batch ID {{ $batch->id }} - Exp: {{ $batch->tanggal_exp }} - Jumlah: {{ $batch->jumlah }}
+                                <option value="{{ $batch->batch }}">
+                                    Batch ke- {{ $batch->batch }} - Exp: {{ $batch->tanggal_exp }} - Jumlah: {{ $batch->jumlah }}
                                 </option>
                             @endforeach
                         </select>
@@ -91,7 +115,7 @@
                             <tbody>
                                 @foreach($batches as $batch)
                                 <tr>
-                                    <td>{{ $batch->id }}</td>
+                                    <td>{{ $batch->batch }}</td>
                                     <td>{{ $batch->jumlah }}</td>
                                     <td>{{ $batch->tanggal_exp }}</td>
                                 </tr>

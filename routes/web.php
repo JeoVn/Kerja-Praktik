@@ -107,4 +107,6 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/homeuser', [MedicineController::class, 'publicIndex'])->name('user.home');
 Route::get('/homeuser/{id}', [MedicineController::class, 'publicShow'])->name('user.detail');
+// Route for user to apply filters and view filtered medicines
+Route::get('/homeuser', [MedicineController::class, 'indexHome'])->name('user.homeuser');
 

@@ -1,5 +1,3 @@
-<!-- resources/views/layouts/app.blade.php -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,13 +13,8 @@
 <body>
 
     <!-- Header -->
-    <header>
-        <nav>
-            <!-- Menu navigasi bisa ditambahkan di sini -->
-        </nav>
-    </header>
-@stack('scripts')
-@yield('scripts')
+    
+    @stack('scripts')
 
     <!-- Konten Utama -->
     <main>
@@ -30,12 +23,14 @@
 
     <!-- Footer -->
     <footer>
-        <p>Footer Content</p>
+        <p>&copy; {{ date('Y') }} AA Apotek Anugrah. Solusi Sehat Keluarga Anda</p>
+        <p> Hubungi Kami 0899-9008-00 </p>
     </footer>
     
-    {{-- ... mungkin sebelum script JS --}}
+    {{-- You can also add additional script files here --}}
     @yield('scripts')
 
+    <!-- Font Awesome CDN (if not already included in head) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 </body>
 </html>
-

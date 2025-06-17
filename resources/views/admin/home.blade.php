@@ -14,8 +14,8 @@
     <div class="header-left">
         <div class="logo-section">
             <div class="logo">
-                <img src="/uploads/obat/logo.jpg" alt="Logo" width="40" height="40">
-            </div> <!-- tutup .logo -->
+                <img src="/uploads/obat/logo.jpg" alt="Logo" width="90" height="90">
+            </div>
             <div class="company-name">
                 AA APOTEK ANUGERAH
             </div>
@@ -50,7 +50,7 @@
             <a href="{{ route('medicines.expiring') }}" class="btn btn-danger mb-3">🔔 Lihat Obat Hampir Expired</a>
             <a href="{{ route('medicines.sedikitstok') }}" class="btn btn-danger mb-3">⚠️ Lihat Obat Hampir Habis Stok</a>
             <a href="{{ route('medicines.purchase') }}" class="btn btn-warning mb-3">📦 Catat Pembelian Obat</a>
-            <a href="{{ route('medicines.addStock') }}" class="btn btn-warning mb-3">📦 Tambah Stok Obat</a>
+            <a href="{{ route('medicines.addStock') }}" class="btn btn-warning mb-3">📦 Tambah Batch Baru Obat</a>
         </div>
     </div>
 

@@ -1,78 +1,124 @@
-/* Layout keseluruhan halaman pembelian obat */
+/* General background */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4faff; /* Soft blue background */
+}
+
+/* Container styling for the form */
 .purchase-form {
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     padding: 30px;
-    border-radius: 10px;
+    border-radius: 12px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     margin-top: 40px;
     max-width: 800px;
     margin: auto;
 }
 
-/* Menata header dari formulir pembelian */
+/* Header Styling */
 .purchase-form h2 {
     font-size: 28px;
     font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
+    color: #0d47a1; /* Apothecary blue */
+    margin-bottom: 25px;
     text-align: center;
+    letter-spacing: 1px;
 }
 
-/* Menata kolom input (Kode Obat, Nama Obat, dll.) */
-.purchase-form .form-group {
-    margin-bottom: 20px;
-}
-
+/* Form Label Styling */
 .purchase-form label {
     font-size: 16px;
     font-weight: 600;
     color: #555;
 }
 
+/* Input Field Styling */
 .purchase-form input[type="text"],
-.purchase-form input[type="number"] {
+.purchase-form input[type="number"],
+.purchase-form input[type="date"],
+.purchase-form select {
     width: 100%;
     padding: 12px;
     margin-top: 6px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    border-radius: 8px;
+    border: 1px solid #ddd;
     font-size: 16px;
+    background-color: #f9f9f9;
 }
 
 .purchase-form input[readonly] {
-    background-color: #f1f1f1;
-}
-
-/* Menata input yang lebih spesifik (kode obat, nama obat, dll.) */
-.purchase-form .form-control {
-    background-color: #fff;
+    background-color: #e6f0ff; /* Light blue background for readonly fields */
 }
 
 .purchase-form input[type="text"]:focus,
-.purchase-form input[type="number"]:focus {
+.purchase-form input[type="number"]:focus,
+.purchase-form input[type="date"]:focus,
+.purchase-form select:focus {
     outline: none;
-    border-color: #3498db;
+    border-color: #3498db; /* Light blue focus */
 }
 
-/* Menata tombol submit */
+/* Button Styling */
 .purchase-form button {
     width: 100%;
     padding: 12px;
-    background-color: #f39c12;
+    background-color: #0d47a1; /* Apothecary blue */
     color: white;
     font-size: 16px;
     font-weight: bold;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .purchase-form button:hover {
-    background-color: #e67e22;
+    background-color: #26488f; /* Darker blue on hover */
 }
 
-/* Menata alert message (success, error) */
+/* Styling for the image preview section */
+.purchase-form .col-md-3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.purchase-form .border {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    background-color: #f0f8ff; /* Light blue for background */
+}
+
+.purchase-form #preview-gambar {
+    max-height: 160px;
+    object-fit: contain;
+}
+
+/* Styling for medicine details box */
+.purchase-form .medicine-details {
+    margin-top: 30px;
+    background-color: #eaf7ff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.purchase-form .medicine-details h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.purchase-form .medicine-details p {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Alert messages */
 .alert {
     padding: 10px;
     margin-bottom: 20px;
@@ -90,26 +136,15 @@
     color: white;
 }
 
-/* Menata form field yang di-override (nama obat, harga otomatis, dll.) */
-.purchase-form .medicine-details {
-    margin-top: 30px;
-    background-color: #eaf7ff;
-    padding: 15px;
-    border-radius: 8px;
+/* Styling for detail button inside the table */
+.purchase-form .btn-sm {
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 6px;
 }
 
-.purchase-form .medicine-details h3 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
-}
-
-.purchase-form .medicine-details p {
-    font-size: 16px;
-    color: #555;
-}
-
-.purchase-form .medicine-details .badge {
+/* Custom Badge for Medicine Details */
+.purchase-form .badge {
     background-color: #3498db;
     color: #fff;
     padding: 5px 10px;
@@ -117,15 +152,39 @@
     border-radius: 5px;
 }
 
-/* Styling untuk responsivitas */
-@media (max-width: 768px) {
-    .purchase-form {
-        padding: 20px;
-    }
-    .purchase-form h2 {
-        font-size: 24px;
-    }
-    .purchase-form button {
-        font-size: 14px;
-    }
+/* Receipt layout */
+.receipt {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #eaf7ff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+
+/* Receipt header */
+.receipt-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.receipt-header h3 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.receipt-header h4 {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+/* Receipt body styling */
+.receipt-body p {
+    font-size: 16px;
+    color: #555;
+    margin: 8px 0;
+}
+
+/* Print styles */
+/* Print styles */
+
+

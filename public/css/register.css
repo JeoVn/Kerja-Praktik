@@ -1,0 +1,160 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #e6f0fa;
+}
+
+/* Container */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+}
+
+/* Form Layout */
+.card {
+    border-radius: 20px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+    border: none;
+    width: 100%;
+    max-width: 450px; /* Set a max width to keep the form from stretching too wide */
+}
+
+.card-header {
+    background-color: #365da6;
+    color: white;
+    border-radius: 20px 20px 0 0;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.card-header h2 {
+    font-size: 28px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.card-body {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 0 0 20px 20px;
+}
+
+/* Input Fields */
+.form-control,
+.form-select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: 1px solid #a0c4ff;
+    font-size: 14px;
+    background-color: #f3f8fc;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #365da6;
+    box-shadow: 0 0 5px rgba(54, 93, 166, 0.5);
+    background-color: #fff;
+    outline: none;
+}
+
+.form-label {
+    padding: 12px 15px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0b2e5e;
+}
+
+/* Submit Button */
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background-color: #365da6;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #26488f;
+}
+
+.d-grid {
+    margin-top: 20px;
+}
+
+/* Success/Error Messages */
+.alert-success,
+.alert-danger {
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Error messages under input fields */
+.text-danger {
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: -5px;
+}
+
+/* Link */
+.text-link {
+    color: #365da6;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.text-link:hover {
+    text-decoration: underline;
+}
+
+/* Additional styling for the login link */
+.text-center p {
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+        margin: 10px;
+    }
+    
+    .card-header h2 {
+        font-size: 24px;
+    }
+
+    .form-control,
+    .form-select {
+        padding: 10px;
+    }
+
+    .btn-primary {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
