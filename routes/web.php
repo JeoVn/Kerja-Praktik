@@ -28,18 +28,6 @@ Route::middleware(['auth', 'role:admin'])->get('/admin/home', [AdminController::
 // Medicines Resource (CRUD)
 Route::resource('medicines', MedicineController::class);
 
-// Admin dashboard khusus (jika ingin dashboard khusus dari MedicineController)
-// Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [MedicineController::class, 'dashboard'])->name('admin.dashboard');
-
-// Form create obat khusus admin (opsional, jika ingin path berbeda)
-// Route::middleware(['auth', 'role:admin'])->get('/admin/create', [MedicineController::class, 'create'])->name('admin.medicines.create');
-
-// Dashboard untuk user biasa
-// Route::get('/dashboarduser', [MedicineController::class, 'index'])->name('dashboarduser');
-
-// Detail obat untuk user
-// Route::get('/detailuser/{medicine}', [MedicineController::class, 'detailuser'])->name('detailuser.show');
-// Route::middleware(['auth', 'role:admin'])->get('/admin/detail/{medicine}', [MedicineController::class, 'show'])->name('admin.detail');
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/home', [MedicineController::class, 'homeAdmin'])->name('admin.home');
@@ -47,8 +35,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/medicines/expiring', [MedicineController::class, 'expiringSoon'])->name('medicines.expiring');
     Route::get('/medicines/sedikit-stok', [MedicineController::class, 'sedikitStok'])->name('medicines.sedikitstok');  
     Route::get('/create', [MedicineController::class, 'create'])->name('admin.medicines.create');
-    // Route::post('medicines/record-purchase', [MedicineController::class, 'recordPurchase'])->name('medicines.recordPurchase');
-    // Route::put('medicines/{id}/update-stock-beli', [MedicineController::class, 'updateStockBeli'])->name('medicines.updateStockBeli');
+    Route::post('medicines/record-purchase', [MedicineController::class, 'recordPurchase'])->name('medicines.recordPurchase');
+    Route::put('medicines/{id}/update-stock-beli', [MedicineController::class, 'updateStockBeli'])->name('medicines.updateStockBeli');
 
  
     // Route for updating stock
@@ -95,6 +83,9 @@ Route::prefix('owner')->middleware(['auth', 'role:owner'])->group(function () {
   
 
 });
+
+// Semua route yang butuh auth dan harus aktif
+
 
 
 Route::middleware(['auth'])->group(function () {

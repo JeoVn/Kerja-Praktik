@@ -22,10 +22,18 @@
     </main>
 
     <!-- Footer -->
-    <footer>
-        <p>&copy; {{ date('Y') }} AA Apotek Anugrah. Solusi Sehat Keluarga Anda</p>
-        <p> Hubungi Kami 0899-9008-00 </p>
-    </footer>
+<!-- Footer -->
+<footer style=" color: white; text-align: center; padding: 20px 10px; margin-top: 50px;">
+    <p style="font-size: 16px; margin: 0;">
+        &copy; {{ date('Y') }} <strong>AA Apotek Anugrah</strong> – Solusi Sehat Keluarga Anda
+    </p>
+    <p style="margin-top: 10px;">
+        <a href="https://wa.me/628999008007" target="_blank" style="color: #ffffff; text-decoration: none; font-size: 16px;">
+            <i class="fab fa-whatsapp" style="margin-right: 8px;"></i>Hubungi Kami via WhatsApp
+        </a>
+    </p>
+</footer>
+
     
     {{-- You can also add additional script files here --}}
     @yield('scripts')

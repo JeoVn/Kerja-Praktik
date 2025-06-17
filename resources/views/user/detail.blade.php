@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('head')
+    <title>Dashboard Obat - AA Apotek Anugerah</title>
+@endsection
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/admin/detail.css') }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -8,9 +11,20 @@
 @section('content')
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3F5FAF; height: 100px;">
     <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="#">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" width="36" height="36" class="me-2" style="object-fit:contain;">
-        </a>
+      <div class="header-section">
+    <div class="header-left">
+        <div class="logo-section">
+            <div class="logo">
+                <img src="/uploads/obat/logo.jpg" alt="Logo" width="90" height="90">
+            </div> <!-- tutup .logo -->
+             <div class="company-name">
+                AA APOTEK ANUGERAH
+            </div>
+            <a href="{{ route('user.homeuser') }}" class="nav-tab-item">Kembali ke Home</a>
+        </div> <!-- tutup .logo-section -->
+    </div> <!-- tutup .header-left -->
+</nav>
+<header>
     </div>
 </nav>
 
