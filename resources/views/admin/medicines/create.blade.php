@@ -1,18 +1,23 @@
 @extends('layouts.app')
 
-<link rel="stylesheet" href="{{ asset('css/admin/create.css') }}">
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/admin/create.css') }}">
+
+     
+@endpush
 
 @section('content')
-<header>
+<div class="container-fluid">
+<div class="page-header"></div>
         <nav>
             <!-- Add a Bigger Back Button with Icon -->
             @if(Route::currentRouteName() != 'admin.home') <!-- Avoid showing 'back' button on home page -->
                 <a href="{{ route('admin.home') }}" class="btn btn-link mb-3" style="font-size: 24px; color: #0d47a1;">
-                    <i class="fas fa-arrow-circle-left"></i> Kembali ke Home
+                       <i class="fas fa-home"></i> Kembali ke Home
                 </a>
+                 </nav>
             @endif
-            <!-- You can add other navigation menu items here -->
-        </nav>
+
     </header>
 
 <div class="container">

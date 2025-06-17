@@ -1,31 +1,46 @@
 @extends('layouts.app')
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/owner/transaksi.css') }}">
+    <style>
+        .home-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .home-link:hover {
+            text-decoration: underline;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+    </style>
 @endpush
+
 @section('content')
-<header class="mb-3">
-    <nav>
-        @if(Route::currentRouteName() != 'owner.home')
-            <a href="{{ route('owner.home') }}" class="btn btn-outline-primary rounded-pill px-4 py-2">
-                <i class="fas fa-arrow-circle-left me-2"></i> Kembali ke Home
-            </a>
-        @endif
-    </nav>
-</header>
 
 <div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card shadow border-0">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <h2 class="text-blue fw-bold">
-                        <i class="fas fa-receipt me-2"></i> Daftar Transaksi Pembelian Obat
-                    </h2>
-                </div>
-            </div>
-        </div>
-    </div>
 
+    <!-- Header dengan tombol kembali -->
+    <div class="page-header">
+        <a href="{{ route('owner.home') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 home-link">
+            <i class="fas fa-home"></i> Kembali ke Home
+        </a>
+
+        <h2 class="text-blue fw-bold m-0">
+            <i class="fas fa-receipt me-2"></i> Daftar Transaksi Pembelian Obat
+        </h2>
+    </div>
+    
+    <!-- Notifikasi -->
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="fas fa-check-circle me-2"></i>{{ session('success') }}

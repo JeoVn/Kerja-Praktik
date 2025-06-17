@@ -2,25 +2,29 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/admin/expiring.css') }}">
+
 @endpush
-<header>
+
+@section('content')
+
+<div class="container-fluid">
+<div class="page-header"></div>
         <nav>
-            <!-- Add a Bigger Back Button with Icon -->
            @if(auth()->user()->role == 'admin')
                             <!-- Admin Link -->
                             <a href="{{ route('admin.home') }}" class="btn btn-link mb-3" style="font-size: 24px; color: #0d47a1;">
-                               <i class="fas fa-arrow-circle-left"></i> Kembali ke Home
+                             <i class="fas fa-home"></i> Kembali ke Home
                             </a>
                         @elseif(auth()->user()->role == 'owner')
                             <!-- Owner Link -->
                             <a href="{{ route('owner.home') }}" class="btn btn-link mb-3" style="font-size: 24px; color: #0d47a1;">
-                             <i class="fas fa-arrow-circle-left"></i> Kembali ke Home
-                            </a>
-                </a>
+                              <i class="fas fa-home"></i> Kembali ke Home
+                              </a>
+</nav>
             @endif
-            <!-- You can add other navigation menu items here -->
-        </nav>
-    </header>
+        </header>
+        
+  
 
 @section('content')
 <div class="container">

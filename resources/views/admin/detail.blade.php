@@ -6,37 +6,29 @@
 @endpush
 
 @section('content')
+
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3F5FAF; height: 100px;">
-<div class="header-section">
-    <div class="header-left">
-        <div class="logo-section">
-            <div class="logo">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <div class="logo me-3">
                 <img src="/uploads/obat/logo.jpg" alt="Logo" width="90" height="90">
-            </div> <!-- tutup .logo -->
-             <div class="company-name">
+            </div>
+            <div class="text-white fs-4 fw-bold">
                 AA APOTEK ANUGERAH
             </div>
-        </div> <!-- tutup .logo-section -->
-    </div> <!-- tutup .header-left -->
+        </div>
+        @if(auth()->user()->role == 'admin')
+            <a href="{{ route('admin.home') }}" class="btn-back-home">
+                <i class="fas fa-home"></i> Kembali ke Home
+            </a>
+        @elseif(auth()->user()->role == 'owner')
+            <a href="{{ route('owner.home') }}" class="btn-back-home">
+                <i class="fas fa-home"></i> Kembali ke Home
+            </a>
+        @endif
+    </div>
 </nav>
-<header>
-        <nav>
-            <!-- Add a Bigger Back Button with Icon -->
-           @if(auth()->user()->role == 'admin')
-                            <!-- Admin Link -->
-                            <a href="{{ route('admin.home') }}" class="btn btn-link mb-3" style="font-size: 24px; color: #0d47a1;">
-                               <i class="fas fa-arrow-circle-left"></i> Kembali ke Home
-                            </a>
-                        @elseif(auth()->user()->role == 'owner')
-                            <!-- Owner Link -->
-                            <a href="{{ route('owner.home') }}" class="btn btn-link mb-3" style="font-size: 24px; color: #0d47a1;">
-                             <i class="fas fa-arrow-circle-left"></i> Kembali ke Home
-                            </a>
-                </a>
-            @endif
-            <!-- You can add other navigation menu items here -->
-        </nav>
-    </header>
+
 
 <div class="container">
     <div class="row align-items-center justify-content-center mt-4">

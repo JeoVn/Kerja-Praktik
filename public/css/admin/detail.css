@@ -4,6 +4,44 @@
     gap: 10px;
 }
 
+
+.btn-back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #95b9f0;
+    background-color: transparent;
+    border: 2px solid #8fb0e0;
+    border-radius: 25px;
+    padding: 8px 18px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+
+
+.btn-back-home:hover {
+    background-color: #b9d0f2;
+    color: white;
+}
+
+
+.home-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+ }
+
+ .home-link:hover {
+    text-decoration: underline;
+}
+
+
 .logo {
     width: 90px;
     height: 90px;
@@ -29,6 +67,51 @@
     margin-top: 30px;
 }
 
+.btn-back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #d0e2fc;
+    background-color: transparent;
+    border: 2px solid #bdd4f6;
+    border-radius: 25px;
+    padding: 8px 18px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-back-home i {
+    font-size: 18px;
+}
+
+.btn-back-home:hover {
+    background-color: #bdd4f6;
+    color: rgb(76, 132, 228);
+}
+
+
+.home-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+ }
+
+ .home-link:hover {
+    text-decoration: underline;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+}
 
 .medicine-header {
     display: flex;

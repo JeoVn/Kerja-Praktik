@@ -6,6 +6,51 @@ body {
     background-color: #f4faff; /* Soft blue background */
 }
 
+.btn-back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0d47a1;
+    background-color: transparent;
+    border: 2px solid #0d47a1;
+    border-radius: 25px;
+    padding: 8px 18px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-back-home i {
+    font-size: 18px;
+}
+
+.btn-back-home:hover {
+    background-color: #0d47a1;
+    color: white;
+}
+
+
+.home-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+ }
+
+ .home-link:hover {
+    text-decoration: underline;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+}
 /* Container styling for the form */
 .purchase-form {
     background-color: #ffffff;

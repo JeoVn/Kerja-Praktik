@@ -2,18 +2,49 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/register.css') }}">
+    <style>
+        .home-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .home-link:hover {
+            text-decoration: underline;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+    </style>
 @endpush
-<header>
-        <nav>
-            <!-- Add a Bigger Back Button with Icon -->
-            @if(Route::currentRouteName() != 'owner.home') <!-- Avoid showing 'back' button on home page -->
-                <a href="{{ route('owner.home') }}" class="btn btn-link mb-3" style="font-size: 24px; color: #0d47a1;">
-                    <i class="fas fa-arrow-circle-left"></i> Kembali ke Home
-                </a>
-            @endif
-            <!-- You can add other navigation menu items here -->
-        </nav>
-    </header>
+
+@section('content')
+
+<div class="container-fluid">
+
+    <!-- Header dengan tombol kembali -->
+    <div class="page-header">
+        <a href="{{ route('owner.home') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 home-link">
+            <i class="fas fa-home"></i> Kembali ke Home
+        </a>
+
+     
+    </div>
+    
+    <!-- Notifikasi -->
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 @section('content')
     <div class="container">
         <div class="row justify-content-center align-items-center" style="height: 100vh;">
