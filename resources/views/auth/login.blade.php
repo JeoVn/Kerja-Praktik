@@ -44,9 +44,11 @@
         <label for="password">Password</label>
         <input type="password" name="password" id="password" placeholder="Enter your password" required>
 
-        <div class="forgot">
-            <a href="{{ route('password.change') }}" class="btn btn-primary mt-3">Ganti Kata Sandi</a>
-        </div>
+        <div class="forgot" style="margin-top: 10px;">
+    <a href="{{ route('password.change') }}">Ganti Kata Sandi (jika sudah login)</a><br>
+    <a href="{{ route('password.request') }}">Lupa Password?</a>
+</div>
+
 
         <button type="submit">Login</button>
     </form>

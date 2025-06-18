@@ -51,5 +51,11 @@
 
         <button type="submit" class="btn btn-primary">Ubah Password</button>
     </form>
+    
+    <div class="mt-3">
+ <a href="{{ route('password.request') }}">Lupa password?</a>
+
+
+    </div>
 </div>
 @endsection

@@ -1,6 +1,11 @@
 <?php
 
-
+use Illuminate\Support\Facades\Password;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\OwnerController;
@@ -22,6 +27,62 @@ Route::get('/register/first-owner', [RegisterController::class, 'showFirstOwnerR
 Route::post('/register/first-owner', [RegisterController::class, 'registerFirstOwner'])->name('register.first-owner.submit');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
+
+
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+})->middleware('guest')->name('password.request');
+
+// Kirim link reset password ke email
+Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
+
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+
+    return $status === Password::RESET_LINK_SENT
+        ? back()->with('status', __($status))
+        : back()->withErrors(['email' => __($status)]);
+})->middleware('guest')->name('password.email');
+
+// Form ubah password dari link email
+Route::get('/reset-password/{token}', function (string $token) {
+    return view('auth.reset-password', [
+        'token' => $token,
+        'email' => request('email')
+    ]);
+})->middleware('guest')->name('password.reset');
+
+// Proses reset password dari email
+Route::post('/reset-password', function (Request $request) {
+    Log::info('🔥 Request Reset Password Masuk:', $request->all());
+
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|min:8|confirmed',
+    ]);
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            Log::info("✅ Reset password untuk: " . $user->email);
+
+            $user->forceFill([
+                'password' => Hash::make($password),
+            ])->save();
+
+            event(new PasswordReset($user));
+        }
+    );
+
+    Log::info('🔁 Status Reset:', ['status' => $status]);
+
+    return $status === Password::PASSWORD_RESET
+        ? redirect()->route('login')->with('status', __($status))
+        : back()->withErrors(['email' => [__($status)]]);
+})->middleware('guest')->name('password.reset.update'); // ⚠️ GANTI NAMA ROUTE
 
 
 Route::middleware(['auth', 'role:admin'])->get('/admin/home', [AdminController::class, 'index'])->name('admin.home');
