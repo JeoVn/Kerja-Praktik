@@ -6,7 +6,9 @@
     @endpush
 
 @section('content')
-
+<br>
+<br>
+<br>
  <div class="container-fluid">
            <div class="page-header">
         @if(auth()->user()->role == 'admin')
