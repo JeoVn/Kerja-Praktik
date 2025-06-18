@@ -1,11 +1,27 @@
 @extends('layouts.app')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/admin/edit.css') }}">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-@endpush
+    <link rel="stylesheet" href="{{ asset('css/admin/edit.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/backhome.css') }}">
+    @endpush
 
 @section('content')
+
+ <div class="container-fluid">
+           <div class="page-header">
+        @if(auth()->user()->role == 'admin')
+            <a href="{{ route('admin.home') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 home-link">
+            <i class="fas fa-home"></i> Kembali ke Home
+            </a>
+        @elseif(auth()->user()->role == 'owner')
+            <a href="{{ route('owner.home') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 home-link">
+            <i class="fas fa-home"></i> Kembali ke Home
+            </a>
+        @endif
+        </div>
+</div>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">

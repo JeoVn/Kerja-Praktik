@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
 @section('head')
-    <title>Dashboard Obat - AA Apotek Anugerah</title>
+
 @endsection
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/admin/detail.css') }}">
+<link rel="stylesheet" href="{{ asset('css/backhome.css') }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 @endpush
 
@@ -20,14 +21,21 @@
              <div class="company-name">
                 AA APOTEK ANUGERAH
             </div>
-            <a href="{{ route('user.homeuser') }}" class="nav-tab-item">Kembali ke Home</a>
-        </div> <!-- tutup .logo-section -->
-    </div> <!-- tutup .header-left -->
-</nav>
-<header>
-    </div>
-</nav>
-
+   </div> 
+   </div> 
+   </div>
+</div>
+   </nav>
+   
+            <div class="container-fluid">
+        <div class="header-right">
+             <a href="{{ route('user.homeuser') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 home-link">
+            <i class="fas fa-home"></i> Kembali ke Home
+        </a>
+         </div>
+        </div>
+        </div>
+<br>
 <div class="container">
     <div class="row align-items-center justify-content-center mt-4">
         <!-- Kontainer Gambar Obat di Tengah -->

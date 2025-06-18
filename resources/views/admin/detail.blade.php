@@ -2,6 +2,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/admin/detail.css') }}">
+<link rel="stylesheet" href="{{ asset('css/backhome.css') }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 @endpush
 
@@ -15,19 +16,24 @@
             </div>
             <div class="text-white fs-4 fw-bold">
                 AA APOTEK ANUGERAH
-            </div>
         </div>
+   </div> 
+   </div> 
+  
+   </nav>
+    <div class="container-fluid">
+        <div class="header-right"></div>
         @if(auth()->user()->role == 'admin')
-            <a href="{{ route('admin.home') }}" class="btn-back-home">
-                <i class="fas fa-home"></i> Kembali ke Home
+            <a href="{{ route('admin.home') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 home-link">
+            <i class="fas fa-home"></i> Kembali ke Home
             </a>
         @elseif(auth()->user()->role == 'owner')
-            <a href="{{ route('owner.home') }}" class="btn-back-home">
-                <i class="fas fa-home"></i> Kembali ke Home
+            <a href="{{ route('owner.home') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 home-link">
+            <i class="fas fa-home"></i> Kembali ke Home
             </a>
         @endif
-    </div>
-</nav>
+        </div>
+</div>
 
 
 <div class="container">

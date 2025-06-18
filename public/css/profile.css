@@ -1,0 +1,27 @@
+    .profile-header {
+        background: linear-gradient(135deg, #6b8dd6, rgb(117, 171, 246));
+        color: white;
+        padding: 30px 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(110, 89, 184, 0.4);
+    }
+    .profile-info p {
+        font-size: 1.1rem;
+    }
+    .admin-list {
+        margin-top: 40px;
+    }
+    .admin-list .card {
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        border-radius: 12px;
+        transition: transform 0.2s ease;
+    }
+    .admin-list .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    .btn-danger:hover {
+        background-color: #b22222;
+    }

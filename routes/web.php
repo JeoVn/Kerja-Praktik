@@ -23,6 +23,7 @@ Route::post('/register/first-owner', [RegisterController::class, 'registerFirstO
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 
+
 Route::middleware(['auth', 'role:admin'])->get('/admin/home', [AdminController::class, 'index'])->name('admin.home');
 
 // Medicines Resource (CRUD)

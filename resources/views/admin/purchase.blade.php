@@ -2,25 +2,20 @@
 
 @push('styles')
      <link rel="stylesheet" href="{{ asset('css/admin/purchase.css') }}">
-   
- 
-@endpush
+    <link rel="stylesheet" href="{{ asset('css/backhome.css') }}">
+    @endpush
 
 @section('content')
 
-<div class="container-fluid">
-<div class="page-header"></div>
-        <nav>
-            <!-- Add a Bigger Back Button with Icon -->
-            @if(Route::currentRouteName() != 'admin.home') <!-- Avoid showing 'back' button on home page -->
-                <a href="{{ route('admin.home') }}" class="btn btn-link mb-3" style="font-size: 24px; color: #0d47a1;">
-                    <i class="fas fa-home"></i> Kembali ke Home
-                </a>
+ <div class="container-fluid">
+           <div class="page-header">
+        @if(auth()->user()->role == 'admin')
+            <a href="{{ route('admin.home') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 home-link">
+            <i class="fas fa-home"></i> Kembali ke Home
+            </a>
             @endif
      
-        
-    </header>
-
+        </div>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">

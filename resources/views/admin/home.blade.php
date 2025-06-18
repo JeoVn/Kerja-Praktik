@@ -9,7 +9,7 @@
 
 @section('content')
 <div class="container-fluid">
-<!-- Header -->
+
 <div class="header-section">
     <div class="header-left">
         <div class="logo-section">
@@ -19,8 +19,8 @@
             <div class="company-name">
                 AA APOTEK ANUGERAH
             </div>
-        </div> <!-- tutup .logo-section -->
-    </div> <!-- tutup .header-left -->
+        </div> 
+    </div> 
 
     <div class="header-right">
         <form method="GET" action="{{ route('medicines.index') }}" class="search-container">
@@ -37,22 +37,38 @@
                 </svg>
             </a>
         </div>
-    </div> <!-- tutup .header-right -->
-</div> <!-- tutup .header-section -->
+    </div> 
+</div>
 
-    </d>
+<div class="container-fluid px-4 mt-3">
+    <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
 
-    <!-- Navigasi -->
-    <div class="nav-tabs-container">
-        <div class="nav-tabs-custom">
-            <a href="{{ route('admin.home') }}" class="nav-tab-item">Home</a>
-            <a href="{{ route('medicines.create') }}" class="nav-tab-item">Tambah Stok Obat Baru</a>
-            <a href="{{ route('medicines.expiring') }}" class="btn btn-danger mb-3">🔔 Lihat Obat Hampir Expired</a>
-            <a href="{{ route('medicines.sedikitstok') }}" class="btn btn-danger mb-3">⚠️ Lihat Obat Hampir Habis Stok</a>
-            <a href="{{ route('medicines.purchase') }}" class="btn btn-warning mb-3">📦 Catat Pembelian Obat</a>
-            <a href="{{ route('medicines.addStock') }}" class="btn btn-warning mb-3">📦 Tambah Batch Baru Obat</a>
-        </div>
+        <a href="{{ route('admin.home') }}" class="btn action-btn btn-outline-primary">
+            <i class="fas fa-home me-2"></i> Home
+        </a>
+
+        <a href="{{ route('medicines.create') }}" class="btn action-btn btn-success">
+            <i class="fas fa-plus me-2"></i> Tambah Obat
+        </a>
+
+        <a href="{{ route('medicines.expiring') }}" class="btn action-btn btn-danger">
+            <i class="fas fa-exclamation-circle me-2"></i> Hampir Expired
+        </a>
+
+        <a href="{{ route('medicines.sedikitstok') }}" class="btn action-btn btn-danger">
+            <i class="fas fa-exclamation-triangle me-2"></i> Hampir Habis
+        </a>
+
+        <a href="{{ route('medicines.purchase') }}" class="btn action-btn btn-warning text-dark">
+            <i class="fas fa-cart-shopping me-2"></i> Catat Pembelian
+        </a>
+
+        <a href="{{ route('medicines.addStock') }}" class="btn action-btn btn-warning text-dark">
+            <i class="fas fa-layer-group me-2"></i> Tambah Batch
+        </a>
+
     </div>
+<br>
 
     <!-- Sidebar Filter -->
     <div class="filter-sidebar-mobile" id="filterSidebar">

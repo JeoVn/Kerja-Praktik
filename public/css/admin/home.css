@@ -1,12 +1,31 @@
 
 body {
-    background: linear-gradient(135deg, #e0ecff 0%, #b2c6ff 100%);
+    background: linear-gradient(135deg, #e0ecff 0%, #bee9fe 100%);
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
     
 }
+
+.btn.action-btn {
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    transition: all 0.2s ease-in-out;
+}
+
+.btn.action-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+
 
 .container-fluid {
     background: transparent;

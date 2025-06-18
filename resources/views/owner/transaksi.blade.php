@@ -2,27 +2,8 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/owner/transaksi.css') }}">
-    <style>
-        .home-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            text-decoration: none;
-        }
-
-        .home-link:hover {
-            text-decoration: underline;
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/backhome.css') }}">
+   
 @endpush
 
 @section('content')

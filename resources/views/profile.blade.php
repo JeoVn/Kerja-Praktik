@@ -1,39 +1,29 @@
 @extends('layouts.app')
 
 @push('styles')
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-<style>
-    .profile-header {
-        background: linear-gradient(135deg, #6b8dd6, rgb(117, 171, 246));
-        color: white;
-        padding: 30px 20px;
-        border-radius: 12px;
-        margin-bottom: 30px;
-        text-align: center;
-        box-shadow: 0 4px 12px rgba(110, 89, 184, 0.4);
-    }
-    .profile-info p {
-        font-size: 1.1rem;
-    }
-    .admin-list {
-        margin-top: 40px;
-    }
-    .admin-list .card {
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-        border-radius: 12px;
-        transition: transform 0.2s ease;
-    }
-    .admin-list .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    }
-    .btn-danger:hover {
-        background-color: #b22222;
-    }
-</style>
-@endpush
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/backhome.css') }}">
+
+    @endpush
 
 @section('content')
+<div class="container-fluid">
+<div class="page-header">
+        @if(auth()->user()->role == 'admin')
+            <a href="{{ route('admin.home') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 home-link">
+            <i class="fas fa-home"></i> Kembali ke Home
+            </a>
+        @elseif(auth()->user()->role == 'owner')
+            <a href="{{ route('owner.home') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 home-link">
+            <i class="fas fa-home"></i> Kembali ke Home
+            </a>
+        @endif
+       
+</div>
+<div class="container">
+
+</div>
 <div class="container my-4">
     <div class="profile-header">
         <h2>Profil Saya</h2>

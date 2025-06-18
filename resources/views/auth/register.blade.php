@@ -2,27 +2,8 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/register.css') }}">
-    <style>
-        .home-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            text-decoration: none;
-        }
-
-        .home-link:hover {
-            text-decoration: underline;
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/backhome.css') }}">
+    
 @endpush
 
 @section('content')
@@ -34,8 +15,10 @@
         <a href="{{ route('owner.home') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 home-link">
             <i class="fas fa-home"></i> Kembali ke Home
         </a>
-
-     
+         <h2 class="text-blue fw-bold m-0">
+            <i class="fas fa-receipt me-2"></i> Registrasi Akun Baru
+        </h2>
+    </div>
     </div>
     
     <!-- Notifikasi -->

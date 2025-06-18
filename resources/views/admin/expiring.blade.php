@@ -2,31 +2,23 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/admin/expiring.css') }}">
-
-@endpush
-
-@section('content')
-
-<div class="container-fluid">
-<div class="page-header"></div>
-        <nav>
-           @if(auth()->user()->role == 'admin')
-                            <!-- Admin Link -->
-                            <a href="{{ route('admin.home') }}" class="btn btn-link mb-3" style="font-size: 24px; color: #0d47a1;">
-                             <i class="fas fa-home"></i> Kembali ke Home
-                            </a>
-                        @elseif(auth()->user()->role == 'owner')
-                            <!-- Owner Link -->
-                            <a href="{{ route('owner.home') }}" class="btn btn-link mb-3" style="font-size: 24px; color: #0d47a1;">
-                              <i class="fas fa-home"></i> Kembali ke Home
-                              </a>
-</nav>
-            @endif
-        </header>
-        
-  
+    <link rel="stylesheet" href="{{ asset('css/backhome.css') }}">
+    @endpush
 
 @section('content')
+
+ <div class="container-fluid">
+           <div class="page-header">
+        @if(auth()->user()->role == 'admin')
+            <a href="{{ route('admin.home') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 home-link">
+            <i class="fas fa-home"></i> Kembali ke Home
+            </a>
+        @elseif(auth()->user()->role == 'owner')
+            <a href="{{ route('owner.home') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 home-link">
+            <i class="fas fa-home"></i> Kembali ke Home
+            </a>
+        @endif
+        </div>
 <div class="container">
     <h2>Daftar Obat Hampir Expired (≤ 6 Bulan)</h2>
 
