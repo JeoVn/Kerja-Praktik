@@ -39,59 +39,33 @@ public function postLogin(Request $request)
         session()->flash('success', 'Login berhasil!');
         $user = Auth::user();
 
-        if ($user->role === 'owner') {
-            return redirect()->route('owner.home');
-        } elseif ($user->role === 'admin') {
-            return redirect()->route('admin.home');
+//         if ($user->role === 'owner') {
+//             return redirect()->route('owner.home');
+//         } elseif ($user->role === 'admin') {
+//             return redirect()->route('admin.home');
+//         }
+
+//         Auth::logout();
+//         return redirect()->route('login')->withErrors(['role' => 'Role pengguna tidak dikenali.']);
+//     }
+
+//     return redirect()->back()->withErrors(['email' => 'Email atau password salah.']);
+// }
+return match($user->role) {
+                'owner' => redirect()->route('owner.home'),
+                'admin' => redirect()->route('admin.home'),
+                default => tap(Auth::logout(), function () {
+                    session()->flash('error', 'Role pengguna tidak dikenali.');
+                }) && redirect()->route('login'),
+            };
         }
 
-        Auth::logout();
-        return redirect()->route('login')->withErrors(['role' => 'Role pengguna tidak dikenali.']);
+        return redirect()->back()->withErrors(['email' => 'Email atau password salah.']);
     }
-
-    return redirect()->back()->withErrors(['email' => 'Email atau password salah.']);
-}
-
-    // Proses login
-    // public function postLogin(Request $request)
-    // {
-    //     // Validasi input
-    //     $request->validate([
-    //         'email' => 'required|email',
-    //         'password' => 'required|string',
-    //     ]);
-
-    //     // Ambil data email dan password dari request
-    //     $credentials = $request->only('email', 'password');
-
-    //     // Cek kredensial
-    //     if (Auth::attempt($credentials)) {
-    //         // Cek role pengguna setelah login
-    //         $user = Auth::user(); // Mengambil user yang sedang login
-
-    //         // Menambahkan pesan sukses untuk login
-    //         session()->flash('success', 'Login successful!');
-
-    //         // Redirect berdasarkan role
-    //         if ($user->role === 'owner') {
-    //             return redirect()->route('owner.home'); // Redirect ke dashboard owner
-    //         } elseif ($user->role === 'admin') {
-    //             return redirect()->route('admin.home'); // Redirect ke dashboard admin
-    //         }
-
-    //         // Default redirection jika role tidak ditemukan
-    //         return redirect()->route('login')->withErrors(['role' => 'Invalid user role']);
-    //     }
-
-    //     // Jika login gagal
-    //     return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
-    // }
-
-    // Logout
     public function logout()
     {
         Auth::logout(); // Logout user
-        session()->flash('success', 'You have successfully logged out.'); // Pesan sukses logout
+        session()->flash('success', 'Berhasil keluar dari akun anda.'); // Pesan sukses logout
         return redirect()->route('login'); // Redirect ke form login
     }
 
@@ -100,9 +74,17 @@ public function postLogin(Request $request)
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|confirmed|min:6',
+            'password' => [
+                'required|string|confirmed|min:6',
+                'regex:/[a-z]/',      // huruf kecil
+                'regex:/[A-Z]/',      // huruf besar
+                'regex:/[0-9]/'       // angka
+            ],
             'role' => 'required|in:admin,owner',
+        ], [
+            'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, dan angka.',
         ]);
+        
 
         $user = User::create([
             'name' => $request->name,
@@ -136,11 +118,22 @@ public function postLogin(Request $request)
 
     public function changePassword(Request $request)
     {
+        // $request->validate([
+        //     'current_password' => 'required',
+        //     'new_password' => 'required|min:6|confirmed',
+        // ]);
         $request->validate([
             'current_password' => 'required',
-            'new_password' => 'required|min:6|confirmed',
+            'new_password' => [
+                'required', 'confirmed', 'min:6',
+                'regex:/[a-z]/',
+                'regex:/[A-Z]/',
+                'regex:/[0-9]/'
+            ]
+        ], [
+            'new_password.regex' => 'Password baru harus mengandung huruf besar, huruf kecil, dan angka.'
         ]);
-
+        
         $user = Auth::user();
 
         if (!Hash::check($request->current_password, $user->password)) {

@@ -1,0 +1,71 @@
+body {
+    background-color: #e6f0fa;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.forgot-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.forgot-card {
+    background-color: #ffffff;
+    padding: 40px 45px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.forgot-card h2 {
+    color: #365da6;
+    margin-bottom: 30px;
+    font-size: 26px;
+  
+}
+
+.forgot-card label {
+    display: block;
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.forgot-card input.form-control {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.forgot-card button.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background-color: #365da6;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.forgot-card button.btn-primary:hover {
+    background-color: #365da6;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}

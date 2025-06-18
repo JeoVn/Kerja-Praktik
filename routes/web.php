@@ -12,6 +12,9 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MedicineController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException; 
+use App\Http\Controllers\Auth\ResetPasswordController; 
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 // Landing page
 Route::get('/', function () {
@@ -28,62 +31,96 @@ Route::post('/register/first-owner', [RegisterController::class, 'registerFirstO
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 
+Route::middleware('guest')->group(function () {
+    // Tampilkan form minta link reset
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
+        ->name('password.request');
 
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->middleware('guest')->name('password.request');
+    // Kirim email reset password
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+        ->name('password.email');
 
-// Kirim link reset password ke email
-Route::post('/forgot-password', function (Request $request) {
-    $request->validate(['email' => 'required|email']);
+    // Form reset password dari email
+    Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])
+        ->name('password.reset');
 
-    $status = Password::sendResetLink(
-        $request->only('email')
-    );
+    // Proses reset password
+    Route::post('/reset-password', [ResetPasswordController::class, 'reset'])
+        ->name('password.reset.update');
+});
 
-    return $status === Password::RESET_LINK_SENT
-        ? back()->with('status', __($status))
-        : back()->withErrors(['email' => __($status)]);
-})->middleware('guest')->name('password.email');
+// Route::get('/forgot-password', function () {
+//     return view('auth.forgot-password');
+// })->middleware('guest')->name('password.request');
 
-// Form ubah password dari link email
-Route::get('/reset-password/{token}', function (string $token) {
-    return view('auth.reset-password', [
-        'token' => $token,
-        'email' => request('email')
-    ]);
-})->middleware('guest')->name('password.reset');
+// // Kirim link reset password ke email
+// Route::post('/forgot-password', function (Request $request) {
+//     $request->validate(['email' => 'required|email']);
 
-// Proses reset password dari email
-Route::post('/reset-password', function (Request $request) {
-    Log::info('🔥 Request Reset Password Masuk:', $request->all());
+//     $status = Password::sendResetLink(
+//         $request->only('email')
+//     );
 
-    $request->validate([
-        'token' => 'required',
-        'email' => 'required|email',
-        'password' => 'required|min:8|confirmed',
-    ]);
+//     return $status === Password::RESET_LINK_SENT
+//         ? back()->with('status', __($status))
+//         : back()->withErrors(['email' => __($status)]);
+// })->middleware('guest')->name('password.email');
 
-    $status = Password::reset(
-        $request->only('email', 'password', 'password_confirmation', 'token'),
-        function ($user, $password) {
-            Log::info("✅ Reset password untuk: " . $user->email);
+// // Form ubah password dari link email
+// Route::get('/reset-password/{token}', function (string $token) {
+//     return view('auth.reset-password', [
+//         'token' => $token,
+//         'email' => request('email')
+//     ]);
+// })->middleware('guest')->name('password.reset');
 
-            $user->forceFill([
-                'password' => Hash::make($password),
-            ])->save();
+// // Proses reset password dari email
+// Route::post('/reset-password', function (Request $request) {
+//     Log::info('🔥 Request Reset Password Masuk:', $request->all());
 
-            event(new PasswordReset($user));
-        }
-    );
+//     $request->validate([
+//         'token' => 'required',
+//         'email' => 'required|email',
+//         'password' => [
+//             'required',
+//             'string',
+//             'min:8',
+//             'confirmed',
+//             'regex:/[a-z]/',      // huruf kecil
+//             'regex:/[A-Z]/',      // huruf besar
+//             'regex:/[0-9]/',      // angka
+//         ],
+//     ], [
+//         'password.required' => 'Password wajib diisi.',
+//         'password.min' => 'Password minimal 8 karakter.',
+//         'password.confirmed' => 'Konfirmasi password tidak cocok.',
+//         'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, dan angka.',
+//     ]);
 
-    Log::info('🔁 Status Reset:', ['status' => $status]);
+//     $status = Password::reset(
+//         $request->only('email', 'password', 'password_confirmation', 'token'),
+//         function ($user, $password) {
+//             if (Hash::check($password, $user->password)) {
+//                 throw ValidationException::withMessages([
+//                     'password' => 'Password baru tidak boleh sama dengan password lama.',
+//                 ]);
+//             }
 
-    return $status === Password::PASSWORD_RESET
-        ? redirect()->route('login')->with('status', __($status))
-        : back()->withErrors(['email' => [__($status)]]);
-})->middleware('guest')->name('password.reset.update'); // ⚠️ GANTI NAMA ROUTE
+//             $user->forceFill([
+//                 'password' => Hash::make($password),
+//             ])->save();
 
+//             event(new \Illuminate\Auth\Events\PasswordReset($user));
+//         }
+//     );
+
+//     if ($status === Password::PASSWORD_RESET) {
+//         return redirect()->route('login')->with('status', __($status));
+//     } else {
+//         return back()->withInput($request->only('email'))
+//                      ->withErrors(['email' => __($status)]);
+//     }
+// })->middleware('guest')->name('password.reset.update');
 
 Route::middleware(['auth', 'role:admin'])->get('/admin/home', [AdminController::class, 'index'])->name('admin.home');
 

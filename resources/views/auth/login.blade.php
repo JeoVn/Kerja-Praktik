@@ -12,13 +12,18 @@
                 <img src="/uploads/obat/logo.jpg" alt="Logo" width="200" height="200">
                                 <h1>AA APOTEK ANUGRAH</h1>
                 <p class="subtitle">SOLUSI SEHAT KELUARGA ANDA</p>
-                <!-- <small class="powered">Powered by PT Kimara Indonesia</small> -->
+                
             </div>
         </div>
         <div class="right-panel">
             <div class="login-box">
     <h2>Login</h2>
-
+    @if (session('status'))
+    <div class="alert alert-success">
+        {{ session('status') }}
+    </div>
+@endif
+ 
     {{-- MENAMPILKAN PESAN ERROR ATAU SUKSES --}}
     @if ($errors->any())
         <div class="alert alert-danger" style="color: red; margin-bottom: 20px;">
@@ -45,7 +50,7 @@
         <input type="password" name="password" id="password" placeholder="Enter your password" required>
 
         <div class="forgot" style="margin-top: 10px;">
-    <a href="{{ route('password.change') }}">Ganti Kata Sandi (jika sudah login)</a><br>
+   
     <a href="{{ route('password.request') }}">Lupa Password?</a>
 </div>
 
