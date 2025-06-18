@@ -15,7 +15,7 @@
                 <img src="/uploads/obat/logo.jpg" alt="Logo" width="90" height="90">
             </div>
             <div class="text-white fs-4 fw-bold">
-                AA APOTEK ANUGERAH
+                AA APOTEK ANUGRAH
         </div>
    </div> 
    </div> 

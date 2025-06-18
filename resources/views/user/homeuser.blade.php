@@ -20,7 +20,7 @@
                         <img src="/uploads/obat/logo.jpg" alt="Logo" width="90" height="90">
                     </div> <!-- tutup .logo -->
                     <div class="company-name">
-                        AA APOTEK ANUGERAH
+                        AA APOTEK ANUGRAH
                     </div>
                 </div> <!-- tutup .logo-section -->
             </div> <!-- tutup .header-left -->
