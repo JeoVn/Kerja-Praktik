@@ -81,7 +81,7 @@
                     @if(session('receipt'))
                     <div class="receipt-printable mt-5">
                         <div class="receipt-header text-center">
-                            <h3>Apotek Anugrah</h3>
+                            <h3>AA Apotek Anugrah</h3>
                             <h4>Struk Pembelian</h4>
                             <hr>
                         </div>

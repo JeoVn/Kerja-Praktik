@@ -8,6 +8,7 @@
     @endpush
 
 @section('content')
+<br>
 <div class="container-fluid">
 <div class="page-header">
         @if(auth()->user()->role == 'admin')
