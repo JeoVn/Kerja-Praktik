@@ -232,4 +232,24 @@ body {
 /* Print styles */
 /* Print styles */
 
+@media print {
+    body * {
+        visibility: hidden;
+    }
 
+    .receipt, .receipt * {
+        visibility: visible;
+    }
+
+    .receipt {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .btn, .btn * {
+        display: none !important;
+    }
+}
